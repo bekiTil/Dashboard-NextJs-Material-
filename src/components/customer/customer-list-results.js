@@ -104,9 +104,7 @@ export const CustomerListResults = ({ customers, searchTerm, ...rest }) => {
       .catch((_) => {
         setErr("Something went wrong");
       })
-      .finally(()=>{
-        router.push('/tutors')
-      })
+      .finally(()=>{})
   }
   return (
     <Card {...rest}>
@@ -132,8 +130,8 @@ export const CustomerListResults = ({ customers, searchTerm, ...rest }) => {
                 <TableCell>Phone</TableCell>
                 <TableCell>Status</TableCell>
                 
-                {customer.status=="PENDING" &&
-                <TableCell>Accept</TableCell>}
+                
+                <TableCell>Accepted/Accept</TableCell>
                 <TableCell>Delete</TableCell>
                 <TableCell>Detail</TableCell>
               </TableRow>
@@ -202,6 +200,11 @@ export const CustomerListResults = ({ customers, searchTerm, ...rest }) => {
                   
                       
                     </IconButton>
+                      }
+                      {customer.status=="SUCCESS"
+                      
+                      &&
+                      <Chip label="Active" color="error" variant="outlined" />
                       }
                     </TableCell>
                     <TableCell>
