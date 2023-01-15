@@ -28,8 +28,11 @@ export const DashboardNavbar = (props) => {
 
   const handleLogout = (e) => {
     e.preventDefault();
-    signout(user.accessToken, user.refreshToken);
-    dispatch(logout());
+    signout(user.accessToken, user.refreshToken)
+    .then((data)=>{
+      dispatch(logout());
+    })
+   
     router.push("/");
   };
   return (
@@ -83,7 +86,7 @@ export const DashboardNavbar = (props) => {
             </IconButton>
           </Tooltip> */}
           <Tooltip title="Logout">
-            <IconButton sx={{ ml: 1 }} onClick={handleLogout}>
+            <IconButton sx={{ ml: 1 }} onClick={(e) => handleLogout(e)}>
               <LockIcon fontSize="small" />
             </IconButton>
           </Tooltip>

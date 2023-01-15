@@ -38,6 +38,7 @@ const signout = async (accessToken, token) => {
       token,
     }),
   });
+  console.log(response)
   return response;
 };
 
