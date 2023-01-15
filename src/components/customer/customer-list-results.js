@@ -104,6 +104,9 @@ export const CustomerListResults = ({ customers, searchTerm, ...rest }) => {
       .catch((_) => {
         setErr("Something went wrong");
       })
+      .finally(()=>{
+        router.push('/tutors')
+      })
   }
   return (
     <Card {...rest}>
@@ -129,7 +132,10 @@ export const CustomerListResults = ({ customers, searchTerm, ...rest }) => {
                 <TableCell>Phone</TableCell>
                 <TableCell>Status</TableCell>
                 
-                <TableCell>Action</TableCell>
+                {customer.status=="PENDING" &&
+                <TableCell>Accept</TableCell>}
+                <TableCell>Delete</TableCell>
+                <TableCell>Detail</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -197,8 +203,8 @@ export const CustomerListResults = ({ customers, searchTerm, ...rest }) => {
                       
                     </IconButton>
                       }
-                    
-
+                    </TableCell>
+                    <TableCell>
                       <IconButton
                         color="error"
                         aria-label="upload picture"
@@ -207,6 +213,8 @@ export const CustomerListResults = ({ customers, searchTerm, ...rest }) => {
                       >
                         <DeleteOutlined />
                       </IconButton>
+                    </TableCell>
+                    <TableCell>
                       <IconButton
                         color="info"
                         aria-label="upload picture"
