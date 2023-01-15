@@ -97,14 +97,16 @@ export const CustomerListResults = ({ customers, searchTerm, ...rest }) => {
         if (data.success) {
           console.log(data)
           setTutor(data.user);
+          router.push('/tutors')
         } else {
           setErr(data.message);
         }
+        
       })
       .catch((_) => {
         setErr("Something went wrong");
       })
-      .finally(()=>{})
+      
   }
   return (
     <Card {...rest}>
