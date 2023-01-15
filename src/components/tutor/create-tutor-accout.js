@@ -22,6 +22,7 @@ import { selectUser } from "redux/userSlice";
 import { useSelector } from "react-redux";
 import { updateParent } from "backend-utils/parent-utils";
 import { useRouter } from "next/router";
+import { updateTutor } from "backend-utils/tutor-utils";
 
 function getStyles(name, subjects, theme) {
   return {
@@ -43,11 +44,12 @@ const MenuProps = {
   },
 };
 
-export const CreateParentAccountForm = (props) => {
+export const CreateTutorAccountForm = (props) => {
   const user = useSelector(selectUser);
   const router = useRouter();
+  const changedTutor = props.tutor;
 
-  const [parent, setParent] = useState(null);
+  const [tutor, setTutor] = useState(null);
   const [initialValues, setInitialValues] = useState(null);
   const [loggingIn, setLoggingIn] = useState(false);
   const [err, setErr] = useState("");
@@ -61,35 +63,37 @@ export const CreateParentAccountForm = (props) => {
     };
   }, []);
   useEffect(() => {
+    console.log(props.tutor)
     setInitialValues({
-      id: props.parent?.id,
-      fullName: props.parent?.fullName,
-      phone1: props.parent?.phone1,
-      phone2: props.parent?.phone2,
-      location: props.parent?.location,
-      preferredBank: props.parent?.preferredBank,
-      profilePicture: props.parent?.profilePicture,
+      id: props.tutor?.id,
+      fullName: props.tutor?.fullName,
+      email: props.tutor?.email,
+      phone: props.tutor?.phone,
+      gender: props.tutor?.gender,
+      location: props.tutor?.location,
+      bankAccountNo: props.tutor?.bankAccountNo,
+      profilePicture: props.tutor?.profilePicture,
     });
-  }, [props.parent]);
+  }, [props.tutor]);
 
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
       fullName: initialValues?.fullName,
-      email: null,
-      phone1: initialValues?.phone1,
-      phone2: initialValues?.phone2,
+      email: initialValues?.email,
+      phone: initialValues?.phone,
+      gender: initialValues?.gender,
       location: initialValues?.location,
-      preferredBank: initialValues?.preferredBank!=null ? initialValues?.preferredBank :"",
+      bankAccountNo: initialValues?.bankAccountNo,
       profilePicture: initialValues?.profilePicture,
     },
     validationSchema: Yup.object({
       fullName: Yup.string().max(255).required("Full name is required"),
-      email: Yup.string().email("Must be a valid email").max(255).nullable(),
+      email: Yup.string().email("Must be a valid email").max(255),
       location: Yup.string().max(255).required("Location is required"),
-      phone1: Yup.string().max(255).required("Phone is required"),
-      phone2: Yup.string().max(255).nullable(),
-      preferredBank: Yup.string().max(255).required("Preferred bank is required"),
+      phone: Yup.string().max(255).required("Phone is required"),
+      gender: Yup.string().max(255),
+      bankAccountNo: Yup.string().max(255).required("Preferred bank is required"),
       profilePicture: Yup.string().max(255),
     }),
     onSubmit: () => {
@@ -97,10 +101,11 @@ export const CreateParentAccountForm = (props) => {
       setErr("");
       setShowAlert(false);
 
-      const parentBody = { ...formik.values };
-      updateParent(user.accessToken, initialValues.id, parentBody)
+      const tutorBody = { ...formik.values };
+      updateTutor(user.accessToken, initialValues.id, tutorBody)
         .then((res) => res.json())
         .then((data) => {
+          console.log(data)
           if (data.success) {
             console.log(data)
             setParent(data.parent);
@@ -116,24 +121,28 @@ export const CreateParentAccountForm = (props) => {
             // ? preserve memory leak
             // ? state is updated only if mounted
             setLoggingIn(false);
-            router.push("/parents");
+            router.push("/tutors");
           }
         });
     },
   });
   const submitHandle =() => {
+    
     setLoggingIn(true);
     setErr("");
     setShowAlert(false);
     console.log(formik.isValid===true,formik.isValid)
-    if (formik.isValid===false){
-    const parentBody = { ...formik.values,status:"SUCCESS" };
-    updateParent(user.accessToken, initialValues.id, parentBody)
+  
+    changedTutor.status="SUCCESS"
+    console.log(changedTutor)
+    
+    updateTutor(user.accessToken, initialValues.id, 1,"SUCCESS")
       .then((res) => res.json())
       .then((data) => {
+        console.log(data)
         if (data.success) {
           console.log(data)
-          setParent(data.parent);
+          setTutor(data.user);
         } else {
           setErr(data.message);
         }
@@ -146,13 +155,11 @@ export const CreateParentAccountForm = (props) => {
           // ? preserve memory leak
           // ? state is updated only if mounted
           setLoggingIn(false);
-          router.push("/parents");
+          router.push("/tutors");
         }
       });
-    }
-    else{
-      formik.validateForm()
-    }
+    
+    
   }
   return (
     <form autoComplete="off" noValidate {...props} onSubmit={formik.handleSubmit}>
@@ -193,12 +200,12 @@ export const CreateParentAccountForm = (props) => {
                 error={Boolean(formik.touched.phone1 && formik.errors.phone1)}
                 helperText={formik.touched.phone1 && formik.errors.phone1}
                 fullWidth
-                label="Phone 1"
-                name="phone1"
+                label="Phone"
+                name="phone"
                 rows={4}
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                value={formik.values.phone1 || ""}
+                value={formik.values.phone || ""}
                 variant="outlined"
               />
             </Grid>
@@ -207,12 +214,12 @@ export const CreateParentAccountForm = (props) => {
                 error={Boolean(formik.touched.phone2 && formik.errors.phone2)}
                 helperText={formik.touched.phone2 && formik.errors.phone2}
                 fullWidth
-                label="Phone 2"
-                name="phone2"
+                label="Gender"
+                name="gender"
                 rows={4}
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                value={formik.values.phone2 || ""}
+                value={formik.values.gender || ""}
                 variant="outlined"
               />
             </Grid>
@@ -234,11 +241,11 @@ export const CreateParentAccountForm = (props) => {
                 error={Boolean(formik.touched.preferredBank && formik.errors.preferredBank)}
                 helperText={formik.touched.preferredBank && formik.errors.preferredBank}
                 fullWidth
-                label="Preferred Bank"
-                name="preferredBank"
+                label="bankAccount No"
+                name="bankAccountNo"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                value={formik.values.preferredBank || ""}
+                value={formik.values.bankAccountNo || ""}
                 variant="outlined"
               />
             </Grid>

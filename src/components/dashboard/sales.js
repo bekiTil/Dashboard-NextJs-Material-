@@ -5,6 +5,20 @@ import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 
 export const Sales = (props) => {
   const theme = useTheme();
+  const monthName = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
 
   const data = {
     datasets: [
@@ -14,22 +28,13 @@ export const Sales = (props) => {
         barThickness: 12,
         borderRadius: 4,
         categoryPercentage: 0.5,
-        data: [18, 5, 19, 27, 29, 19, 20],
+        data: props?.months,
         label: 'This year',
         maxBarThickness: 10
       },
-      {
-        backgroundColor: '#EEEEEE',
-        barPercentage: 0.5,
-        barThickness: 12,
-        borderRadius: 4,
-        categoryPercentage: 0.5,
-        data: [11, 20, 12, 29, 30, 25, 13],
-        label: 'Last year',
-        maxBarThickness: 10
-      }
+    
     ],
-    labels: ['1 Aug', '2 Aug', '3 Aug', '4 Aug', '5 Aug', '6 Aug', '7 aug']
+    labels: monthName.splice(props?.currentMonth,props?.currentMonth+7)
   };
 
   const options = {
@@ -89,7 +94,7 @@ export const Sales = (props) => {
             endIcon={<ArrowDropDownIcon fontSize="small" />}
             size="small"
           >
-            Last 7 days
+            Last 7 Month
           </Button>
         )}
         title="Latest Sales"

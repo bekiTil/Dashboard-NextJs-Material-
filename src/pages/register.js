@@ -14,6 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import {register} from "../../backend-utils/user-utils";
 
 const Register = () => {
   const router = useRouter();
@@ -33,7 +34,18 @@ const Register = () => {
       policy: Yup.boolean().oneOf([true], "This field must be checked"),
     }),
     onSubmit: () => {
-      router.push("/");
+      register(formik.values.email,formik.values.password).
+      then((res)=>res.json()).
+      then((data)=>{
+        if (data.success){
+          router.push("/login");
+        }
+        else{
+console.log("Something_wrong")
+        }
+        
+      })
+     
     },
   });
 

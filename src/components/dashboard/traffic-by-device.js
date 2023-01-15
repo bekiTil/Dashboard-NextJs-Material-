@@ -6,18 +6,18 @@ import TabletIcon from '@mui/icons-material/Tablet';
 
 export const TrafficByDevice = (props) => {
   const theme = useTheme();
-
+  console.log(props)
   const data = {
     datasets: [
       {
-        data: [63, 15, 22],
-        backgroundColor: ['#3F51B5', '#e53935', '#FB8C00'],
+        data: [props.numbers?.kG,props.numbers?.from1Ton4,props.numbers?.from5To6,props.numbers?.from7To8,props.numbers?.from9To10,props.numbers?.from11T012],
+        backgroundColor: ['#3F51B5', '#e53935', '#FB8C00','#065535','#800080','#7fffd4'],
         borderWidth: 8,
         borderColor: '#FFFFFF',
         hoverBorderColor: '#FFFFFF'
       }
     ],
-    labels: ['Desktop', 'Tablet', 'Mobile']
+    labels: ['KG', '1-4', '5-6','7-8','9-10','11-12']
   };
 
   const options = {
@@ -42,30 +42,11 @@ export const TrafficByDevice = (props) => {
     }
   };
 
-  const devices = [
-    {
-      title: 'Desktop',
-      value: 63,
-      icon: LaptopMacIcon,
-      color: '#3F51B5'
-    },
-    {
-      title: 'Tablet',
-      value: 15,
-      icon: TabletIcon,
-      color: '#E53935'
-    },
-    {
-      title: 'Mobile',
-      value: 23,
-      icon: PhoneIcon,
-      color: '#FB8C00'
-    }
-  ];
+  const devices = [];
 
   return (
     <Card {...props}>
-      <CardHeader title="Traffic by Device" />
+      <CardHeader title="Number by Grade" />
       <Divider />
       <CardContent>
         <Box
@@ -88,7 +69,7 @@ export const TrafficByDevice = (props) => {
         >
           {devices.map(({
             color,
-            icon: Icon,
+           
             title,
             value
           }) => (
@@ -99,7 +80,7 @@ export const TrafficByDevice = (props) => {
                 textAlign: 'center'
               }}
             >
-              <Icon color="action" />
+            
               <Typography
                 color="textPrimary"
                 variant="body1"
@@ -111,7 +92,7 @@ export const TrafficByDevice = (props) => {
                 variant="h4"
               >
                 {value}
-                %
+                
               </Typography>
             </Box>
           ))}

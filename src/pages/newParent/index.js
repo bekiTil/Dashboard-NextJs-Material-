@@ -11,7 +11,7 @@ import { selectUser } from "redux/userSlice";
 import { ParentListResults } from "src/components/parent/parent-list-results";
 import { ParentListToolbar } from "src/components/parent/parent-list-toolbar";
 
-const Parents = () => {
+const NewParents = () => {
   const user = useSelector(selectUser);
   const [parents, setParents] = useState([]);
   const [err, setErr] = useState("");
@@ -19,12 +19,12 @@ const Parents = () => {
   const router = useRouter();
   if (!user) router.push("/login");
   useEffect(() => {
-    getParents(user.accessToken)
+    getPendingParents(user.accessToken)
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
-          console.log(data)
           setParents(data.users);
+          console.log(data)
         } else {
           setErr(data.message);
         }
@@ -33,9 +33,6 @@ const Parents = () => {
         setErr("Something went wrong");
       });
   }, []);
-
-
-  
 
   return (
     <>
@@ -63,7 +60,6 @@ const Parents = () => {
     </>
   );
 };
+NewParents.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
-Parents.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
-
-export default Parents;
+export default NewParents;

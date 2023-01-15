@@ -31,45 +31,57 @@ const items = [
     title: "Home",
   },
   {
+    href: "/newTutor",
+    icon: <UsersIcon fontSize="small" />,
+    title: "New Tutors",
+  },
+  {
     href: "/tutors",
     icon: <UsersIcon fontSize="small" />,
-    title: "Tutors",
+    title: "Active Tutors",
   },
+  {
+    href: "/newParent",
+    icon: <UsersIcon fontSize="small" />,
+    title: "New Parents",
+  },
+ 
   {
     href: "/parents",
     icon: <UsersIcon fontSize="small" />,
-    title: "Parents",
+    title: "Active Parents",
   },
-  {
-    href: "/students",
-    icon: <UsersIcon fontSize="small" />,
-    title: "Students",
-  },
+ 
+  // {
+  //   href: "/students",
+  //   icon: <UsersIcon fontSize="small" />,
+  //   title: "Students",
+  // },
   // {
   //   href: "/products",
   //   icon: <ShoppingBagIcon fontSize="small" />,
   //   title: "Products",
   // },
-  {
-    href: "/jobs",
-    icon: <ShoppingBagIcon fontSize="small" />,
-    title: "Jobs",
-  },
+  // {
+  //   href: "/jobs",
+  //   icon: <ShoppingBagIcon fontSize="small" />,
+  //   title: "Jobs",
+  // },
   {
     href: "/reports",
     icon: <UploadIcon fontSize="small" />,
     title: "Reports",
   },
-  {
-    href: "/account",
-    icon: <UserIcon fontSize="small" />,
-    title: "Account",
-  },
-  {
-    href: "/settings",
-    icon: <CogIcon fontSize="small" />,
-    title: "Settings",
-  },
+  // {
+  //   href: "/account",
+  //   icon: <UserIcon fontSize="small" />,
+  //   title: "Account",
+  // },
+  // {
+  //   href: "/settings",
+  //   icon: <CogIcon fontSize="small" />,
+  //   title: "Settings",
+  // },
   // {
   //   href: "/login",
   //   icon: <LockIcon fontSize="small" />,

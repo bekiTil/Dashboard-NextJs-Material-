@@ -109,7 +109,20 @@ export const ParentCreateForm = (props) => {
   });
 
   return (
+    
     <form autoComplete="off" noValidate {...props} onSubmit={formik.handleSubmit}>
+       <TextField
+                error={Boolean(formik.touched.fullName && formik.errors.fullName)}
+                helperText={formik.touched.fullName && formik.errors.fullName}
+                fullWidth
+                label="Full Name"
+                name="fullName"
+                required
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.fullName}
+                variant="outlined"
+              />
       <Card>
         <CardHeader subheader="The information can be edited" title="Fill Parent Requirement" />
         <Divider />

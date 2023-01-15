@@ -12,6 +12,7 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableContainer,
   TableHead,
   TablePagination,
   TableRow,
@@ -23,6 +24,9 @@ import { deleteTutor } from "backend-utils/tutor-utils";
 import { useSelector } from "react-redux";
 import { selectUser } from "redux/userSlice";
 import { useRouter } from "next/router";
+import AddTaskRoundedIcon from '@mui/icons-material/AddTaskRounded';
+import { updateTutor } from "backend-utils/tutor-utils";
+
 
 export const CustomerListResults = ({ customers, searchTerm, ...rest }) => {
   const user = useSelector(selectUser);
@@ -85,11 +89,26 @@ export const CustomerListResults = ({ customers, searchTerm, ...rest }) => {
         setErr("Something went wrong");
       });
   };
-
+  const changeStatus =(id)=>{
+    updateTutor(token,id, 1,"SUCCESS")
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data)
+        if (data.success) {
+          console.log(data)
+          setTutor(data.user);
+        } else {
+          setErr(data.message);
+        }
+      })
+      .catch((_) => {
+        setErr("Something went wrong");
+      })
+  }
   return (
     <Card {...rest}>
-      <PerfectScrollbar>
-        <Box sx={{ minWidth: 1050 }}>
+        <Box >
+          <TableContainer>
           <Table>
             <TableHead>
               <TableRow>
@@ -109,6 +128,7 @@ export const CustomerListResults = ({ customers, searchTerm, ...rest }) => {
                 <TableCell>Location</TableCell>
                 <TableCell>Phone</TableCell>
                 <TableCell>Status</TableCell>
+                
                 <TableCell>Action</TableCell>
               </TableRow>
             </TableHead>
@@ -162,6 +182,23 @@ export const CustomerListResults = ({ customers, searchTerm, ...rest }) => {
                       {customer.status === "PENDING" && <Chip label="PENDING" color="primary" />}
                     </TableCell>
                     <TableCell>
+                      {customer.status=="PENDING"
+                      &&
+                      <IconButton
+                      color="error"
+                      aria-label="upload picture"
+                      component="span"
+                      onClick=
+                      {() => changeStatus(customer.id) }
+                      
+                    >
+                      <AddTaskRoundedIcon />
+                  
+                      
+                    </IconButton>
+                      }
+                    
+
                       <IconButton
                         color="error"
                         aria-label="upload picture"
@@ -174,7 +211,10 @@ export const CustomerListResults = ({ customers, searchTerm, ...rest }) => {
                         color="info"
                         aria-label="upload picture"
                         component="span"
-                        onClick={() => router.push("/tutors/" + customer.id)}
+                        onClick={() => {
+                        
+                          router.push("/tutors/" + customer.id);
+                        }}
                       >
                         <MoreHorizSharp />
                       </IconButton>
@@ -183,8 +223,9 @@ export const CustomerListResults = ({ customers, searchTerm, ...rest }) => {
                 ))}
             </TableBody>
           </Table>
+          </TableContainer>
         </Box>
-      </PerfectScrollbar>
+      
       <TablePagination
         component="div"
         count={customers.length}

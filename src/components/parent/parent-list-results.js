@@ -13,6 +13,7 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableContainer,
   TableHead,
   TablePagination,
   TableRow,
@@ -77,11 +78,19 @@ export const ParentListResults = ({ customers, searchTerm, ...rest }) => {
     setPage(newPage);
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = (id,success) => {
     deleteParent(token, id)
       .then((res) => res.json())
       .then((_data) => {
-        router.push("/parents");
+        if (success=='SUCCESS'){
+          router.push("/parents")
+
+        }
+        else{
+          router.push("/newParent")
+        }
+        console.log(_data)
+        
       })
       .catch((_) => {
         setErr("Something went wrong");
@@ -90,9 +99,15 @@ export const ParentListResults = ({ customers, searchTerm, ...rest }) => {
 
   return (
     <Card {...rest}>
-      <PerfectScrollbar>
-        <Box sx={{ minWidth: 1050 }}>
-          <Table>
+      
+        <Box 
+       
+        
+        >
+          <TableContainer>
+          <Table
+          
+          >
             <TableHead>
               <TableRow>
                 <TableCell padding="checkbox">
@@ -109,7 +124,7 @@ export const ParentListResults = ({ customers, searchTerm, ...rest }) => {
                 <TableCell>Name</TableCell>
                 <TableCell>Location</TableCell>
                 <TableCell>Phone</TableCell>
-                <TableCell>Email</TableCell>
+                
                 <TableCell>Action</TableCell>
               </TableRow>
             </TableHead>
@@ -156,22 +171,22 @@ export const ParentListResults = ({ customers, searchTerm, ...rest }) => {
                     </TableCell>
                     <TableCell>{customer.location}</TableCell>
                     <TableCell>{customer.phone1}</TableCell>
-                    <TableCell>{customer.email}</TableCell>
+                   
                     <TableCell>
                       <IconButton
                         color="error"
                         aria-label="upload picture"
                         component="span"
-                        onClick={() => handleDelete(customer.id)}
+                        onClick={() => handleDelete(customer.id,customer.status)}
                       >
                         <DeleteOutlined />
                       </IconButton>
-                      {customer.email === null && (
+                      {customer.email === null && customer.status ==="PENDING" && (
                         <Button
                           color="primary"
                           variant="contained"
                           onClick={() => {
-                            router.push("/parents/" + customer.id);
+                            router.push("/newParent/" + customer.id);
                           }}
                         >
                           Create Account
@@ -190,8 +205,9 @@ export const ParentListResults = ({ customers, searchTerm, ...rest }) => {
                 ))}
             </TableBody>
           </Table>
+          </TableContainer>
         </Box>
-      </PerfectScrollbar>
+      
       <TablePagination
         component="div"
         count={customers.length}

@@ -36,9 +36,11 @@ export const TutorProfile = (props) => {
               width: 64,
             }}
           />
+
           <Typography color="textPrimary" gutterBottom variant="h5">
             {props.user?.fullName}
           </Typography>
+          <Box>
           <Typography color="textSecondary" variant="body2">
             Email: {props.user?.email}
           </Typography>
@@ -93,6 +95,7 @@ export const TutorProfile = (props) => {
           <Typography color="textSecondary" variant="body2">
             Subjects: {props.user?.subjects.toString()}
           </Typography>
+          </Box>
         </Box>
       </CardContent>
       <Divider />

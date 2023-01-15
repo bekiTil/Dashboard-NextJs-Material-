@@ -10,6 +10,16 @@ const getStudents = async (token) => {
   });
   return response;
 };
+const getChildrenOfParent = async (token,parentId) =>{
+  const response = await fetch(`${API_URL}api/v1/student/useParent/${id}`,{
+    method:"GET",
+    headers : {
+      "Content-Type": "application/json",
+      authorization: `Bearer ${token}`,
+    },
+  });
+  return response;
+  }
 
 const getAStudent = async (token, id) => {
   const response = await fetch(`${API_URL}api/v1/student/${id}`, {
@@ -34,6 +44,7 @@ const updateStudent = async (token, id, tutorId, status) => {
       status,
     }),
   });
+  console.log(response)
   return response;
 };
 
@@ -62,4 +73,15 @@ const deleteStudent = async (token, id) => {
   return response;
 };
 
-export { getStudents, createStudent, getAStudent, deleteStudent, updateStudent };
+const getNumberOfStudentsByGrade = async (token)=>{
+const response = await fetch (`${API_URL}api/v1/student/byGrade`,{
+      method:"GET",
+      headers:{
+        "Content-Type" :"application/json",
+        authorization: `Bearer ${token}`,
+      }
+      })
+    return response
+}
+
+export { getStudents, createStudent, getAStudent, deleteStudent, updateStudent,getChildrenOfParent,getNumberOfStudentsByGrade };

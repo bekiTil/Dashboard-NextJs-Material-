@@ -1,5 +1,15 @@
 import { API_URL } from "./url";
 
+const getPendingTutors = async (token) => {
+  const response = await fetch(`${API_URL}api/v1/tutor/pending`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      authorization: `Bearer ${token}`,
+    },
+  });
+  return response;
+};
 const getTutors = async (token) => {
   const response = await fetch(`${API_URL}api/v1/tutor`, {
     method: "GET",
@@ -10,6 +20,18 @@ const getTutors = async (token) => {
   });
   return response;
 };
+
+const getATutorwithLocation = async (token, location) => {
+  const response = await fetch(`${API_URL}api/v1/tutor/location/${location}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      authorization: `Bearer ${token}`,
+    },
+  });
+  return response;
+};
+
 
 const getATutor = async (token, id) => {
   const response = await fetch(`${API_URL}api/v1/tutor/${id}`, {
@@ -48,4 +70,4 @@ const deleteTutor = async (token, id) => {
   return response;
 };
 
-export { getTutors, updateTutor, deleteTutor, getATutor };
+export { getTutors, updateTutor, deleteTutor, getATutor ,getATutorwithLocation,getPendingTutors};

@@ -50,18 +50,21 @@ const TutorDetail = () => {
             Account
           </Typography>
           <Grid container spacing={3}>
-            <Grid item lg={6} md={6} xs={12}>
+            <Grid item lg={4} md={3} xs={12}>
               <TutorProfile user={tutorData} />
             </Grid>
-            <Grid item lg={6} md={6} xs={12}>
+            <Grid item lg={8} md={6} xs={12}>
               <Card>
                 <CardContent>
+                <Grid item lg={12} md={12} xs={12}>
                   <Box
                     sx={{
                       alignItems: "center",
                       display: "flex",
                       flexDirection: "column",
+                      
                     }}
+                    minHeight={300}
                   >
                     <Typography color="textPrimary" gutterBottom variant="h5">
                       Essay
@@ -70,10 +73,11 @@ const TutorDetail = () => {
                       {tutorData?.essay}
                     </Typography>
                   </Box>
+                  </Grid>
                 </CardContent>
               </Card>
               <br></br>
-              <Card>
+              {/* <Card>
                 <CardContent>
                   <Box
                     sx={{
@@ -122,14 +126,70 @@ const TutorDetail = () => {
                     </Typography>
                   </Box>
                 </CardContent>
-              </Card>
+              </Card> */}
             </Grid>
           </Grid>
-          <Typography sx={{ mb: 3 }} variant="h4">
+          <Grid container mt={2} spacing={3} >
+            <Grid  item lg={6} md={6} xs={12}  >
+          <Card>
+                <CardContent>
+                  <Box
+                    sx={{
+                      alignItems: "center",
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
+                    minHeight={150}
+                  >
+                    <Typography color="textPrimary" gutterBottom variant="h5">
+                      Bank Information
+                    </Typography>
+                    <Typography color="textSecondary" variant="body2">
+                      Preferred Bank: {tutorData?.preferredBank}
+                    </Typography>
+                    <Typography color="textSecondary" variant="body2">
+                      Account Number: {tutorData?.bankAccountNo}
+                    </Typography>
+                  </Box>
+                </CardContent>
+              </Card>
+              </Grid>
+              <Grid minHeight={150}  item lg={6} md={6} xs={12}  >
+              <Card >
+                <CardContent>
+                  <Box
+                    sx={{
+                      alignItems: "center",
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
+                    minHeight={150}
+                  >
+                    <Typography color="textPrimary" gutterBottom variant="h5">
+                      Contact's Information
+                    </Typography>
+                    <Typography color="textSecondary" variant="body2">
+                      Contact's Name: {tutorData?.contactName}
+                    </Typography>
+                    <Typography color="textSecondary" variant="body2">
+                      Contact's Phone Number: {tutorData?.contactPhone1}
+                    </Typography>
+                    <Typography color="textSecondary" variant="body2">
+                      Contact's Other Phone No.:{tutorData?.contactPhone2}
+                    </Typography>
+                    <Typography color="textSecondary" variant="body2">
+                      Contact's Email: {tutorData?.contactEmail}
+                    </Typography>
+                  </Box>
+                </CardContent>
+              </Card>
+              </Grid>
+          </Grid>
+          {/* <Typography sx={{ mb: 3 }} variant="h4">
             Reports
           </Typography>
-          <Grid container spacing={3}>
-            {tutorData?.reports.map((report, index) => {
+          <Grid container spacing={3}> */}
+            {/* {tutorData?.reports.map((report, index) => {
               return (
                 <Grid item lg={6} md={6} xs={12} key={index}>
                   <Card>
@@ -214,9 +274,9 @@ const TutorDetail = () => {
                     </CardContent>
                   </Card>
                 </Grid>
-              );
-            })}
-          </Grid>
+              ); */}
+            {/* })} */}
+          {/* </Grid> */}
         </Container>
       </Box>
     </>

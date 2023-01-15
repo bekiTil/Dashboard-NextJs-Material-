@@ -1,5 +1,15 @@
 import { API_URL } from "./url";
 
+const getPendingParents = async (token) => {
+  const response = await fetch(`${API_URL}api/v1/parent/pending`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      authorization: `Bearer ${token}`,
+    },
+  });
+  return response;
+};
 const getParents = async (token) => {
   const response = await fetch(`${API_URL}api/v1/parent`, {
     method: "GET",
@@ -59,4 +69,15 @@ const deleteParent = async (token, id) => {
   return response;
 };
 
-export { getParents, createParent, getAParent, updateParent, deleteParent };
+const numberByMonth = async (token)=>{
+  const response = await fetch(`${API_URL}api/v1/parent/basedOnMonth`,{
+    method:"GET",
+    headers:{
+      "Content-Type": "application/json",
+      authorization :`Bearer ${token}`,
+    }
+  })
+  return response;
+}
+
+export { getParents, createParent, getAParent, updateParent, deleteParent,getPendingParents, numberByMonth};
