@@ -12,7 +12,7 @@ const getReports = async (token) => {
 };
 
 const getAReport = async (token,id)=>{
-  console.log("hi")
+  
   const response = await fetch(`${API_URL}api/v1/report/${id}`, {
     method:"GET",
     headers :{

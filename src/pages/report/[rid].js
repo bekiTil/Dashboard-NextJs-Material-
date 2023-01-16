@@ -73,566 +73,259 @@ const ReportDetail = () => {
     <Grid alignItems="center" m={2} p={2}>
       {report?.reports?.inputFields?.map((tutee, index) => {
         return (
-          <Box p={5}>
-            <Typography align="center">Tutee Name: {tutee.name}</Typography>
+          <div key={index} className="grid grid-cols-1 gap-4">
+            <div className="flex flex-row">
+              <div className="">
+                <label className="col mt-2 text-lg font-semibold md:text-xl">Tutee Name</label>
+                <br></br>
+                <input
+                  className="mr-1 w-full h-full rounded-lg border border-gray-400 bg-gray-200 text-gray-700  transition duration-500 focus:border-gray-900 focus:outline-none md:w-3/4"
+                  name="name"
+                  type="text"
+                  placeholder="Full Name"
+                  required={true}
+                  value={tutee.name}
+                  disabled={true}
+                />
+              </div>
+            </div>
+            <div className=" w-fit my-10 border border-gray-200 rounded-lg shadow-md md:px-3 md:py-2 ">
+              <div className="text-lg">On the Content</div>
 
-            <Grid marginTop={2} padding={2} container boxShadow={12}>
-              <Typography>On the Content</Typography>
-              {tutee.subjects.map((sub, index1) => {
+              {tutee.subjects.map((sub, valu) => {
                 return (
-                  <Grid
-                    sx={{}}
-                    item
-                    rowSpacing={1}
-                    spacing={2}
-                    columnSpacing={2}
-                    container
-                    lg={12}
-                    xs={12}
-                  >
-                    <Grid item xs={3} lg={3}>
-                      {index1 === 0 && (
-                        <Button
-                          variant="outlined"
-                          fullWidth={true}
-                          sx={{
-                            fontSize: {
-                              sm: 15,
-                              xs: 10,
-                            },
-                          }}
-                        >
+                  <div className=" mt-10  flex flex-row px-3 py-2">
+                    <div className="col basis-1/4 mr-2 md:mr-0">
+                      {index == 0 && valu == 0 && (
+                        <div className=" inline-block w-fit md:w-2/3   rounded bg-[#1A3765] px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out">
                           Subject
-                        </Button>
+                        </div>
                       )}
-                      <TextField
-                        style={{ wordWrap: "break-word" }}
-                        disabled
-                        inputProps={{
-                          style: {
-                            fontSize: {
-                              sm: 15,
-                              xs: 10,
-                            },
-                          },
-                        }}
-                        sx={{
-                          my: 2,
-                          fontSize: {
-                            sm: 15,
-                            xs: 10,
-                          },
-                        }}
+                      <input
+                        className="mr-1 my-2 w-fit py-4 break-words rounded-lg text-xs border border-gray-400 bg-gray-200 text-gray-700  transition duration-500 focus:border-gray-900 focus:outline-none md:w-3/4"
+                        type="text"
+                        placeholder="Subject"
+                        name="subject"
+                        disabled={true}
                         value={sub.subject}
-                      ></TextField>
-                      {/* <Typography
-                      
-                        style={{ wordWrap: "break-word" }}
-                        sx={{
-                          fontSize: {
-                            sm: 15,
-                            xs: 10,
-                          },
-                        }}
-                      >
-                        {sub.subject}
-                      </Typography> */}
-                    </Grid>
-                    <Grid item xs={9} lg={9}>
-                      {sub.chapters.map((cha, index2) => {
+                      />
+                    </div>
+                    <div className="col flex basis-3/4 flex-col">
+                      {sub.chapters.map((chap, chapter_index) => {
                         return (
-                          <Grid
-                            item
-                            rowSpacing={1}
-                            spacing={2}
-                            columnSpacing={2}
-                            container
-                            lg={12}
-                            xs={12}
-                          >
-                            <Grid item xs={4} lg={4}>
-                              {index1 == 0 && index2 == 0 && (
-                                <Button
-                                  style={{ wordWrap: "break-word" }}
-                                  variant="outlined"
-                                  fullWidth={true}
-                                  sx={{
-                                    fontSize: {
-                                      sm: 15,
-                                      xs: 10,
-                                    },
-                                  }}
-                                >
+                          <div className="row flex flex-row" key={chapter_index}>
+                            <div className="col mr-2 md:mr-0">
+                              {index == 0 && valu == 0 && chapter_index == 0 && (
+                                <div className=" w-fit  md:w-2/3 rounded bg-[#1A3765] px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out">
+                                  {" "}
                                   Chapter
-                                </Button>
+                                </div>
                               )}
-                              <TextField
-                                disabled
-                                inputProps={{
-                                  style: {
-                                    fontSize: {
-                                      sm: 15,
-                                      xs: 10,
-                                    },
-                                  },
-                                }}
-                                sx={{
-                                  my: 2,
-                                  fontSize: {
-                                    sm: 15,
-                                    xs: 10,
-                                  },
-                                }}
-                                value={cha.chapter}
-                              ></TextField>
-                              {/* <Typography
-                                style={{ wordWrap: "break-word" }}
-                                sx={{
-                                  fontSize: {
-                                    sm: 15,
-                                    xs: 10,
-                                  },
-                                }}
-                              >
-                                {cha.chapter}
-                              </Typography> */}
-                            </Grid>
-                            <Grid item lg={8} xs={8}>
-                              {cha.topics.map((top, index3) => {
+                              <input
+                                className="mr-1  my-2 w-fit py-4 break-words rounded-lg text-xs border border-gray-400 bg-gray-200 text-gray-700  transition duration-500 focus:border-gray-900 focus:outline-none md:w-3/4"
+                                type="text"
+                                placeholder="Chapter"
+                                name="chapter"
+                                disabled={true}
+                                value={chap.chapter}
+                              />
+                            </div>
+                            <div className="col flex basis-2/3 flex-col">
+                              {chap.topics.map((top, topic_index) => {
                                 return (
-                                  <Grid
-                                    item
-                                    rowSpacing={1}
-                                    spacing={2}
-                                    columnSpacing={2}
-                                    container
-                                    lg={12}
-                                    xs={12}
-                                  >
-                                    <Grid item xs={6} lg={6}>
-                                      {index1 == 0 && index2 == 0 && index3 == 0 && (
-                                        <Button
-                                          style={{ wordWrap: "break-word" }}
-                                          variant="outlined"
-                                          fullWidth={true}
-                                          sx={{
-                                            fontSize: {
-                                              sm: 15,
-                                              xs: 10,
-                                            },
-                                          }}
-                                        >
-                                          Topic
-                                        </Button>
-                                      )}
-                                      <TextField
-                                        disabled
-                                        inputProps={{
-                                          style: {
-                                            fontSize: {
-                                              sm: 15,
-                                              xs: 10,
-                                            },
-                                          },
-                                        }}
-                                        sx={{
-                                          my: 2,
-                                          fontSize: {
-                                            sm: 15,
-                                            xs: 10,
-                                          },
-                                        }}
+                                  <div className="row flex flex-row" key={topic_index}>
+                                    <div className="col mr-2 md:mr-0">
+                                      {index == 0 &&
+                                        valu == 0 &&
+                                        chapter_index == 0 &&
+                                        topic_index == 0 && (
+                                          <div className="w-fit md:w-2/3  rounded bg-[#1A3765] px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out">
+                                            {" "}
+                                            Topic
+                                          </div>
+                                        )}
+                                      <input
+                                        
+                                        className="mr-1  my-2 w-fit py-4 break-all  text-xs rounded-lg border border-gray-400 bg-gray-200 text-gray-700  transition duration-500 focus:border-gray-900 focus:outline-none md:w-3/4"
+                                        type="text"
+                                        placeholder="Topic"
                                         value={top.topic}
-                                      ></TextField>
-                                      {/* <Typography
-                                      paddingY={2}
-                                        sx={{
-                                          fontSize: {
-                                            sm: 15,
-                                            xs: 10,
-                                          },
-                                        }}
-                                        style={{ wordWrap: "break-word" }}
-                                      >
-                                        {top.topic}dkfhaflakfkafjlk
-                                      </Typography> */}
-                                    </Grid>
-                                    <Grid item xs={6} lg={6}>
-                                      {index1 == 0 && index2 == 0 && index3 == 0 && (
-                                        <Button
-                                          style={{ wordWrap: "break-word" }}
-                                          variant="outlined"
-                                          fullWidth={true}
-                                          sx={{
-                                            fontSize: {
-                                              sm: 15,
-                                              xs: 9,
-                                            },
-                                          }}
-                                        >
-                                          Understanding
-                                        </Button>
-                                      )}
-                                      <TextField
-                                        style={{ wordWrap: "break-word" }}
-                                        disabled
-                                        inputProps={{
-                                          style: {
-                                            fontSize: {
-                                              sm: 15,
-                                              xs: 10,
-                                            },
-                                          },
-                                        }}
-                                        sx={{
-                                          my: 2,
-                                        }}
+                                        disabled={true}
+                                        name="topic"
+                                      />
+                                    </div>
+                                    <div className="col mr-2 md:mr-0">
+                                      {index == 0 &&
+                                        valu == 0 &&
+                                        chapter_index == 0 &&
+                                        topic_index == 0 && (
+                                          <div className=" mb-1 w-fit md:w-2/3 rounded bg-[#1A3765] text-center py-2.5 text-xs  uppercase  text-white shadow-md ">
+                                            Understanding
+                                          </div>
+                                        )}
+                                      <input
+                                        className="mr-1 my-2 w-fit py-4 break-words text-xs rounded-lg border border-gray-400 bg-gray-200 text-gray-700  transition duration-500 focus:border-gray-900 focus:outline-none md:w-3/4"
+                                        type="text"
+                                        placeholder="Understanding"
+                                        disabled={true}
                                         value={top.understanding}
-                                      ></TextField>
-                                    </Grid>
-                                  </Grid>
+                                        name="understanding"
+                                      />
+                                    </div>
+                                  </div>
                                 );
                               })}
-                            </Grid>
-                          </Grid>
+                            </div>
+                          </div>
                         );
                       })}
-                    </Grid>
-                  </Grid>
+                    </div>
+                  </div>
                 );
               })}
-            </Grid>
-            <Grid
-              marginTop={2}
-              padding={2}
-              container
-              rowSpacing={1}
-              spacing={2}
-              columnSpacing={2}
-              boxShadow={12}
-            >
-              <Typography>On the Result</Typography>
-              {tutee.assesments.map((sub, index4) => {
+            </div>
+
+            <div className=" w-fit my-10 border border-gray-200 rounded-lg shadow-md  md:px-3 md:py-2 ">
+              <div className="text-lg">On Result</div>
+
+              {tutee.assesments.map((asses, assesments_index) => {
                 return (
-                  <Grid
-                    item
-                    alignContent="center"
-                    container
-                    lg={12}
-                    xs={12}
-                    rowSpacing={1}
-                    spacing={2}
-                    columnSpacing={2}
-                  >
-                    <Grid item xs={3} lg={3}>
-                      {index4 === 0 && (
-                        <Button
-                          variant="outlined"
-                          fullWidth={true}
-                          sx={{
-                            fontSize: {
-                              sm: 15,
-                              xs: 10,
-                            },
-                          }}
-                        >
+                  <div className=" mt-10  flex flex-row px-3 py-2" key={assesments_index}>
+                    <div className="col basis-1/4 mr-2 md:mr-0">
+                      {assesments_index == 0 && (
+                        <div className=" inline-block w-fit md:w-2/3  rounded bg-[#1A3765] px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out">
                           Subject
-                        </Button>
+                        </div>
                       )}
-                      <TextField
-                        disabled
-                        inputProps={{
-                          style: {
-                            fontSize: {
-                              sm: 15,
-                              xs: 10,
-                            },
-                          },
-                        }}
-                        sx={{
-                          my: 2,
-                          fontSize: {
-                            sm: 15,
-                            xs: 10,
-                          },
-                        }}
-                        value={sub.assesment}
-                      ></TextField>
-                    </Grid>
-                    <Grid item xs={9} lg={9}>
-                      {sub.units.map((cha, index5) => {
+                      <input
+                        className="mr-1 my-2 w-fit py-4 break-words rounded-lg border text-xs border-gray-400 bg-gray-200 text-gray-700  transition duration-500 focus:border-gray-900 focus:outline-none md:w-3/4"
+                        type="text"
+                        placeholder="Subject"
+                        disabled={true}
+                        name="assesment"
+                        value={asses.assesment}
+                      />
+                    </div>
+                    <div className="col flex basis-3/4 flex-col">
+                      {asses.units.map((uni, unit_index) => {
                         return (
-                          <Grid
-                            item
-                            container
-                            rowSpacing={1}
-                            spacing={2}
-                            columnSpacing={2}
-                            lg={12}
-                            xs={12}
-                          >
-                            <Grid item xs={4} lg={4}>
-                              {index4 === 0 && index5 == 0 && (
-                                <Button
-                                  sx={{
-                                    fontSize: {
-                                      sm: 15,
-                                      xs: 10,
-                                    },
-                                  }}
-                                  variant="outlined"
-                                  fullWidth={true}
-                                >
+                          <div className="row flex flex-row" key={unit_index}>
+                            <div className="col  mr-2 md:mr-0 ">
+                              {assesments_index == 0 && unit_index == 0 && (
+                                <div className=" w-fit md:w-2/3  rounded bg-[#1A3765] px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out">
+                                  {" "}
                                   Chapter
-                                </Button>
+                                </div>
                               )}
-                              <TextField
-                                style={{ wordWrap: "break-word" }}
-                                disabled
-                                inputProps={{
-                                  style: {
-                                    fontSize: {
-                                      sm: 15,
-                                      xs: 10,
-                                    },
-                                  },
-                                }}
-                                sx={{
-                                  my: 2,
-                                  fontSize: {
-                                    sm: 15,
-                                    xs: 10,
-                                  },
-                                }}
-                                value={cha.unit}
-                              ></TextField>
-                            </Grid>
-                            <Grid item lg={8} xs={8}>
-                              {cha.types.map((top, index6) => {
+                              <input
+                                className="mr-1 my-2 w-fit py-4 break-words text-xs rounded-lg border border-gray-400 bg-gray-200 text-gray-700  transition duration-500 focus:border-gray-900 focus:outline-none md:w-3/4"
+                                type="text"
+                                name="unit"
+                                placeholder="Chapter"
+                                disabled={true}
+                                value={uni.unit}
+                              />
+                            </div>
+                            <div className="col flex basis-2/3 flex-col">
+                              {uni.types.map((typ, type_index) => {
                                 return (
-                                  <Grid
-                                    item
-                                    container
-                                    rowSpacing={1}
-                                    spacing={2}
-                                    columnSpacing={2}
-                                    lg={12}
-                                    xs={12}
-                                  >
-                                    <Grid item xs={6} lg={6}>
-                                      {index4 === 0 && index5 == 0 && index6 == 0 && (
-                                        <Button
-                                          sx={{
-                                            fontSize: {
-                                              sm: 15,
-                                              xs: 10,
-                                            },
-                                          }}
-                                          variant="outlined"
-                                          fullWidth={true}
-                                        >
-                                          Type
-                                        </Button>
-                                      )}
-                                      <TextField
-                                        style={{ wordWrap: "break-word" }}
-                                        disabled
-                                        inputProps={{
-                                          style: {
-                                            fontSize: {
-                                              sm: 15,
-                                              xs: 10,
-                                            },
-                                          },
-                                        }}
-                                        sx={{
-                                          my: 2,
-                                          fontSize: {
-                                            sm: 15,
-                                            xs: 10,
-                                          },
-                                        }}
-                                        value={top.type}
-                                      ></TextField>
-                                    </Grid>
-                                    <Grid item xs={6} lg={6}>
-                                      {index4 === 0 && index5 == 0 && index6 == 0 && (
-                                        <Button
-                                          sx={{
-                                            fontSize: {
-                                              sm: 15,
-                                              xs: 10,
-                                            },
-                                          }}
-                                          variant="outlined"
-                                          fullWidth={true}
-                                        >
-                                          Result
-                                        </Button>
-                                      )}
-                                      <TextField
-                                        style={{ wordWrap: "break-word" }}
-                                        disabled
-                                        inputProps={{
-                                          style: {
-                                            fontSize: {
-                                              sm: 15,
-                                              xs: 10,
-                                            },
-                                          },
-                                        }}
-                                        sx={{
-                                          my: 2,
-                                          fontSize: {
-                                            sm: 15,
-                                            xs: 10,
-                                          },
-                                        }}
-                                        value={top.result}
-                                      ></TextField>
-                                    </Grid>
-                                  </Grid>
+                                  <div className="row flex flex-row" key={type_index}>
+                                    <div className="col  mr-2 md:mr-0">
+                                      {assesments_index == 0 &&
+                                        unit_index == 0 &&
+                                        type_index == 0 && (
+                                          <div className=" mb-1  w-fit md:w-2/3  rounded bg-[#1A3765] px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out">
+                                            {" "}
+                                            Type
+                                          </div>
+                                        )}
+                                      <input
+                                    
+                                        className="mr-1 my-2 w-fit py-4 break-words text-xs rounded-lg border border-gray-400 bg-gray-200 text-gray-700  transition duration-500 focus:border-gray-900 focus:outline-none md:w-3/4"
+                                        type="text"
+                                        placeholder="Type"
+                                        value={typ.type}
+                                        disabled={true}
+                                        name="type"
+                                      />
+                                    </div>
+                                    <div className="col mr-2 md:mr-0 ">
+                                      {assesments_index == 0 &&
+                                        unit_index == 0 &&
+                                        type_index == 0 && (
+                                          <div className=" mb-1  w-fit md:w-2/3  rounded bg-[#1A3765] px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out">
+                                            Result
+                                          </div>
+                                        )}
+                                      <input
+                                        className="mr-1 my-2 w-fit py-4 break-words text-xs rounded-lg border border-gray-400 bg-gray-200 text-gray-700  transition duration-500 focus:border-gray-900 focus:outline-none md:w-3/4"
+                                        type="text"
+                                        placeholder="Result"
+                                        disabled={true}
+                                        value={typ.result}
+                                        name="result"
+                                      />
+                                    </div>
+                                  </div>
                                 );
                               })}
-                            </Grid>
-                          </Grid>
+                            </div>
+                          </div>
                         );
                       })}
-                    </Grid>
-                  </Grid>
+                    </div>
+                  </div>
                 );
               })}
-            </Grid>
-
-            <Typography>On the Tutorial Delivary </Typography>
-            <Grid
-              marginTop={2}
-              padding={2}
-              container
-              rowSpacing={1}
-              spacing={2}
-              columnSpacing={2}
-              boxShadow={12}
-            >
-              <Grid xs={12} md={6}>
-                <div className="text-lg">1.How do the tutorial go?</div>
-                <TextField value={report.feedback} multiline disabled />
-              </Grid>
-              <Grid xs={12} md={6}>
-                <div className="text-lg">2.Was there any Challenge?</div>
-
-                <TextField value={report.pastChallenge} multiline disabled />
-              </Grid>
-              <Grid xs={12} md={6}>
-                <div className="text-lg">3.What are you going to the Challenge?</div>
-                <TextField value={report.futureChallenge} multiline disabled />
-              </Grid>
-              <Grid xs={12} md={6}>
-                <div className="text-lg">4.How can we help you with the Challenge?</div>
-                <TextField value={report.helpChallenge} multiline disabled />
-              </Grid>
-            </Grid>
-            <Grid
-              marginTop={2}
-              padding={2}
-              container
-              rowSpacing={1}
-              spacing={2}
-              columnSpacing={2}
-              boxShadow={12}
-            >
-              <Grid xs={12} md={6} my={2}>
-                <TextField label="dressing" value={report.dressing} />
-              </Grid>
-
-              <Grid xs={12} md={6}>
-                <TextField label="Grooming" value={report.grooming} />
-              </Grid>
-              <Grid xs={12} md={6} my={2}>
-                <TextField label="Hygiene" value={report.hygiene} />
-              </Grid>
-              <Grid xs={12} md={6} my={2}>
-                <TextField label="Punctuality" value={report.punctuality} />
-              </Grid>
-              <Grid xs={12} md={6} my={2}>
-                <TextField label="Manner" value={report.manner} />
-              </Grid>
-              <Grid xs={12} md={6} my={2}>
-                <TextField label="Elequence" value={report.elequence} />
-              </Grid>
-            </Grid>
-            
-          </Box>
+            </div>
+          </div>
         );
       })}
+
+      
+      { report?.status == "PENDING" && ( 
+      <Box>
       <Typography component="legend">Rate the Report </Typography>
       <Rating
         name="simple-controlled"
         value={value}
         onChange={(event, newValue) => {
-          report.rate=newValue
+          report.rate = newValue;
           setValue(newValue);
-          
         }}
       />
-       { report?.status=="PENDING" && (
-     <Stack direction="row" spacing={2}>
-     
-<Button variant="contained" color="success"
-onClick={()=>{
-report.status="SUCCESS"
-UpdateAReport(token,rid,{status:"SUCCESS",rate:value})}
-
+      </Box>
+      )
 }
->
-  Success
-</Button>
-
-<Button
-
-variant="contained" color="error"
-onClick={()=>{
-  report.status="FAILED"
-  UpdateAReport(token,rid,{status:"FAILED",rate:value})}
-  
-  }
->
-  Reject
-</Button>
-    
-     </Stack>
-       )
-      }
-         {
-      report?.status=="FAILED" &&(
-        <Alert severity="warning"
-        
       
-        >
-          Rejected
-        </Alert>
+           {report?.status == "PENDING" && (
+        <Stack direction="row" spacing={2}>
+          <Button
+            variant="contained"
+            color="success"
+            onClick={() => {
+              report.status = "SUCCESS";
+              UpdateAReport(token, rid, { status: "SUCCESS", rate: value });
+            }}
+          >
+            Success
+          </Button>
 
-
-
-
-      )
-    }
-      {
-      report?.status=="SUCCESS" &&(
-        <Alert severity="success" 
-        
-      
-        >
-          Accepted
-        </Alert>
-
-
-
-
-      )
-    }
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => {
+              report.status = "FAILED";
+              UpdateAReport(token, rid, { status: "FAILED", rate: value });
+            }}
+          >
+            Reject
+          </Button>
+        </Stack>
+      )}
+      {report?.status == "FAILED" && <Alert severity="warning">Rejected</Alert>}
+      {report?.status == "SUCCESS" && <Alert severity="success">Accepted</Alert>}
     </Grid>
- 
   );
 };
 
