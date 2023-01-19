@@ -27,7 +27,8 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Avatar
+  Avatar,
+  Chip
 } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import { ReportListResults } from "../components/report/report-list-results";
@@ -308,6 +309,7 @@ fontWeight='bold'
               <TableHead>
                 <TableRow>
                   <TableCell>Name</TableCell>
+                  <TableCell>Status</TableCell>
                   <TableCell align="right">Action</TableCell>
                 </TableRow>
               </TableHead>
@@ -348,6 +350,11 @@ fontWeight='bold'
                         {report.tutorName}
                         </Typography>
                          </Box>
+                        </TableCell>
+                        <TableCell>
+                        {report.status === "SUCCESS" && <Chip label="SUCCESS" color="success" />}
+                      {report.status === "FAILED" && <Chip label="SUCCESS" color="error" />}
+                      {report.status === "PENDING" && <Chip label="PENDING" color="primary" />}
                         </TableCell>
                         <TableCell align="right">
                           <IconButton
