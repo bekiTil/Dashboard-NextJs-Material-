@@ -9,6 +9,8 @@ import {
   DialogTitle,
   Alert,
 } from "@mui/material";
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 import {
   InputLabel,
   MenuItem,
@@ -28,13 +30,13 @@ import {
   TablePagination,
   TableRow,
   Avatar,
-  Chip
+  Chip,
 } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import { ReportListResults } from "../components/report/report-list-results";
 import { ReportListToolbar } from "../components/report/report-list-toolbars";
 import { DashboardLayout } from "../components/dashboard-layout";
-import AssignmentLateRoundedIcon from '@mui/icons-material/AssignmentLateRounded';
+import AssignmentLateRoundedIcon from "@mui/icons-material/AssignmentLateRounded";
 import { getReports, getReportsBasedOnWeek } from "../../backend-utils/report-utils";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../redux/userSlice";
@@ -49,10 +51,18 @@ import IconButton from "@mui/material/IconButton";
 import CommentIcon from "@mui/icons-material/Comment";
 import { DeleteOutlined, MoreHorizSharp } from "@mui/icons-material";
 import { getInitials } from "src/utils/get-initials";
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
 const Reports = () => {
-  const currentDate= new Date()
-  const currentMonth = currentDate.getMonth()+1
+  const [value, setValue] = useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth() + 1;
   const user = useSelector(selectUser);
   const [reports, setReports] = useState(null);
   const [err, setErr] = useState("");
@@ -65,7 +75,7 @@ const Reports = () => {
   const [Week5, setFiveWeek] = useState([]);
   const [WeeklyReport, setWeeklyReport] = useState([]);
   const [totalWeeks, setTotalWeeks] = useState([]);
-  const [selectMonth,setSelectedMonth] = useState(currentMonth)
+  const [selectMonth, setSelectedMonth] = useState(currentMonth);
   const monthName = [
     "Jan",
     "Feb",
@@ -81,10 +91,10 @@ const Reports = () => {
     "Dec",
   ];
   const d = new Date();
-  const [monthIndex,setMonthIndex]=useState(d.getMonth())
+  const [monthIndex, setMonthIndex] = useState(d.getMonth());
   const handleOpen = (truthValue, weekRepo = []) => {
-    console.log(truthValue)
-    console.log(weekRepo)
+    console.log(truthValue);
+    console.log(weekRepo);
     setWeeklyReport(weekRepo);
   };
   const getDay = (date) => {
@@ -95,7 +105,7 @@ const Reports = () => {
   };
   const createCalander = async (year, month, newData) => {
     let data = [];
-    console.log(newData,"createCalander")
+    console.log(newData, "createCalander");
     let mon = month - 1;
     let d = new Date(year, mon);
     let temp = [];
@@ -109,21 +119,20 @@ const Reports = () => {
         temp = [];
       }
 
-     
       d.setDate(d.getDate() + 1);
     }
     if (temp.length > 0) {
       data.push([temp[0], temp[temp.length - 1]]);
       temp = [];
     }
-  
+
     setWeeks(data);
 
     return [data, newData];
   };
 
   const assignReporWithValidWeek = (newData, week) => {
-    console.log(newData,week)
+    console.log(newData, week);
     let firstData = [];
     let secondData = [];
     let thirdData = [];
@@ -161,10 +170,9 @@ const Reports = () => {
   if (!user) router.push("/login");
   useEffect(() => {
     let d = new Date();
-    let month = d.getMonth()+1
+    let month = d.getMonth() + 1;
     let year = 2023;
 
-    
     getReportsBasedOnWeek(user.accessToken, year, month)
       .then((res) => res.json())
       .then((data) => {
@@ -179,7 +187,7 @@ const Reports = () => {
       })
       .then((newData) => createCalander(year, month, newData))
       .then((newData) => assignReporWithValidWeek(newData[1], newData[0]))
-      .then(()=>setMonthIndex(month-1))
+      .then(() => setMonthIndex(month - 1))
       .catch((_) => {
         setErr("Something went wrong");
       });
@@ -187,15 +195,14 @@ const Reports = () => {
 
   useEffect(() => {
     let d = new Date();
-    let month=selectMonth
-    let year = d.getFullYear()
+    let month = selectMonth;
+    let year = d.getFullYear();
 
-    
     getReportsBasedOnWeek(user.accessToken, year, month)
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
-          console.log(data.reports,"data success");
+          console.log(data.reports, "data success");
           setReports(data.reports);
           return data.reports;
         } else {
@@ -205,14 +212,12 @@ const Reports = () => {
       })
       .then((newData) => createCalander(year, month, newData))
       .then((newData) => assignReporWithValidWeek(newData[1], newData[0]))
-      .then(()=>setMonthIndex(month-1))
+      .then(() => setMonthIndex(month - 1))
       .catch((_) => {
         setErr("Something went wrong");
       });
   }, [selectMonth]);
 
-
-  
   return (
     <>
       <Head>
@@ -228,29 +233,23 @@ const Reports = () => {
         <Container maxWidth={false}>
           <ReportListToolbar name="Reports" setSearchTerm={setSearchTerm} />
           <Box
-  m={1}
- //margin
-  display="flex"
-  justifyContent="flex-end"
-  alignItems="flex-end"
-
->
-<Grid>
-<Typography
-fontWeight='bold'
->
-              Choose Month
-              </Typography>
-<Select
-               labelId="demo-select-small"
-               id="demo-select-small"
-               name="selectMonth"
-               margin="normal"
-               value={selectMonth}
-               label="Hours Per Day"
-               sx={{ marginLeft: "auto" }}
-               onChange={(event) => setSelectedMonth(event.target.value)}
-              
+            m={1}
+            //margin
+            display="flex"
+            justifyContent="flex-end"
+            alignItems="flex-end"
+          >
+            <Grid>
+              <Typography fontWeight="bold">Choose Month</Typography>
+              <Select
+                labelId="demo-select-small"
+                id="demo-select-small"
+                name="selectMonth"
+                margin="normal"
+                value={selectMonth}
+                label="Hours Per Day"
+                sx={{ marginLeft: "auto" }}
+                onChange={(event) => setSelectedMonth(event.target.value)}
               >
                 <MenuItem value={1}>January</MenuItem>
                 <MenuItem value={2}>February</MenuItem>
@@ -265,45 +264,56 @@ fontWeight='bold'
                 <MenuItem value={11}>November</MenuItem>
                 <MenuItem value={12}>December</MenuItem>
               </Select>
-              </Grid>
-</Box>
-          <Grid
-        
-      
-          >
+            </Grid>
+          </Box>
+          <Grid></Grid>
 
-          </Grid>
-          <Container sx={{ 
-             boxShadow: 1,
-                    
-             bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#101010' : '#fff'),
-             color: (theme) =>
-               theme.palette.mode === 'dark' ? 'black.300' : 'grey.800',
-             p: 2,
-            
-             borderRadius: 2,
-            justifyContent: "space-between", margin: 1 }}>
-            <Grid container spacing={3}>
+          <div className="w-full p-3 bg-white border border-gray-200 rounded-lg shadow-md">
+          
+          <Tabs
+        value={value}
+        sx={{
+          paddingLeft:2
+        }}
+        onChange={handleChange}
+        variant="scrollable"
+        scrollButtons="auto"
+        aria-label="scrollable auto tabs example"
+      >
               {weeks.map((week, index) => {
                 return (
-                  <Grid item>
-                    <Button
-                      fullWidth
-                      variant="outlined"
-                      onClick={() => handleOpen(totalWeeks, totalWeeks[index])}
-                      startIcon={<AssignmentLateRoundedIcon />}
-                      sx={{
-                        
-                      }}
+                  
+                <Tab 
+                    sx={{
+                      paddingX:4,
                       
-                    >
-                      {`${monthName[monthIndex]} ${week[0]} - ${week[1]}`}
-                    </Button>
-                  </Grid>
+                    }}
+                    fullWidth={true}
+                    label= {`${monthName[monthIndex]} ${week[0]} - ${week[1]}`}
+                    onClick={() => handleOpen(totalWeeks, totalWeeks[index])}
+                  >
+                   
+                    </Tab>
+                    
+                  //   {/* <Button
+                  //   fullWidth
+                     
+                    
+                      
+                  //     onClick={() => handleOpen(totalWeeks, totalWeeks[index])}
+                  //     startIcon={<AssignmentLateRoundedIcon />}
+                  //     sx={{
+                      
+                  //     }}
+                      
+                  //   >
+                  //     <p className="text-xs "></p>
+                  //   </Button> */}
+                  // </ToggleButton>
                 );
               })}
-            </Grid>
-          </Container>
+            </Tabs>
+          </div>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
@@ -314,74 +324,70 @@ fontWeight='bold'
                 </TableRow>
               </TableHead>
               <TableBody>
-                {WeeklyReport.length>0 &&
-                
-                
-               WeeklyReport
-                .slice(0, 10)
-                .filter((val) => {
-                  if (searchTerm == "") {
-                    return val;
-                  } else if (val.tutorName.toLowerCase().includes(searchTerm.toLowerCase())) {
-                    return val;
-                  }
-                })
-                .map((report, index) => {
-                  return (
-                    <>
-                      <TableRow
-                        key={index}
-                        sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                      >
-                        <TableCell component="th" scope="row">
-                        <Box
-                        sx={{
-                          alignItems: "center",
-                          display: "flex",
-                        }}
-                      >
-                        <Avatar
-                          // src={customer.avatarUrl}
-                          sx={{ mr: 2 }}
-                        >
-                          {getInitials( report.tutorName)}
-                        </Avatar>
-                        <Typography color="textPrimary" variant="body1">
-                        {report.tutorName}
-                        </Typography>
-                         </Box>
-                        </TableCell>
-                        <TableCell>
-                        {report.status === "SUCCESS" && <Chip label="SUCCESS" color="success" />}
-                      {report.status === "FAILED" && <Chip label="SUCCESS" color="error" />}
-                      {report.status === "PENDING" && <Chip label="PENDING" color="primary" />}
-                        </TableCell>
-                        <TableCell align="right">
-                          <IconButton
-                            color="info"
-                            aria-label="upload picture"
-                            component="span"
-                            onClick={() => router.push("/report/" + report.id)}
+                {WeeklyReport.length > 0 &&
+                  WeeklyReport.slice(0, 10)
+                    .filter((val) => {
+                      if (searchTerm == "") {
+                        return val;
+                      } else if (val.tutorName.toLowerCase().includes(searchTerm.toLowerCase())) {
+                        return val;
+                      }
+                    })
+                    .map((report, index) => {
+                      return (
+                        <>
+                          <TableRow
+                            key={index}
+                            sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                           >
-                            <MoreHorizSharp />
-                          </IconButton>
-                        </TableCell>
-                      </TableRow>
-                    </>
-                  );
-                })}
-                {
-                  WeeklyReport.length===0 && (
-                    <Typography
-                    align="center"
-                    p={2}
-                    
-                    >
-                      NO REPORT FOR THIS WEEK
-                    </Typography>
-                  )
-                }
-               
+                            <TableCell component="th" scope="row">
+                              <Box
+                                sx={{
+                                  alignItems: "center",
+                                  display: "flex",
+                                }}
+                              >
+                                <Avatar
+                                  // src={customer.avatarUrl}
+                                  sx={{ mr: 2 }}
+                                >
+                                  {getInitials(report.tutorName)}
+                                </Avatar>
+                                <Typography color="textPrimary" variant="body1">
+                                  {report.tutorName}
+                                </Typography>
+                              </Box>
+                            </TableCell>
+                            <TableCell>
+                              {report.status === "SUCCESS" && (
+                                <Chip label="SUCCESS" color="success" />
+                              )}
+                              {report.status === "FAILED" && (
+                                <Chip label="REJECTED" color="error" />
+                              )}
+                              {report.status === "PENDING" && (
+                                <Chip label="PENDING" color="primary" />
+                              )}
+                            </TableCell>
+                            <TableCell align="right">
+                              <IconButton
+                                color="info"
+                                aria-label="upload picture"
+                                component="span"
+                                onClick={() => router.push("/report/" + report.id)}
+                              >
+                                <MoreHorizSharp />
+                              </IconButton>
+                            </TableCell>
+                          </TableRow>
+                        </>
+                      );
+                    })}
+                {WeeklyReport.length === 0 && (
+                  <Typography align="center" p={2}>
+                    NO REPORT FOR THIS WEEK
+                  </Typography>
+                )}
               </TableBody>
             </Table>
           </TableContainer>

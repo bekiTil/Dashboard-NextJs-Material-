@@ -102,7 +102,7 @@ const ReportDetail = () => {
                         </div>
                       )}
                       <input
-                        className="mr-1 my-2 w-fit py-4 break-words rounded-lg text-xs border border-gray-400 bg-gray-200 text-gray-700  transition duration-500 focus:border-gray-900 focus:outline-none md:w-3/4"
+                        className="mr-1 my-2 w-fit py-4 break-words rounded-lg text-xs border border-gray-400 bg-gray-200 text-gray-700  transition duration-500 focus:border-gray-900 focus:outline-none"
                         type="text"
                         placeholder="Subject"
                         name="subject"
@@ -122,7 +122,7 @@ const ReportDetail = () => {
                                 </div>
                               )}
                               <input
-                                className="mr-1  my-2 w-fit py-4 break-words rounded-lg text-xs border border-gray-400 bg-gray-200 text-gray-700  transition duration-500 focus:border-gray-900 focus:outline-none md:w-3/4"
+                                className="mr-1  my-2 w-fit py-4 break-words rounded-lg text-xs border border-gray-400 bg-gray-200 text-gray-700  transition duration-500 focus:border-gray-900 focus:outline-none"
                                 type="text"
                                 placeholder="Chapter"
                                 name="chapter"
@@ -146,25 +146,25 @@ const ReportDetail = () => {
                                         )}
                                       <input
                                         
-                                        className="mr-1  my-2 w-fit py-4 break-all  text-xs rounded-lg border border-gray-400 bg-gray-200 text-gray-700  transition duration-500 focus:border-gray-900 focus:outline-none md:w-3/4"
-                                        type="text"
+                                        className="mr-1  my-2 w-fit py-4 break-words  text-xs rounded-lg border border-gray-400 bg-gray-200 text-gray-700  transition duration-500 focus:border-gray-900 focus:outline-none"
+                                        type="textarea"
                                         placeholder="Topic"
                                         value={top.topic}
                                         disabled={true}
                                         name="topic"
                                       />
                                     </div>
-                                    <div className="col mr-2 md:mr-0">
+                                    <div className="col  mr-2 md:mx-1">
                                       {index == 0 &&
                                         valu == 0 &&
                                         chapter_index == 0 &&
                                         topic_index == 0 && (
-                                          <div className=" mb-1 w-fit md:w-2/3 rounded bg-[#1A3765] text-center py-2.5 text-xs  uppercase  text-white shadow-md ">
+                                          <div className=" w-fit md:w-2/3 rounded bg-[#1A3765] text-center py-2.5 text-xs  uppercase  text-white shadow-md ">
                                             Understanding
                                           </div>
                                         )}
                                       <input
-                                        className="mr-1 my-2 w-fit py-4 break-words text-xs rounded-lg border border-gray-400 bg-gray-200 text-gray-700  transition duration-500 focus:border-gray-900 focus:outline-none md:w-3/4"
+                                        className="mr-1 my-2 w-fit py-4 break-words text-xs rounded-lg border border-gray-400 bg-gray-200 text-gray-700  transition duration-500 focus:border-gray-900 focus:outline-none "
                                         type="text"
                                         placeholder="Understanding"
                                         disabled={true}
@@ -198,7 +198,7 @@ const ReportDetail = () => {
                         </div>
                       )}
                       <input
-                        className="mr-1 my-2 w-fit py-4 break-words rounded-lg border text-xs border-gray-400 bg-gray-200 text-gray-700  transition duration-500 focus:border-gray-900 focus:outline-none md:w-3/4"
+                        className="mr-1 my-2 w-fit py-4 break-words rounded-lg border text-xs border-gray-400 bg-gray-200 text-gray-700  transition duration-500 focus:border-gray-900 focus:outline-none "
                         type="text"
                         placeholder="Subject"
                         disabled={true}
@@ -218,7 +218,7 @@ const ReportDetail = () => {
                                 </div>
                               )}
                               <input
-                                className="mr-1 my-2 w-fit py-4 break-words text-xs rounded-lg border border-gray-400 bg-gray-200 text-gray-700  transition duration-500 focus:border-gray-900 focus:outline-none md:w-3/4"
+                                className="mr-1 my-2 w-fit py-4 break-words text-xs rounded-lg border border-gray-400 bg-gray-200 text-gray-700  transition duration-500 focus:border-gray-900 focus:outline-none "
                                 type="text"
                                 name="unit"
                                 placeholder="Chapter"
@@ -241,7 +241,7 @@ const ReportDetail = () => {
                                         )}
                                       <input
                                     
-                                        className="mr-1 my-2 w-fit py-4 break-words text-xs rounded-lg border border-gray-400 bg-gray-200 text-gray-700  transition duration-500 focus:border-gray-900 focus:outline-none md:w-3/4"
+                                        className="mr-1 my-2 w-fit py-4 break-words text-xs rounded-lg border border-gray-400 bg-gray-200 text-gray-700  transition duration-500 focus:border-gray-900 focus:outline-none "
                                         type="text"
                                         placeholder="Type"
                                         value={typ.type}
@@ -258,7 +258,7 @@ const ReportDetail = () => {
                                           </div>
                                         )}
                                       <input
-                                        className="mr-1 my-2 w-fit py-4 break-words text-xs rounded-lg border border-gray-400 bg-gray-200 text-gray-700  transition duration-500 focus:border-gray-900 focus:outline-none md:w-3/4"
+                                        className="mr-1 my-2 w-fit py-4 break-words text-xs rounded-lg border border-gray-400 bg-gray-200 text-gray-700  transition duration-500 focus:border-gray-900 focus:outline-none "
                                         type="text"
                                         placeholder="Result"
                                         disabled={true}
