@@ -11,7 +11,8 @@ import { TotalCustomers } from "../components/dashboard/total-customers";
 import { TotalProfit } from "../components/dashboard/total-profit";
 import { TrafficByDevice } from "../components/dashboard/traffic-by-device";
 import { DashboardLayout } from "../components/dashboard-layout";
-
+import Backdrop from '@mui/material/Backdrop'
+import CircularProgress from '@mui/material/CircularProgress'
 import { useDispatch, useSelector } from "react-redux";
 import { logout, selectUser } from "../../redux/userSlice";
 import { useEffect, useState } from "react";
@@ -30,6 +31,7 @@ const Dashboard = () => {
   const [reports, setReports] = useState([]);
   const [err, setErr] = useState("");
   const [gradeNumber,setGradeNumber] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
   const [numberofParentWithMonth, setNumberOfParentWithMonth]= useState([])
   const dispatch = useDispatch();
   const  currentMonth=new Date().getMonth() ;
@@ -64,7 +66,13 @@ const Dashboard = () => {
         })
         .catch((_) => {
           setErr("Something went wrong");
-        });
+        })
+        .finally(
+           ()=>{
+
+          setIsLoading(false)
+           }
+        );
       getJobs(token)
         .then((res) => res.json())
         .then((data) => {
@@ -152,6 +160,12 @@ const Dashboard = () => {
       <Head>
         <title>Dashboard | Temaribet</title>
       </Head>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <Box
         component="main"
         sx={{

@@ -76,7 +76,9 @@ export const CustomerListResults = ({ customers, searchTerm, ...rest }) => {
   };
 
   const handlePageChange = (event, newPage) => {
+    console.log()
     setPage(newPage);
+    
   };
 
   const handleDelete = (id) => {
@@ -140,7 +142,7 @@ export const CustomerListResults = ({ customers, searchTerm, ...rest }) => {
             </TableHead>
             <TableBody>
               {customers
-                .slice(0, limit)
+                .slice((limit*page), (limit)*(page+1))
                 .filter((val) => {
                   if (searchTerm == "") {
                     return val;

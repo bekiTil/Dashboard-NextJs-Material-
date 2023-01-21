@@ -130,7 +130,7 @@ export const ParentListResults = ({ customers, searchTerm, ...rest }) => {
             </TableHead>
             <TableBody>
               {customers
-                .slice(0, limit)
+                .slice((limit*page), (limit)*(page+1))
                 .filter((val) => {
                   if (searchTerm == "") {
                     return val;

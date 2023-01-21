@@ -306,6 +306,7 @@ const ReportDetail = () => {
             onClick={() => {
               report.status = "SUCCESS";
               UpdateAReport(token, rid, { status: "SUCCESS", rate: value });
+              router.push('/report/'+rid)
             }}
           >
             Success
@@ -317,6 +318,7 @@ const ReportDetail = () => {
             onClick={() => {
               report.status = "FAILED";
               UpdateAReport(token, rid, { status: "FAILED", rate: value });
+              router.push('/report/'+rid)
             }}
           >
             Reject

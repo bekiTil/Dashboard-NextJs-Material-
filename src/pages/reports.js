@@ -53,6 +53,7 @@ import { DeleteOutlined, MoreHorizSharp } from "@mui/icons-material";
 import { getInitials } from "src/utils/get-initials";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import { data } from "autoprefixer";
 
 const Reports = () => {
   const [value, setValue] = useState(0);
@@ -75,7 +76,9 @@ const Reports = () => {
   const [Week5, setFiveWeek] = useState([]);
   const [WeeklyReport, setWeeklyReport] = useState([]);
   const [totalWeeks, setTotalWeeks] = useState([]);
+  const [tempWeeks,setTempWeeks] = useState([])
   const [selectMonth, setSelectedMonth] = useState(currentMonth);
+  const [statusReport,setStatusReport] =useState(1);
   const monthName = [
     "Jan",
     "Feb",
@@ -96,6 +99,7 @@ const Reports = () => {
     console.log(truthValue);
     console.log(weekRepo);
     setWeeklyReport(weekRepo);
+    setTempWeeks(weekRepo);
   };
   const getDay = (date) => {
     // get day number from 0 (monday) to 6 (sunday)
@@ -194,6 +198,7 @@ const Reports = () => {
   }, []);
 
   useEffect(() => {
+    
     let d = new Date();
     let month = selectMonth;
     let year = d.getFullYear();
@@ -218,6 +223,36 @@ const Reports = () => {
       });
   }, [selectMonth]);
 
+  useEffect(() => {
+    let data=[]
+    if (WeeklyReport.length>0) 
+    {
+      console.log(WeeklyReport)
+      WeeklyReport.map((report,index)=>{
+        console.log(report.status,statusReport)
+        if (statusReport==1)
+        {
+          data.push(report)
+        }
+        else if (statusReport==2  && report.status=="SUCCESS")
+        {
+          data.push(report)
+        }
+        else if (statusReport==3 && report.status=="REJECTED"){
+          data.push(report)
+        }
+        else if (statusReport==4 && report.status=="FAILED"){
+          data.push(report)
+        }
+      })
+    }
+    console.log(data,"hi")
+    setTempWeeks(data)
+  
+
+   
+  }, [statusReport]);
+
   return (
     <>
       <Head>
@@ -239,6 +274,27 @@ const Reports = () => {
             justifyContent="flex-end"
             alignItems="flex-end"
           >
+            <Grid>
+
+            <Typography fontWeight="bold">Choose Month</Typography>
+              <Select
+                labelId="demo-select-small"
+                id="demo-select-small"
+                name="statusReport"
+                margin="normal"
+                value={statusReport}
+                label="Hours Per Day"
+                sx={{ marginLeft: "auto" }}
+                onChange={(event) => setStatusReport(event.target.value)}
+              >
+                <MenuItem value={1}>All</MenuItem>
+                <MenuItem value={2}>Accepted</MenuItem>
+                <MenuItem value={3}>Pending</MenuItem>
+                <MenuItem value={4}>Rejected</MenuItem>
+               
+              </Select>
+            
+            </Grid>
             <Grid>
               <Typography fontWeight="bold">Choose Month</Typography>
               <Select
@@ -324,8 +380,8 @@ const Reports = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {WeeklyReport.length > 0 &&
-                  WeeklyReport.slice(0, 10)
+                {tempWeeks.length > 0 &&
+                  tempWeeks.slice(0, 10)
                     .filter((val) => {
                       if (searchTerm == "") {
                         return val;
@@ -360,13 +416,13 @@ const Reports = () => {
                             </TableCell>
                             <TableCell>
                               {report.status === "SUCCESS" && (
-                                <Chip label="SUCCESS" color="success" />
+                                <Chip variant="outlined" label="SUCCESS" color="success" />
                               )}
                               {report.status === "FAILED" && (
-                                <Chip label="REJECTED" color="error" />
+                                <Chip  variant="outlined"  label="REJECTED" color="error" />
                               )}
                               {report.status === "PENDING" && (
-                                <Chip label="PENDING" color="primary" />
+                                <Chip  variant="outlined"  label="PENDING" color="primary" />
                               )}
                             </TableCell>
                             <TableCell align="right">
