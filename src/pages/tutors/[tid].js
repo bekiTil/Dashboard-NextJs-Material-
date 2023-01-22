@@ -172,6 +172,9 @@ const TutorDetail = () => {
                       Contact's Name: {tutorData?.contactName}
                     </Typography>
                     <Typography color="textSecondary" variant="body2">
+                      Contact's Name: {tutorData?.telegramUsername}
+                    </Typography>
+                    <Typography color="textSecondary" variant="body2">
                       Contact's Phone Number: {tutorData?.contactPhone1}
                     </Typography>
                     <Typography color="textSecondary" variant="body2">

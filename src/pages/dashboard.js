@@ -54,7 +54,14 @@ const Dashboard = () => {
         })
         .catch((_) => {
           setErr("Something went wrong");
-        });
+        })
+        .finally(
+          ()=>{
+
+         setIsLoading(false)
+          }
+       );
+        ;
       getParents(token)
         .then((res) => res.json())
         .then((data) => {
@@ -84,7 +91,14 @@ const Dashboard = () => {
         })
         .catch((_) => {
           setErr("Something went wrong");
-        });
+        })
+        .finally(
+          ()=>{
+
+         setIsLoading(false)
+          }
+       );
+        ;
       getReports(token)
         .then((res) => res.json())
         .then((data) => {
@@ -96,7 +110,13 @@ const Dashboard = () => {
         })
         .catch((_) => {
           setErr("Something went wrong");
-        });
+        })
+        .finally(
+          ()=>{
+
+         setIsLoading(false)
+          }
+       );;
         getNumberOfStudentsByGrade(token)
         .then((res)=>res.json())
         .then((data)=>{
@@ -112,7 +132,13 @@ const Dashboard = () => {
         })
         .catch((_) => {
           setErr("Something went wrong");
-        });
+        })
+        .finally(
+          ()=>{
+
+         setIsLoading(false)
+          }
+       );;
       numberByMonth(token)
       .then((res)=>res.json())
       .then((data)=>{

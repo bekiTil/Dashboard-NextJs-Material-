@@ -273,10 +273,13 @@ const Reports = () => {
             display="flex"
             justifyContent="flex-end"
             alignItems="flex-end"
+            
           >
-            <Grid>
+            <Grid
+            marginX={2}
+            >
 
-            <Typography fontWeight="bold">Choose Month</Typography>
+            <Typography fontWeight="bold">Status</Typography>
               <Select
                 labelId="demo-select-small"
                 id="demo-select-small"
