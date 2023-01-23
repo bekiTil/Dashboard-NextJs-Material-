@@ -10,9 +10,11 @@ import { useSelector } from "react-redux";
 import { selectUser } from "redux/userSlice";
 import { ParentListResults } from "src/components/parent/parent-list-results";
 import { ParentListToolbar } from "src/components/parent/parent-list-toolbar";
-
+import Backdrop from '@mui/material/Backdrop'
+import CircularProgress from '@mui/material/CircularProgress'
 const Parents = () => {
   const user = useSelector(selectUser);
+  const [isLoading, setIsLoading] = useState(true)
   const [parents, setParents] = useState([]);
   const [err, setErr] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
@@ -31,7 +33,11 @@ const Parents = () => {
       })
       .catch((_) => {
         setErr("Something went wrong");
-      });
+      })
+      .finally(()=>{
+        setIsLoading(false)
+      })
+      ;
   }, []);
 
 
@@ -42,6 +48,12 @@ const Parents = () => {
       <Head>
         <title>Parents | Temaribet</title>
       </Head>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <Box
         component="main"
         sx={{

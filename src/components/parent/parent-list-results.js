@@ -82,6 +82,7 @@ export const ParentListResults = ({ customers, searchTerm, ...rest }) => {
     deleteParent(token, id)
       .then((res) => res.json())
       .then((_data) => {
+        console.log(_data,success)
         if (success=='SUCCESS'){
           router.push("/parents")
 
@@ -90,6 +91,7 @@ export const ParentListResults = ({ customers, searchTerm, ...rest }) => {
           router.push("/newParent")
         }
         console.log(_data)
+        window.location.reload(false);
         
       })
       .catch((_) => {

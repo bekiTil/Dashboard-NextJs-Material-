@@ -10,10 +10,13 @@ import { DashboardLayout } from "src/components/dashboard-layout";
 import { CustomerListResults } from "src/components/customer/customer-list-results";
 import { CustomerListToolbar } from "src/components/customer/customer-list-toolbar";
 import { getPendingTutors } from "backend-utils/tutor-utils";
+import Backdrop from '@mui/material/Backdrop'
+import CircularProgress from '@mui/material/CircularProgress'
 
 const NewTutors = () => {
   const user = useSelector(selectUser);
   const [tutors, setTutors] = useState([]);
+  const [isLoading, setIsLoading] = useState(true)
   const [err, setErr] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
@@ -34,6 +37,9 @@ const NewTutors = () => {
       })
       .catch((_) => {
         setErr("Something went wrong");
+      })
+      .finally(()=>{
+        setIsLoading(false)
       });
   }, []);
 
@@ -42,6 +48,12 @@ const NewTutors = () => {
       <Head>
         <title>Tutors | Temaribet</title>
       </Head>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <Box
         component="main"
         sx={{
