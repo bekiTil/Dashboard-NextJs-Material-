@@ -89,14 +89,15 @@ export const ReportListResults = ({ customers, searchTerm, ...rest }) => {
             </TableHead>
             <TableBody>
               {customers
+              .filter((val) => {
+                if (searchTerm == "") {
+                  return val;
+                } else if (val.tutor.fullName.toLowerCase().includes(searchTerm.toLowerCase())) {
+                  return val;
+                }
+              })
                 .slice((limit*page), (limit)*(page+1))
-                .filter((val) => {
-                  if (searchTerm == "") {
-                    return val;
-                  } else if (val.tutor.fullName.toLowerCase().includes(searchTerm.toLowerCase())) {
-                    return val;
-                  }
-                })
+                
                 .map((customer) => (
                   <TableRow
                     hover
