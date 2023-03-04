@@ -30,7 +30,7 @@ const Loading = () => {
   if (user) {
     const decodedToken = jwt_decode(user.accessToken);
     console.log(decodedToken);
-    if (decodedToken.exp > Date.now()) {
+    if (decodedToken.exp < Date.now()) {
       dispatch(logout());
     }
   }
