@@ -12,6 +12,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
 import store from "../../redux/store";
 
+
 const clientSideEmotionCache = createEmotionCache();
 
 let persistor = persistStore(store);

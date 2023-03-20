@@ -41,5 +41,16 @@ const signout = async (accessToken, token) => {
   console.log(response)
   return response;
 };
+const getUserById = async (id, token) => {
+  const response = await fetch(`${API_URL}api/v1/user/${id}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      authorization: `Bearer ${token}`,
+    },
+  })
+ 
+  return response
+}
 
-export { signin, signout,register };
+export { signin, signout,register,getUserById };

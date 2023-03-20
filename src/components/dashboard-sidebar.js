@@ -72,6 +72,21 @@ const items = [
     icon: <UploadIcon fontSize="small" />,
     title: "Reports",
   },
+  {
+    href: "/timeSheets",
+    icon: <UploadIcon fontSize="small" />,
+    title: "TimeSheet",
+  },
+  {
+    href: "/parentFinances",
+    icon: <UploadIcon fontSize="small" />,
+    title: "Parnet Finance",
+  },
+  {
+    href: "/tutorFinances",
+    icon: <UploadIcon fontSize="small" />,
+    title: "Tutor Finance",
+  },
   // {
   //   href: "/account",
   //   icon: <UserIcon fontSize="small" />,

@@ -70,4 +70,46 @@ const deleteTutor = async (token, id) => {
   return response;
 };
 
-export { getTutors, updateTutor, deleteTutor, getATutor ,getATutorwithLocation,getPendingTutors};
+const fetchTimesheet = async(token)=>{
+  const response = await fetch(`${API_URL}api/v1/tutor/fetchTimeSheet`, {
+    method:"GET",
+    headers :{
+      "Content-Type": "application/json",
+      authorization : `Bearer ${token}` ,
+    },
+  });
+  return response;
+}
+const getTimeSheetsBasedOnMonth = async (token,year)=>{
+  
+  const response = await fetch (`${API_URL}api/v1/tutor/fetchImage/${year}`,{
+    method:"GET",
+    headers :{
+      "Content-Type":"application/json",
+      authorization: `Bearer ${token}`,
+    }
+  }
+  );
+  console.log(response,"backend", year)
+
+  return response;
+
+}
+const UpdateAnImage = async (token,id,imageBody)=>{
+  console.log(imageBody)
+  
+  const response = await fetch(`${API_URL}api/v1/tutor/image/${id}`, {
+    method: "PATCH",
+    headers :{
+      "Content-Type": "application/json",
+      authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ ...imageBody }),
+    
+
+  })
+  console.log(response)
+  return response;
+}
+
+export { getTutors, updateTutor, deleteTutor, getATutor ,getATutorwithLocation,getPendingTutors,getTimeSheetsBasedOnMonth, UpdateAnImage};

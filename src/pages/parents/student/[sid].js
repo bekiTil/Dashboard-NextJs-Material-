@@ -96,7 +96,12 @@ const StudentDetail = () => {
             setErr("Something went wrong");
           })
           .finally(()=>
-          router.push("/parents/profile/" + student.parentId));
+          
+          {
+            console.log(student)
+            router.push("/parents/profile/" + student?.parentId)}
+          
+          )
       };
     return (
         <TableContainer component={Paper}>
