@@ -34,6 +34,7 @@ export const CustomerListResults = ({ customers, searchTerm, ...rest }) => {
   if (user) {
     var token = user.accessToken;
   }
+  const [isLoading, setIsLoading] = useState(false)
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
@@ -92,6 +93,7 @@ export const CustomerListResults = ({ customers, searchTerm, ...rest }) => {
       });
   };
   const changeStatus =(id)=>{
+    setIsLoading(true)
     updateTutor(token,id, 1,"SUCCESS")
       .then((res) => res.json())
       .then((data) => {
@@ -107,6 +109,11 @@ export const CustomerListResults = ({ customers, searchTerm, ...rest }) => {
       })
       .catch((_) => {
         setErr("Something went wrong");
+        
+      })
+      .finally(()=>{
+        router.push('/tutors')
+        setIsLoading(false)
       })
       
   }
@@ -135,7 +142,7 @@ export const CustomerListResults = ({ customers, searchTerm, ...rest }) => {
                 <TableCell>Status</TableCell>
                 
                 
-                <TableCell>Accepted/Accept</TableCell>
+                {customers[0]?.status =='PENDING' &&<TableCell>Action</TableCell>}
                 <TableCell>Delete</TableCell>
                 <TableCell>Detail</TableCell>
               </TableRow>
@@ -195,6 +202,7 @@ export const CustomerListResults = ({ customers, searchTerm, ...rest }) => {
                       {customer.status=="PENDING"
                       &&
                       <IconButton
+                      disabled={isLoading}
                       color="error"
                       aria-label="upload picture"
                       component="span"
@@ -215,6 +223,7 @@ export const CustomerListResults = ({ customers, searchTerm, ...rest }) => {
                     </TableCell>
                     <TableCell>
                       <IconButton
+                       disabled={isLoading}
                         color="error"
                         aria-label="upload picture"
                         component="span"

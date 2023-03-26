@@ -118,7 +118,7 @@ export const DashboardSidebar = (props) => {
   const user = useSelector(selectUser);
   const { open, onClose } = props;
   const router = useRouter();
-  const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"), {
+  const lgUp = useMediaQuery((theme) => theme.breakpoints.up("xl"), {
     defaultMatches: true,
     noSsr: false,
   });

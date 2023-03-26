@@ -102,7 +102,7 @@ const TimeSheet = () => {
         <CardHeader title={`Parent: ${listOfTimeSheet[0]?.parent.fullName}`}></CardHeader>
           <CardContent>
             <Grid container>
-              <Grid item xs={12} sm={6} md={12}>
+              <Grid item xs={12} sm={12} md={12}>
                 <Box mt={2}>
                   <TableContainer component={Paper}>
                     <Table aria-label="simple table">

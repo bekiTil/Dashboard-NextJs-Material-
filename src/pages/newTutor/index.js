@@ -46,13 +46,13 @@ const NewTutors = () => {
   return (
     <>
       <Head>
-        <title>Tutors | Temaribet</title>
+        <title> Tutors | Temaribet</title>
       </Head>
       <Backdrop
-        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        sx={{ color: '#fff', backgroundColor: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={isLoading}
       >
-        <CircularProgress color="inherit" />
+        <CircularProgress color="info" />
       </Backdrop>
       <Box
         component="main"
@@ -62,7 +62,7 @@ const NewTutors = () => {
         }}
       >
         <Container maxWidth={false}>
-          <CustomerListToolbar name="Tutors" setSearchTerm={setSearchTerm} />
+          <CustomerListToolbar name="New Tutors" setSearchTerm={setSearchTerm} />
           <Box sx={{ mt: 3 }}>
             <CustomerListResults customers={tutors} searchTerm={searchTerm} />
           </Box>

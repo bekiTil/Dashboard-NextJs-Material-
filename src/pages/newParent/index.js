@@ -10,6 +10,8 @@ import { useSelector } from "react-redux";
 import { selectUser } from "redux/userSlice";
 import { ParentListResults } from "src/components/parent/parent-list-results";
 import { ParentListToolbar } from "src/components/parent/parent-list-toolbar";
+import Backdrop from '@mui/material/Backdrop'
+import CircularProgress from '@mui/material/CircularProgress'
 
 const NewParents = () => {
   const user = useSelector(selectUser);
@@ -17,6 +19,7 @@ const NewParents = () => {
   const [err, setErr] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true)
   if (!user) router.push("/login");
   useEffect(() => {
     getPendingParents(user.accessToken)
@@ -31,7 +34,9 @@ const NewParents = () => {
       })
       .catch((_) => {
         setErr("Something went wrong");
-      });
+      }).finally(()=>{
+        setIsLoading(false)
+      })
   }, []);
 
   return (
@@ -39,6 +44,12 @@ const NewParents = () => {
       <Head>
         <title>Parents | Temaribet</title>
       </Head>
+      <Backdrop
+        sx={{ color: '#fff', backgroundColor: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading}
+      >
+        <CircularProgress color="info" />
+      </Backdrop>
       <Box
         component="main"
         sx={{
@@ -48,7 +59,7 @@ const NewParents = () => {
       >
         <Container maxWidth={false}>
           <ParentListToolbar
-            name="Parents"
+            name="New Parents"
             setSearchTerm={setSearchTerm}
             route="/parents/create-parent"
           />
