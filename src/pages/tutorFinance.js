@@ -32,7 +32,7 @@ import { UpdateAnImage } from "backend-utils/tutor-utils";
 import ArrowDropDownCircleOutlinedIcon from "@mui/icons-material/ArrowDropDownCircleOutlined";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import ThumbDownOffAltOutlinedIcon from "@mui/icons-material/ThumbDownOffAltOutlined";
-import { useRouter } from "next/router";
+
 
 const TFinance = () => {
   const router = useRouter();
