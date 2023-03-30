@@ -57,10 +57,13 @@ import { data } from "autoprefixer";
 import { current } from "@reduxjs/toolkit";
 import { getTimeSheetsBasedOnMonth } from "backend-utils/tutor-utils";
 import CircularProgress from "@mui/material/CircularProgress";
+import Backdrop from '@mui/material/Backdrop'
+
 
 const ParentFinance = () => {
   const [value, setValue] = useState(0);
   const [loadingOpen, setLoadingOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true)
 
 
   const handleChange = (event, newValue) => {
@@ -97,7 +100,7 @@ const ParentFinance = () => {
   const [selectedMonthIndex, setSelectedMonthIndex] = useState(0);
   const [totalMonths, setTotalMonths] = useState([]);
   const [tempWeeks, setTempWeeks] = useState([]);
-  const [selectYear, setSelectedYear] = useState();
+  const [selectYear, setSelectedYear] = useState(currentYear);
   const [statusReport, setStatusReport] = useState(1);
   const years = [];
   for (let year = 2023; year <= 2050; year++) {
@@ -182,9 +185,9 @@ const ParentFinance = () => {
     const uniqueTutorIds = [];
     newData.map((timesheet) => {
       if (timesheet.statusOfAcceptance === "SUCCESS") {
-        if (!uniqueTutorIds.includes(timeSheets.parentId)) {
+        if (!uniqueTutorIds.includes(timeSheets?.parentId)) {
           arrOfFilterdMonth[timesheet.month - 1].push(timesheet);
-          uniqueTutorIds.push(timeSheets.parentId);
+          uniqueTutorIds.push(timeSheets?.parentId);
         }
 
         arrOfMonth[timesheet.month - 1].push(timesheet);
@@ -197,29 +200,32 @@ const ParentFinance = () => {
   };
   const router = useRouter();
   if (!user) router.push("/login");
-  useEffect(() => {
-    let d = new Date();
-    let month = d.getMonth() + 1;
-    let year = 2023;
+  // useEffect(() => {
+  //   let d = new Date();
+  //   let month = d.getMonth() + 1;
+  //   let year = 2023;
 
-    getTimeSheetsBasedOnMonth(user.accessToken, year)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          console.log(data.timeSheets);
-          setTimeSheets(data.timeSheets);
-          return data.timeSheets;
-        } else {
-          setErr(data.message);
-          return [];
-        }
-      })
-      .then((newData) => assignTimeSheetWithValidMonth(newData))
+  //   getTimeSheetsBasedOnMonth(user.accessToken, year)
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       if (data.success) {
+  //         console.log(data.timeSheets);
+  //         setTimeSheets(data.timeSheets);
+  //         return data.timeSheets;
+  //       } else {
+  //         setErr(data.message);
+  //         return [];
+  //       }
+  //     })
+  //     .then((newData) => assignTimeSheetWithValidMonth(newData))
 
-      .catch((_) => {
-        setErr("Something went wrong");
-      });
-  }, []);
+  //     .catch((_) => {
+  //       setErr("Something went wrong");
+  //     })
+  //     .finally(()=>{
+  //       setIsLoading(false)
+  //     });
+  // }, []);
 
   useEffect(() => {
     let d = new Date();
@@ -242,6 +248,8 @@ const ParentFinance = () => {
 
       .catch((_) => {
         setErr("Something went wrong");
+      }) .finally(()=>{
+        setIsLoading(false)
       });
   }, [selectYear]);
 
@@ -269,8 +277,14 @@ const ParentFinance = () => {
   return (
     <>
       <Head>
-        <title>Reports | Temaribet</title>
+        <title>Parent Finance | Temaribet</title>
       </Head>
+      <Backdrop
+        sx={{ color: '#fff', backgroundColor: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading}
+      >
+        <CircularProgress color="info" />
+      </Backdrop>
       <Box
         component="main"
         sx={{
@@ -279,7 +293,7 @@ const ParentFinance = () => {
         }}
       >
         <Container maxWidth={false}>
-          <ReportListToolbar name="Reports" setSearchTerm={setSearchTerm} />
+          <ReportListToolbar name="Parent Finance" setSearchTerm={setSearchTerm} />
           <Box
             m={1}
             //margin
@@ -372,7 +386,7 @@ const ParentFinance = () => {
               <TableHead>
                 <TableRow>
                   <TableCell>Name</TableCell>
-                  <TableCell>Status</TableCell>
+                  <TableCell align="right" >Status</TableCell>
                   <TableCell align="right">Action</TableCell>
                 </TableRow>
               </TableHead>
@@ -392,7 +406,7 @@ const ParentFinance = () => {
                       if (searchTerm == "") {
                         return val;
                       } else if (
-                        val.tutor?.tutorName.toLowerCase().includes(searchTerm.toLowerCase())
+                        val.tutor?.fullName.toLowerCase().includes(searchTerm.toLowerCase())
                       ) {
                         return val;
                       }

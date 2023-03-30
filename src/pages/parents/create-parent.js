@@ -180,6 +180,8 @@ const StudentRegistration = () => {
   })
   const createStudentParent = () => {
     setIsLoading(true)
+    event.preventDefault()
+   
     createParent(user.accessToken,{
       fullName: formik.values.parentName,
       location: formik.values.Address,
@@ -188,13 +190,13 @@ const StudentRegistration = () => {
       phone2: formik.values.phoneNumber2,
       preferredBank: null,
       profilePicture: null,
-      userId: null,
+      userId: undefined,
     })
       .then((res) => res.json())
 
       .then((res) =>
         studnets.map((val) => {
-          console.log(res)
+          console.log(res.error)
           createStudent(user.accessToken,{
             fullName: val.studentName,
             gender: val.gender,
@@ -211,7 +213,7 @@ const StudentRegistration = () => {
             subjects: val.subjects,
             workDays: parseInt(val.workDays),
             workHour: parseInt(val.workHour),
-            tutorId: null,
+           
           })
             .then((res) => res.json())
             .then((res) => console.log(res))
@@ -221,7 +223,7 @@ const StudentRegistration = () => {
               setOpen(true)
             })
         })
-      )
+      ).catch((error)=>{console.log(error.message)})
   }
 
   return (
@@ -237,7 +239,7 @@ const StudentRegistration = () => {
         }}
       >
       <div className="justify-center px-10 font-minionPro md:flex  md:px-16 ">
-        <form>
+        <form method='post' onSubmit={createStudentParent}>
           <Typography
           fontWeight='bold'
           variant='h4'
@@ -278,11 +280,13 @@ const StudentRegistration = () => {
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
                 value={formik.values.parentName}
+                required
               />
             </Grid>
             <Grid item xs={16} md={8} lg={3}>
               <InputLabel id="demo-select-small">Phone Number</InputLabel>
               <TextField
+              required
                 error={Boolean(
                   formik.touched.phoneNumber1 && formik.errors.phoneNumber1
                 )}
@@ -299,6 +303,7 @@ const StudentRegistration = () => {
             <Grid item xs={16} md={8} lg={3}>
               <InputLabel id="demo-select-small">Phone Number 2</InputLabel>
               <TextField
+              required
                 error={Boolean(
                   formik.touched.phoneNumber2 && formik.errors.phoneNumber2
                 )}
@@ -325,6 +330,7 @@ const StudentRegistration = () => {
              Address
               </InputLabel>
               <Select
+              required
                labelId="demo-select-small"
                id="demo-select-small"
                name="Address"
@@ -397,6 +403,7 @@ const StudentRegistration = () => {
                         </InputLabel>
                         <TextField
                           fullWidth
+                          required
                           margin="normal"
                           name="studentName"
                           onChange={(event) => handleStudentField(event, index)}
@@ -407,6 +414,7 @@ const StudentRegistration = () => {
                         <InputLabel id="demo-select-small">Age</InputLabel>
                         <TextField
                           fullWidth
+                          required
                           margin="normal"
                           name="age"
                           InputProps={{
@@ -433,6 +441,7 @@ const StudentRegistration = () => {
                           id="demo-select-small"
                           name="gender"
                           margin="normal"
+                          required
                           value={val.gender}
                           label="gender"
                           fullWidth
@@ -459,6 +468,7 @@ const StudentRegistration = () => {
                 name="grade"
                 margin="normal"
                 value={val.grade}
+                required
                 label="grade"
                 fullWidth
                 onChange={(event) => handleStudentField(event,index)}
@@ -486,6 +496,7 @@ const StudentRegistration = () => {
                           fullWidth
                           margin="normal"
                           name="schoolName"
+                          required
                           onChange={(event) => handleStudentField(event, index)}
                           value={val.schoolName}
                         />
@@ -521,6 +532,7 @@ const StudentRegistration = () => {
                name="workDays"
                margin="normal"
                value={val.workDays}
+               required
                label="Hours Per Day"
                fullWidth
                onChange={(event) => handleStudentField(event,index)}
@@ -552,6 +564,7 @@ const StudentRegistration = () => {
                 name="workHour"
                 margin="normal"
                 value={val.workHour}
+                required
                 label="Hours Per Day"
                 fullWidth
                 onChange={(event) => handleStudentField(event,index)}
@@ -583,6 +596,7 @@ const StudentRegistration = () => {
                           fullWidth
                           name="subjects"
                           value={val.subjects}
+                          required
                           onChange={(event) => handleStudentField(event, index)}
                           input={
                             <OutlinedInput
@@ -626,6 +640,7 @@ const StudentRegistration = () => {
               <TextField
                 margin="normal"
                 multiline
+                required
                 fullWidth
                 rows={4}
                 xs={16}
@@ -653,17 +668,18 @@ const StudentRegistration = () => {
             </Alert>
           </div>
           <div className="my-1 flex justify-center md:my-2 ">
-            <Button
-
-variant='contained'
-fullWidth
-sx={{
-  my:1
-}}
-              onClick={createStudentParent}
+          <button
+              class=" focus:shadow-outline w-1/2 rounded-xl bg-[#1A3765] py-2 px-4 font-bold text-white disabled:bg-[#6793d9] hover:bg-[#6793d9] focus:outline-none md:w-1/4 md:text-xl"
+              type="submit"
+              
+              disabled={isLoading}
+              
+              
             >
+            
               Submit
-            </Button>
+            </button>
+            
           </div>
         </form>
       </div>
@@ -683,18 +699,7 @@ sx={{
 
           <DialogContent dividers>
             <Typography gutterBottom>
-              You have successfully submitted your request for tutor. Morbi leo
-              risus, porta ac consectetur ac, vestibulum at eros.
-            </Typography>
-            <Typography gutterBottom>
-              In 24 Hour Praesent commodo cursus magna, vel scelerisque nisl
-              consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum
-              faucibus dolor auctor.
-            </Typography>
-            <Typography gutterBottom>
-              Aenean lacinia bibendum nulla sed consectetur. Praesent commodo
-              cursus magna, vel scelerisque nisl consectetur et. Donec sed odio
-              dui. Donec ullamcorper nulla non metus auctor fringilla.
+             Parent Created
             </Typography>
           </DialogContent>
           <DialogActions>

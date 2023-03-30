@@ -253,6 +253,8 @@ export const CreateParentAccountForm = (props) => {
           }}
         >
           <Button color="primary" variant="contained" type="submit"
+          
+          disabled={loggingIn}
           onClick={submitHandle}>
             Save details
           </Button>

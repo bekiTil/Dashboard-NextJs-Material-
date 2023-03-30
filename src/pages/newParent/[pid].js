@@ -8,6 +8,8 @@ import { selectUser } from "redux/userSlice";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { getAParent } from "backend-utils/parent-utils";
+import Backdrop from '@mui/material/Backdrop'
+import CircularProgress from '@mui/material/CircularProgress'
 const CreateParentAccount = () => {
   const user = useSelector(selectUser);
 
@@ -15,6 +17,7 @@ const CreateParentAccount = () => {
   const { pid } = router.query;
   const [parent, setParent] = useState(null);
   const [err, setErr] = useState("");
+  const [isLoading, setIsLoading] = useState(true)
   if (user) {
     var token = user.accessToken;
   }
@@ -30,6 +33,8 @@ const CreateParentAccount = () => {
       })
       .catch((err) => {
         setErr("Something went wrong");
+      }).finally(()=>{
+        setIsLoading(false)
       });
   }, [pid]);
 
@@ -38,6 +43,12 @@ const CreateParentAccount = () => {
       <Head>
         <title>Create Parent | Temaribet</title>
       </Head>
+      <Backdrop
+         sx={{ color: '#fff', backgroundColor: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading}
+      >
+        <CircularProgress color="info" />
+      </Backdrop>
       <Box
         component="main"
         sx={{

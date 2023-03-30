@@ -27,13 +27,13 @@ const Loading = () => {
     dispatch(logout());
     router.push("/login");
   }
-  if (user) {
-    const decodedToken = jwt_decode(user.accessToken);
-    console.log(decodedToken,Date.now())
-    if (decodedToken.exp > Date.now()) {
-      dispatch(logout());
-    }
-  }
+  // if (user) {
+  //   const decodedToken = jwt_decode(user.accessToken);
+  //   console.log(decodedToken,Date.now())
+  //   if (decodedToken.exp > Date.now()) {
+  //     dispatch(logout());
+  //   }
+  // }
   return (
     <>
       <Head>

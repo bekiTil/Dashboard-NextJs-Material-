@@ -53,7 +53,7 @@ const TFinance = () => {
     "December",
   ];
   if (myObject == undefined || tutorId == undefined || myObject == null) {
-    router.push("/parentFinances");
+    router.push("/tutorFinances");
   }
   const parsedArray = [];
   if (myObject) {
@@ -63,6 +63,7 @@ const TFinance = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [open, setOpen] = useState(false);
   const user = useSelector(selectUser);
+  const [buttonDisable, setButtonDisable] = useState(false);
   useEffect(() => {
     let temp = [];
 
@@ -80,6 +81,8 @@ const TFinance = () => {
   };
 
   const handlePayment = ()=>{
+    
+    setButtonDisable(true)
     listOfTimeSheet.map((sheet,index)=>{
       UpdateAnImage(user.accessToken, sheet.id,{statusOfMoneyPaid:"SUCCESS"}).then((data)=>data.json())
       .then((data)=>console.log(data))
@@ -88,8 +91,8 @@ const TFinance = () => {
 
       })
       .finally(()=>{
-
-        router.push("/")
+        setButtonDisable(false)
+        router.push("/tutorFinances")
       })
     })
   }
@@ -173,11 +176,13 @@ const TFinance = () => {
 
       </Box>
 
-      {listOfTimeSheet[0]?.statusOfMoneyPaid==="PENDING" &&
-      <Box display="flex" justifyContent="right" alignItems="flex-end">
+      {listOfTimeSheet[0]?.statusOfMoneyPaid==="SUCCESS" &&
+      <Box padding={1} display="flex" justifyContent="right" alignItems="flex-end">
           <Button
-          variant="outlined"
-          onChange={()=>handlePayment()}
+          
+          variant="contained"
+          disabled={buttonDisable}
+          onClick={()=>handlePayment()}
           >
             Payment Made
 

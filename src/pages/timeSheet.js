@@ -28,10 +28,10 @@ import {
 import { useSelector } from "react-redux";
 import { selectUser } from "../../redux/userSlice";
 import { DashboardLayout } from "../components/dashboard-layout";
-import { UpdateAnImage } from "backend-utils/tutor-utils";
+import { UpdateAnImage,UpdateAnImageWithAMessage } from "backend-utils/tutor-utils";
 import ArrowDropDownCircleOutlinedIcon from "@mui/icons-material/ArrowDropDownCircleOutlined";
-import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
-import ThumbDownOffAltOutlinedIcon from '@mui/icons-material/ThumbDownOffAltOutlined';
+import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
+import ThumbDownOffAltOutlinedIcon from "@mui/icons-material/ThumbDownOffAltOutlined";
 
 const TimeSheet = () => {
   const router = useRouter();
@@ -63,6 +63,8 @@ const TimeSheet = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [open, setOpen] = useState(false);
   const user = useSelector(selectUser);
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     let temp = [];
 
@@ -73,6 +75,13 @@ const TimeSheet = () => {
     });
     console.log(temp[0].tutorId, "the value");
     setListOfTimeSheet(temp);
+    temp.map((val, index) =>
+      UpdateAnImage(user.accessToken, val.id, { view: "SEEN" })
+        .then((data) => console.log(data))
+        .catch((error) => {
+          console.log(error);
+        })
+    );
   }, []);
 
   const handleClickOpen = (image) => {
@@ -84,6 +93,7 @@ const TimeSheet = () => {
     setOpen(false);
   };
   const handleStatusChange = (timeId, newStatus) => {
+    setIsLoading(true);
     UpdateAnImage(user.accessToken, timeId, { statusOfAcceptance: newStatus }).then((data) => {
       let val = [...listOfTimeSheet];
       val.map((timesheet, index) => {
@@ -94,7 +104,24 @@ const TimeSheet = () => {
       console.log(val);
 
       setListOfTimeSheet(val);
-    });
+    }).catch((error)=>console.log(error)).finally(()=>{setIsLoading(false)});;
+  };
+  const handleStatusChangeWithMessage = (timeId, newStatus) => {
+    setIsLoading(true);
+    UpdateAnImageWithAMessage(user.accessToken, timeId, { statusOfAcceptance: newStatus })
+    .then(
+      (data) => {
+        let val = [...listOfTimeSheet];
+        val.map((timesheet, index) => {
+          if (timesheet.id == timeId) {
+            timesheet.statusOfAcceptance = newStatus;
+          }
+        });
+        console.log(val);
+
+        setListOfTimeSheet(val);
+      }
+    ).catch((error)=>console.log(error)).finally(()=>{setIsLoading(false)});
   };
 
   return (
@@ -158,13 +185,7 @@ const TimeSheet = () => {
                             {val.listStudent?.listStudent.map((student, index) => (
                               <TableRow key={index}>
                                 <TableCell component="th" scope="row">
-                                {index == 0 &&
-                                  <Typography>
-
-                                  {val.parent.fullName}
-                                  </Typography>
-}
-                                
+                                  {index == 0 && <Typography>{val.parent.fullName}</Typography>}
                                 </TableCell>
                                 <TableCell align="center">{student.studentName.fullName}</TableCell>
                                 <TableCell align="center">{student.grade}</TableCell>
@@ -183,38 +204,36 @@ const TimeSheet = () => {
                                   )} */}
                                 </TableCell>
                                 <TableCell align="center">
-                                  {index==0 && val.statusOfAcceptance === "PENDING" && (
+                                  {index == 0 && val.statusOfAcceptance === "PENDING" && (
                                     <Box display="flex" justifyContent="center" alignItems="center">
                                       <Button
-                                        
-                                        onClick={() => handleStatusChange(val.id, "SUCCESS")}
-                                       
+                                        disabled={isLoading}
+                                        onClick={() =>
+                                          handleStatusChangeWithMessage(val.id, "SUCCESS")
+                                        }
                                         color="inherit"
                                       >
-                                     < ThumbUpOutlinedIcon/>
+                                        <ThumbUpOutlinedIcon />
                                       </Button>
                                       <Button
+                                        disabled={isLoading}
                                         sx={{ mx: 1 }}
                                         onClick={() => handleStatusChange(val.id, "REJECTED")}
-                                       
                                         color="inherit"
                                       >
-                                       <ThumbDownOffAltOutlinedIcon/>
+                                        <ThumbDownOffAltOutlinedIcon />
                                       </Button>
                                     </Box>
                                   )}
                                 </TableCell>
-                               
-                                <TableCell align="center">
-                                {index == 0 &&
-                                  <Button onClick={() => handleClickOpen(val.cloudinary_id)}>
-                                    <ArrowDropDownCircleOutlinedIcon
-                                     color="disabled"
-                                    />
-                                  </Button>
-}
-                                </TableCell>
 
+                                <TableCell align="center">
+                                  {index == 0 && (
+                                    <Button onClick={() => handleClickOpen(val.cloudinary_id)}>
+                                      <ArrowDropDownCircleOutlinedIcon color="disabled" />
+                                    </Button>
+                                  )}
+                                </TableCell>
                               </TableRow>
                             ))}
                           </>

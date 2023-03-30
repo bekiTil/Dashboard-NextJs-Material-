@@ -34,6 +34,8 @@ import { getAParent } from "backend-utils/parent-utils";
 import { DashboardLayout } from "src/components/dashboard-layout";
 import { selectUser } from "redux/userSlice";
 import { updateStudent } from "backend-utils/student-utils";
+import Backdrop from '@mui/material/Backdrop'
+import CircularProgress from '@mui/material/CircularProgress'
 
 const ParentDetail = () => {
   const user = useSelector(selectUser);
@@ -45,7 +47,8 @@ const ParentDetail = () => {
   const [existedTutor, setExistedTutor] = useState(null);
   const [prospectTutor, setProspectTutor] = useState(null);
   const [childId, setChildId] = useState(null);
-
+  const [isLoading, setIsLoading] = useState(true)
+  const [changebutton ,setChangeButton]  = useState(false)
   if (user) {
     var token = user.accessToken;
   }
@@ -63,12 +66,14 @@ const ParentDetail = () => {
       })
       .catch((err) => {
         setErr("Something went wrong");
+      }).finally(()=>{
+        setIsLoading(false)
       });
   }, [ppid]);
 
   const connectTutorChild = (tutorId, childId) => {
     console.log(tutorId, childId, token);
-    updateStudent(token, childId, tutorId, "SUCCESS")
+    updateStudentTutor(token, childId, tutorId, "SUCCESS")
       .then((res) => res.json())
       .then((data) => console.log(data))
       .catch((err) => {
@@ -77,6 +82,7 @@ const ParentDetail = () => {
   };
   const handleClose = () => {
     setOpen(false);
+    router.push('/dashboard')
   };
 
   
@@ -84,6 +90,7 @@ const ParentDetail = () => {
     setChildId(null);
     setExistedTutor(null);
     setProspectTutor(null);
+    setChangeButton(true);
     if (status === "PENDING") {
       getATutorwithLocation(token, parentData?.location)
         .then((res) => res.json())
@@ -106,9 +113,10 @@ const ParentDetail = () => {
         })
         .finally(() => {
           setOpen(true);
+          setChangeButton(false);
         });
     } else {
-      getATutor(token, parentData?.students[index].tutorId)
+      getATutor(token, parentData?.students[index].tutorIds)
         .then((res) => res.json())
         .then((data) => {
           if (data.success) {
@@ -122,6 +130,7 @@ const ParentDetail = () => {
         })
         .finally(() => {
           setOpen(true);
+          setChangeButton(false);
         });
     }
   };
@@ -130,6 +139,12 @@ const ParentDetail = () => {
       <Head>
         <title>Account | Temaribet</title>
       </Head>
+      <Backdrop
+         sx={{ color: '#fff', backgroundColor: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading}
+      >
+        <CircularProgress color="info" />
+      </Backdrop>
       <Box
         component="main"
         sx={{
@@ -273,8 +288,9 @@ const ParentDetail = () => {
                         color="primary"
                         fullWidth
                         variant="text"
+                        disabled={changebutton}
                       >
-                        Tutoring Status: {student.tutorId}
+                        Tutoring Status: {student.status}
                       </Button>
                     </CardActions>
                   </Card>

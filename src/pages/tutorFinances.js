@@ -57,6 +57,7 @@ import { data } from "autoprefixer";
 import { current } from "@reduxjs/toolkit";
 import { getTimeSheetsBasedOnMonth } from "backend-utils/tutor-utils";
 import CircularProgress from "@mui/material/CircularProgress";
+import Backdrop from '@mui/material/Backdrop';
 
 
 const TutorFinance = () => {
@@ -81,6 +82,7 @@ const TutorFinance = () => {
     "Dec",
   ];
   const currentDate = new Date();
+  const [isLoading, setIsLoading] = useState(true)
   const currentYear = currentDate.getFullYear();
   const user = useSelector(selectUser);
   const [timeSheets, setTimeSheets] = useState(null);
@@ -94,10 +96,10 @@ const TutorFinance = () => {
   const [Week5, setFiveWeek] = useState([]);
   const [WeeklyReport, setWeeklyReport] = useState([]);
   const [totalWeeks, setTotalWeeks] = useState([]);
-  const [selectedMonthIndex, setSelectedMonthIndex] = useState(0);
+  const [selectedMonthIndex, setSelectedMonthIndex] = useState(currentDate.getMonth-1);
   const [totalMonths, setTotalMonths] = useState([]);
   const [tempWeeks, setTempWeeks] = useState([]);
-  const [selectYear, setSelectedYear] = useState();
+  const [selectYear, setSelectedYear] = useState(currentYear);
   const [statusReport, setStatusReport] = useState(1);
   const years = [];
   for (let year = 2023; year <= 2050; year++) {
@@ -182,9 +184,9 @@ const TutorFinance = () => {
     const uniqueTutorIds = [];
     newData.map((timesheet) => {
       if (timesheet.statusOfAcceptance === "SUCCESS") {
-        if (!uniqueTutorIds.includes(timeSheets.tutorId)) {
+        if (!uniqueTutorIds.includes(timeSheets?.tutorId)) {
           arrOfFilterdMonth[timesheet.month - 1].push(timesheet);
-          uniqueTutorIds.push(timeSheets.tutorId);
+          uniqueTutorIds.push(timeSheets?.tutorId);
         }
 
         arrOfMonth[timesheet.month - 1].push(timesheet);
@@ -197,29 +199,32 @@ const TutorFinance = () => {
   };
   const router = useRouter();
   if (!user) router.push("/login");
-  useEffect(() => {
-    let d = new Date();
-    let month = d.getMonth() + 1;
-    let year = 2023;
+  // useEffect(() => {
+  //   let d = new Date();
+  //   let month = d.getMonth() + 1;
+  //   let year = 2023;
 
-    getTimeSheetsBasedOnMonth(user.accessToken, year)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          console.log(data.timeSheets);
-          setTimeSheets(data.timeSheets);
-          return data.timeSheets;
-        } else {
-          setErr(data.message);
-          return [];
-        }
-      })
-      .then((newData) => assignTimeSheetWithValidMonth(newData))
+  //   getTimeSheetsBasedOnMonth(user.accessToken, year)
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       if (data.success) {
+  //         console.log(data.timeSheets);
+  //         setTimeSheets(data.timeSheets);
+  //         return data.timeSheets;
+  //       } else {
+  //         setErr(data.message);
+  //         return [];
+  //       }
+  //     })
+  //     .then((newData) => assignTimeSheetWithValidMonth(newData))
 
-      .catch((_) => {
-        setErr("Something went wrong");
-      });
-  }, []);
+  //     .catch((_) => {
+  //       setErr("Something went wrong");
+  //     }).finally(()=>{
+  //       setIsLoading(false)
+  //     });
+  //     ;
+  // }, []);
 
   useEffect(() => {
     let d = new Date();
@@ -242,35 +247,22 @@ const TutorFinance = () => {
 
       .catch((_) => {
         setErr("Something went wrong");
-      });
+      }).finally( ()=>{
+        setIsLoading(false)
+      });;
   }, [selectYear]);
-
-  useEffect(() => {
-    let data = [];
-    if (WeeklyReport.length > 0) {
-      console.log(WeeklyReport);
-      WeeklyReport.map((report, index) => {
-        console.log(report.status, statusReport);
-        if (statusReport == 1) {
-          data.push(report);
-        } else if (statusReport == 2 && report.status == "SUCCESS") {
-          data.push(report);
-        } else if (statusReport == 3 && report.status == "REJECTED") {
-          data.push(report);
-        } else if (statusReport == 4 && report.status == "FAILED") {
-          data.push(report);
-        }
-      });
-    }
-    console.log(data, "hi");
-    setTempWeeks(data);
-  }, [statusReport]);
 
   return (
     <>
       <Head>
-        <title>Reports | Temaribet</title>
+        <title>Tutor Finance | Temaribet</title>
       </Head>
+      <Backdrop
+        sx={{ color: '#fff', backgroundColor: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading}
+      >
+        <CircularProgress color="info" />
+      </Backdrop>
       <Box
         component="main"
         sx={{
@@ -279,7 +271,7 @@ const TutorFinance = () => {
         }}
       >
         <Container maxWidth={false}>
-          <ReportListToolbar name="Reports" setSearchTerm={setSearchTerm} />
+          <ReportListToolbar name="Tutor Finance" setSearchTerm={setSearchTerm} />
           <Box
             m={1}
             //margin
@@ -287,24 +279,7 @@ const TutorFinance = () => {
             justifyContent="flex-end"
             alignItems="flex-end"
           >
-            {/* <Grid marginX={2}>
-              <Typography fontWeight="bold">Status</Typography>
-              <Select
-                labelId="demo-select-small"
-                id="demo-select-small"
-                name="statusReport"
-                margin="normal"
-                value={statusReport}
-                label="Hours Per Day"
-                sx={{ marginLeft: "auto" }}
-                onChange={(event) => setStatusReport(event.target.value)}
-              >
-                <MenuItem value={1}>All</MenuItem>
-                <MenuItem value={2}>Accepted</MenuItem>
-                <MenuItem value={3}>Pending</MenuItem>
-                <MenuItem value={4}>Rejected</MenuItem>
-              </Select>
-            </Grid> */}
+          
             <Grid>
               <Typography fontWeight="bold">Choose Year</Typography>
               <Select
@@ -372,7 +347,7 @@ const TutorFinance = () => {
               <TableHead>
                 <TableRow>
                   <TableCell>Name</TableCell>
-                  <TableCell>Status</TableCell>
+                  <TableCell align="right" >Status</TableCell>
                   <TableCell align="right">Action</TableCell>
                 </TableRow>
               </TableHead>
@@ -448,7 +423,7 @@ const TutorFinance = () => {
                     })}
                 {WeeklyReport.length === 0 && (
                   <Typography justifyContent="center" align="center" p={2}>
-                    NO TIMESHEET FOR THIS MONTH YET
+                    NO TUTOR FINANCE  FOR THIS MONTH YET
                   </Typography>
                 )}
               </TableBody>

@@ -55,6 +55,7 @@ const createParent = async (token, parentBody) => {
       ...parentBody,
     }),
   });
+  console.log(response)
   return response;
 };
 

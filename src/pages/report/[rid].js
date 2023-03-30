@@ -288,6 +288,7 @@ const ReportDetail = () => {
       <Typography component="legend">Rate the Report </Typography>
       <Rating
         name="simple-controlled"
+        color="primary"
         value={value}
         onChange={(event, newValue) => {
           report.rate = newValue;
@@ -309,7 +310,7 @@ const ReportDetail = () => {
               router.push('/report/'+rid)
             }}
           >
-            Success
+            Accept
           </Button>
 
           <Button

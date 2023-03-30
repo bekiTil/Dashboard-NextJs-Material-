@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { Box, Card, CardContent, Container, Grid, Typography } from "@mui/material";
+import { Box, Card, CardContent, Container, Grid, Typography ,IconButton} from "@mui/material";
 
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
@@ -9,6 +9,10 @@ import { TutorProfile } from "src/components/customer/tutor-account";
 import { DashboardLayout } from "src/components/dashboard-layout";
 import { selectUser } from "redux/userSlice";
 import moment from "moment";
+import AddTaskRoundedIcon from '@mui/icons-material/AddTaskRounded';
+import Backdrop from '@mui/material/Backdrop'
+import CircularProgress from '@mui/material/CircularProgress'
+import { updateTutor } from "backend-utils/tutor-utils";
 
 const TutorDetail = () => {
   const user = useSelector(selectUser);
@@ -16,6 +20,7 @@ const TutorDetail = () => {
   const { tid } = router.query;
   const [tutorData, setTutorData] = useState(null);
   const [err, setErr] = useState("");
+  const [isLoading, setIsLoading] = useState(true)
   if (user) {
     var token = user.accessToken;
   }
@@ -31,13 +36,48 @@ const TutorDetail = () => {
       })
       .catch((err) => {
         setErr("Something went wrong");
+      })
+      .finally(()=>{
+       
+        setIsLoading(false)
       });
   }, [tid]);
+  const changeStatus =(id)=>{
+    setIsLoading(true)
+    updateTutor(token,id, 1,"SUCCESS")
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data)
+        if (data.success) {
+          console.log(data)
+          setTutorData(data.user);
+          
+        } else {
+          setErr(data.message);
+        }
+        
+      })
+      .catch((_) => {
+        setErr("Something went wrong");
+        
+      })
+      .finally(()=>{
+       
+        setIsLoading(false)
+      })
+      
+  }
   return (
     <>
       <Head>
         <title>Account | Temaribet</title>
       </Head>
+      <Backdrop
+         sx={{ color: '#fff', backgroundColor: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading}
+      >
+        <CircularProgress color="info" />
+      </Backdrop>
       <Box
         component="main"
         sx={{
@@ -172,7 +212,7 @@ const TutorDetail = () => {
                       Contact's Name: {tutorData?.contactName}
                     </Typography>
                     <Typography color="textSecondary" variant="body2">
-                      Contact's Name: {tutorData?.telegramUsername}
+                      Contact's Telegram Username: {tutorData?.telegramUsername}
                     </Typography>
                     <Typography color="textSecondary" variant="body2">
                       Contact's Phone Number: {tutorData?.contactPhone1}
@@ -280,6 +320,22 @@ const TutorDetail = () => {
               ); */}
             {/* })} */}
           {/* </Grid> */}
+         
+          {tutorData?.status=="PENDING"
+                      && <IconButton
+                      disabled={isLoading}
+                      color="error"
+                      aria-label="upload picture"
+                      component="span"
+                      onClick=
+                      {() => changeStatus(tid) }
+                      
+                    >
+                      <AddTaskRoundedIcon />
+                  
+                      
+                    </IconButton>
+}
         </Container>
       </Box>
     </>

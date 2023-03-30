@@ -54,6 +54,8 @@ import { getInitials } from "src/utils/get-initials";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { data } from "autoprefixer";
+import Backdrop from '@mui/material/Backdrop'
+import CircularProgress from '@mui/material/CircularProgress'
 
 const Reports = () => {
   const [value, setValue] = useState(0);
@@ -79,6 +81,8 @@ const Reports = () => {
   const [tempWeeks,setTempWeeks] = useState([])
   const [selectMonth, setSelectedMonth] = useState(currentMonth);
   const [statusReport,setStatusReport] =useState(1);
+  const [isLoading, setIsLoading] = useState(true)
+ 
   const monthName = [
     "Jan",
     "Feb",
@@ -176,7 +180,7 @@ const Reports = () => {
     let d = new Date();
     let month = d.getMonth() + 1;
     let year = 2023;
-
+ 
     getReportsBasedOnWeek(user.accessToken, year, month)
       .then((res) => res.json())
       .then((data) => {
@@ -194,6 +198,9 @@ const Reports = () => {
       .then(() => setMonthIndex(month - 1))
       .catch((_) => {
         setErr("Something went wrong");
+      }).finally(()=>{
+        setIsLoading(false)
+        
       });
   }, []);
 
@@ -258,6 +265,12 @@ const Reports = () => {
       <Head>
         <title>Reports | Temaribet</title>
       </Head>
+      <Backdrop
+         sx={{ color: '#fff', backgroundColor: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading}
+      >
+        <CircularProgress color="info" />
+      </Backdrop>
       <Box
         component="main"
         sx={{

@@ -5,7 +5,6 @@ import { format } from "date-fns";
 import {
   Avatar,
   Box,
-  Button,
   Card,
   Checkbox,
   Chip,
@@ -18,21 +17,27 @@ import {
   TablePagination,
   TableRow,
   Typography,
+  Button
 } from "@mui/material";
 import { getInitials } from "../../utils/get-initials";
-import { useRouter } from "next/router";
-import { deleteParent } from "backend-utils/parent-utils";
+import { DeleteOutlined, DetailsSharp, MoreHorizSharp } from "@mui/icons-material";
+import { deleteTutor } from "backend-utils/tutor-utils";
 import { useSelector } from "react-redux";
 import { selectUser } from "redux/userSlice";
-import { DeleteOutlined, MoreHorizSharp } from "@mui/icons-material";
+import { useRouter } from "next/router";
+import AddTaskRoundedIcon from '@mui/icons-material/AddTaskRounded';
+import { updateTutor } from "backend-utils/tutor-utils";
+import { updateStudentTutor } from "backend-utils/student-utils";
 
-export const ParentListResults = ({ customers, searchTerm, ...rest }) => {
+
+
+export const ChoiceListResults = ({ customers, searchTerm,sid, student,...rest }) => {
   const user = useSelector(selectUser);
   const router = useRouter();
   if (user) {
     var token = user.accessToken;
   }
-  const [isLoading,setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
@@ -75,45 +80,33 @@ export const ParentListResults = ({ customers, searchTerm, ...rest }) => {
   };
 
   const handlePageChange = (event, newPage) => {
+    console.log()
     setPage(newPage);
+    
   };
-
-  const handleDelete = (id,success) => {
+  const connectTutorChild = (tutorId, childId) => {
+    console.log(tutorId, childId, token);
     setIsLoading(true)
-    deleteParent(token, id)
+    updateStudentTutor(token, childId, tutorId, "SUCCESS")
       .then((res) => res.json())
-      .then((_data) => {
-        console.log(_data,success)
-        if (success=='SUCCESS'){
-          router.push("/parents")
-
-        }
-        else{
-          router.push("/newParent")
-        }
-        console.log(_data)
-        window.location.reload(false);
-        
-      })
-      .catch((_) => {
+      .then((data) => console.log(data))
+      .catch((err) => {
         setErr("Something went wrong");
-      }).finally(
-        ()=>{
-          setIsLoading(false)
-      });
+      })
+      .finally(()=>
+      
+      {
+        setIsLoading(false)
+      
+        router.push("/parents/profile/" + student?.parentId)}
+      
+      )
   };
-
   return (
     <Card {...rest}>
-      
-        <Box 
-       
-        
-        >
+        <Box >
           <TableContainer>
-          <Table
-          
-          >
+          <Table>
             <TableHead>
               <TableRow>
                 <TableCell padding="checkbox">
@@ -129,22 +122,22 @@ export const ParentListResults = ({ customers, searchTerm, ...rest }) => {
                 </TableCell>
                 <TableCell>Name</TableCell>
                 <TableCell>Location</TableCell>
-                <TableCell>Phone</TableCell>
-                
                 <TableCell>Action</TableCell>
+                <TableCell>Detail</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {customers
-              .filter((val) => {
-                if (searchTerm == "") {
-                  return val;
-                } else if (val.fullName.toLowerCase().includes(searchTerm.toLowerCase())) {
-                  return val;
-                }
-              })
+
+               .filter((val) => {
+                  if (searchTerm == "") {
+                    return val;
+                  } else if (val.fullName.toLowerCase().includes(searchTerm.toLowerCase())) {
+                    return val;
+                  }
+                })
                 .slice((limit*page), (limit)*(page+1))
-                
+               
                 .map((customer) => (
                   <TableRow
                     hover
@@ -176,41 +169,33 @@ export const ParentListResults = ({ customers, searchTerm, ...rest }) => {
                         </Typography>
                       </Box>
                     </TableCell>
-                    <TableCell>{customer.location}</TableCell>
-                    <TableCell>{customer.phone1}</TableCell>
-                   
+                    <TableCell>{`${customer.location}`}</TableCell>
+                    
+                 
                     <TableCell>
-                      { customer.status ==="PENDING" && 
-                      <IconButton
-                        color="error"
+                      
+                      <Button
+                       disabled={isLoading}
+                       variant="contained"
+                       color="primary"
                         aria-label="upload picture"
-                        disabled={isLoading}
                         component="span"
-                        onClick={() => handleDelete(customer.id,customer.status)}
+                        onClick={() => connectTutorChild(customer.id,sid)}
                       >
-                        <DeleteOutlined />
-                      </IconButton>
-}
-                      {customer.email === null && customer.status ==="PENDING" && (
-                        <Button
-                          color="primary"
-                          variant="contained"
-                          disabled={isLoading}
-                          onClick={() => {
-                            setIsLoading(true)
-                            router.push("/newParent/" + customer.id);
-                          }}
-                        >
-                          Create Account
-                        </Button>
-                      )}
+                       Choose
+                      </Button>
+                    
+                    </TableCell>
+
+                    <TableCell>
                       <IconButton
                         color="info"
                         aria-label="upload picture"
-                        disabled={isLoading}
                         component="span"
-                        onClick={() => { setIsLoading(true);
-                          router.push("/parents/profile/" + customer.id)}}
+                        onClick={() => {
+                        
+                          router.push("/tutors/" + customer.id);
+                        }}
                       >
                         <MoreHorizSharp />
                       </IconButton>
@@ -235,6 +220,6 @@ export const ParentListResults = ({ customers, searchTerm, ...rest }) => {
   );
 };
 
-ParentListResults.propTypes = {
+ChoiceListResults.propTypes = {
   customers: PropTypes.array.isRequired,
 };

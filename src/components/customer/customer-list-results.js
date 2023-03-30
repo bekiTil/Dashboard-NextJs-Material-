@@ -142,8 +142,8 @@ export const CustomerListResults = ({ customers, searchTerm, ...rest }) => {
                 <TableCell>Status</TableCell>
                 
                 
-                {customers[0]?.status =='PENDING' &&<TableCell>Action</TableCell>}
-                <TableCell>Delete</TableCell>
+              
+                {customers[0]?.status =='PENDING' && <TableCell>Delete</TableCell>}
                 <TableCell>Detail</TableCell>
               </TableRow>
             </TableHead>
@@ -198,47 +198,31 @@ export const CustomerListResults = ({ customers, searchTerm, ...rest }) => {
                       {customer.status === "FAILED" && <Chip label="SUCCESS" color="error" />}
                       {customer.status === "PENDING" && <Chip label="PENDING" color="primary" />}
                     </TableCell>
+                    
+                    {customer.status=="PENDING" && 
                     <TableCell>
-                      {customer.status=="PENDING"
-                      &&
-                      <IconButton
-                      disabled={isLoading}
-                      color="error"
-                      aria-label="upload picture"
-                      component="span"
-                      onClick=
-                      {() => changeStatus(customer.id) }
                       
-                    >
-                      <AddTaskRoundedIcon />
-                  
-                      
-                    </IconButton>
-                      }
-                      {customer.status=="SUCCESS"
-                      
-                      &&
-                      <Chip label="Active" color="error" variant="outlined" />
-                      }
-                    </TableCell>
-                    <TableCell>
                       <IconButton
                        disabled={isLoading}
                         color="error"
                         aria-label="upload picture"
                         component="span"
-                        onClick={() => handleDelete(customer.id)}
+                        onClick={() => {   setIsLoading(true);
+                           handleDelete(customer.id)}}
                       >
                         <DeleteOutlined />
                       </IconButton>
+                    
                     </TableCell>
+}
                     <TableCell>
                       <IconButton
                         color="info"
                         aria-label="upload picture"
                         component="span"
+                        disabled={isLoading}
                         onClick={() => {
-                        
+                          setIsLoading(true)
                           router.push("/tutors/" + customer.id);
                         }}
                       >
