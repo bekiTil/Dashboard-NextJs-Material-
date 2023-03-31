@@ -367,7 +367,7 @@ const ParentDetail = () => {
             <Button color="primary" variant="contained" onClick={handleClose} autoFocus>
               Go to Home
             </Button>
-            {existedTutor === null && prospectTutor === null && (
+            {existedTutor === null &&  (
               <Button color="primary" variant="contained" 
               
               onClick={() => router.push("/parents/student/" + childId)}

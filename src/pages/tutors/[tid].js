@@ -321,21 +321,7 @@ const TutorDetail = () => {
             {/* })} */}
           {/* </Grid> */}
          
-          {tutorData?.status=="PENDING"
-                      && <IconButton
-                      disabled={isLoading}
-                      color="error"
-                      aria-label="upload picture"
-                      component="span"
-                      onClick=
-                      {() => changeStatus(tid) }
-                      
-                    >
-                      <AddTaskRoundedIcon />
-                  
-                      
-                    </IconButton>
-}
+         
         </Container>
       </Box>
     </>
