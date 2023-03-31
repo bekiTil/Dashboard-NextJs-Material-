@@ -15,6 +15,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  IconButton,
   Alert,
 } from "@mui/material";
 import Table from "@mui/material/Table";
@@ -36,6 +37,8 @@ import { selectUser } from "redux/userSlice";
 import { updateStudent } from "backend-utils/student-utils";
 import Backdrop from '@mui/material/Backdrop'
 import CircularProgress from '@mui/material/CircularProgress'
+
+import { DeleteOutlined, MoreHorizSharp } from "@mui/icons-material";
 
 const ParentDetail = () => {
   const user = useSelector(selectUser);
@@ -325,6 +328,7 @@ const ParentDetail = () => {
                       <TableCell align="right">Location</TableCell>
 
                       <TableCell align="right">Action</TableCell>
+                      <TableCell align="right">Detail</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -343,6 +347,18 @@ const ParentDetail = () => {
                               <Button onClick={() => connectTutorChild(tutor.id, childId)}>
                                 Choose
                               </Button>
+                            </TableCell>
+                            <TableCell>
+                            <IconButton
+                        color="info"
+                        aria-label="upload picture"
+                        disabled={isLoading}
+                        component="span"
+                        onClick={() => { setIsLoading(true);
+                          router.push("/parents/profile/" + customer.id)}}
+                      >
+                        <MoreHorizSharp />
+                      </IconButton>
                             </TableCell>
                           </TableRow>
                         </>
