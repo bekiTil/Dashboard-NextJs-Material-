@@ -63,6 +63,7 @@ const TimeSheet = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [open, setOpen] = useState(false);
   const user = useSelector(selectUser);
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     let temp = [];
 
@@ -83,8 +84,10 @@ const TimeSheet = () => {
     setOpen(false);
   };
   const handleStatusChange = (timeId, newStatus) => {
+    setIsLoading(true);
     UpdateAnImage(user.accessToken, timeId, { statusOfMoneySent: newStatus }).then((data) => {
       let val = [...listOfTimeSheet];
+      console.log(data)
       val.map((timesheet, index) => {
         if (timesheet.id == timeId) {
           timesheet.statusOfMoneySent = newStatus;
@@ -92,6 +95,8 @@ const TimeSheet = () => {
       });
       console.log(val)
       setListOfTimeSheet(val)
+    }).finally(()=>{
+      setIsLoading(false)
     });
   };
 
@@ -191,7 +196,7 @@ const TimeSheet = () => {
                                   {index==0 && val.statusOfMoneySent === "PENDING" && (
                                     <Box display="flex" justifyContent="center" alignItems="center">
                                       <Button
-                                        
+                                        disabled={isLoading}
                                         onClick={() => handleStatusChange(val.id, "SUCCESS")}
                                        
                                         color="inherit"

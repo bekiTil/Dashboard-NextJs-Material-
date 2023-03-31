@@ -176,7 +176,7 @@ const TFinance = () => {
 
       </Box>
 
-      {listOfTimeSheet[0]?.statusOfMoneyPaid==="SUCCESS" &&
+      {
       <Box padding={1} display="flex" justifyContent="right" alignItems="flex-end">
           <Button
           

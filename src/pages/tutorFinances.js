@@ -184,9 +184,9 @@ const TutorFinance = () => {
     const uniqueTutorIds = [];
     newData.map((timesheet) => {
       if (timesheet.statusOfAcceptance === "SUCCESS") {
-        if (!uniqueTutorIds.includes(timeSheets?.tutorId)) {
+        if (!uniqueTutorIds.includes(timesheet.tutorId + timesheet.month )) {
           arrOfFilterdMonth[timesheet.month - 1].push(timesheet);
-          uniqueTutorIds.push(timeSheets?.tutorId);
+          uniqueTutorIds.push(timesheet.tutorId + timesheet.month );
         }
 
         arrOfMonth[timesheet.month - 1].push(timesheet);

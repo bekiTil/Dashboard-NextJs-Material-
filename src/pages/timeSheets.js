@@ -181,11 +181,12 @@ const TimeSheets = () => {
     const uniqueTutorIds = [];
     console.log(newData, "newData");
     newData.map((timesheet) => {
-      console.log(timeSheets)
-      if (!uniqueTutorIds.includes(timeSheets?.tutorId)) {
+      // console.log(timeSheets?.tutorId,"timeSheets")
+      if (!uniqueTutorIds.includes(timesheet.tutorId + timesheet.month)) {
         arrOfFilterdMonth[timesheet.month - 1].push(timesheet);
        
-        uniqueTutorIds.push(timeSheets?.tutorId);
+        uniqueTutorIds.push(timesheet.tutorId + timesheet.month);
+       
       }
       console.log(timesheet,"new")
       if (timesheet.view =="PENDING"){
@@ -194,7 +195,7 @@ const TimeSheets = () => {
       }
       arrOfMonth[timesheet.month - 1].push(timesheet);
     });
-    console.log(arrOfFilterdMonth);
+    console.log(arrOfFilterdMonth,"filtered");
     console.log(arrOfMonthNOt,"file");
  
     setTotalWeeks(arrOfFilterdMonth);
