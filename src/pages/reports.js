@@ -101,7 +101,7 @@ const Reports = () => {
   const [monthIndex, setMonthIndex] = useState(d.getMonth());
   const handleOpen = (truthValue, weekRepo = []) => {
     console.log(truthValue);
-    console.log(weekRepo);
+    console.log(weekRepo,value);
     setWeeklyReport(weekRepo);
     setTempWeeks(weekRepo);
   };
@@ -203,6 +203,11 @@ const Reports = () => {
         
       });
   }, []);
+  useEffect(() => {
+    handleOpen(totalWeeks, totalWeeks[value]);
+
+   
+  }, [totalWeeks]);
 
   useEffect(() => {
     

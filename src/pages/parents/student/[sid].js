@@ -76,6 +76,7 @@ const StudentDetail = () => {
           .then((data) => {
             console.log(data);
             if (data.success) {
+              
               setStudentDetail(data.user);
             } else {
               setErr(data.message);
