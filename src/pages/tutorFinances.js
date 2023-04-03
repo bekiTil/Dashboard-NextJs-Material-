@@ -31,6 +31,7 @@ import {
   TableRow,
   Avatar,
   Chip,
+  Badge,
 } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import { ReportListResults } from "../components/report/report-list-results";
@@ -58,7 +59,7 @@ import { current } from "@reduxjs/toolkit";
 import { getTimeSheetsBasedOnMonth } from "backend-utils/tutor-utils";
 import CircularProgress from "@mui/material/CircularProgress";
 import Backdrop from '@mui/material/Backdrop';
-
+import MailIcon from '@mui/icons-material/Mail';
 
 const TutorFinance = () => {
   const [value, setValue] = useState(0);
@@ -101,6 +102,7 @@ const TutorFinance = () => {
   const [tempWeeks, setTempWeeks] = useState([]);
   const [selectYear, setSelectedYear] = useState(currentYear);
   const [statusReport, setStatusReport] = useState(1);
+  const [monthNotify, setMonthNotify] = useState([]);
   const years = [];
   for (let year = 2023; year <= 2050; year++) {
     years.push(year);
@@ -180,6 +182,7 @@ const TutorFinance = () => {
     console.log(newData);
     const arrOfMonth = Array.from({ length: 12 }, () => []);
     const arrOfFilterdMonth = Array.from({ length: 12 }, () => []);
+    const arrOfMonthNOt = Array.from({ length: 12 }, () => [0]);
 
     const uniqueTutorIds = [];
     newData.map((timesheet) => {
@@ -187,6 +190,10 @@ const TutorFinance = () => {
         if (!uniqueTutorIds.includes(timesheet.tutorId + timesheet.month )) {
           arrOfFilterdMonth[timesheet.month - 1].push(timesheet);
           uniqueTutorIds.push(timesheet.tutorId + timesheet.month );
+        }
+        if (timesheet.statusOfMoneyPaid =="PENDING"){
+       
+          arrOfMonthNOt[timesheet.month - 1] = Number( arrOfMonthNOt[timesheet.month - 1])+ 1;
         }
 
         arrOfMonth[timesheet.month - 1].push(timesheet);
@@ -196,6 +203,8 @@ const TutorFinance = () => {
 
     setTotalWeeks(arrOfFilterdMonth);
     setTotalMonths(arrOfMonth);
+    setMonthNotify(arrOfMonthNOt);
+    
   };
   const router = useRouter();
   if (!user) router.push("/login");
@@ -251,6 +260,63 @@ const TutorFinance = () => {
         setIsLoading(false)
       });;
   }, [selectYear]);
+  const countNotification = (tutorId) => {
+    var count = 0;
+    console.log(tutorId)
+    totalMonths[selectedMonthIndex]?.map((val) => {
+      if (val.tutorId == tutorId) {
+        if (val.statusOfMoneyPaid == "PENDING") {
+          count += 1;
+        }
+      }
+    });
+    console.log(totalMonths,selectedMonthIndex,"file change",count )
+    return count;
+  };
+
+  useEffect(()=>{
+    let data = [];
+    
+    const uniqueTutorIds = [];
+        console.log(WeeklyReport);
+        totalMonths[selectedMonthIndex]?.map((timesheet,index) => {
+         
+          if (statusReport == 2 && timesheet.statusOfMoneyPaid == "SUCCESS") {
+             if (!uniqueTutorIds.includes(timesheet.tutorId)) {
+              data.push(timesheet)
+             
+              uniqueTutorIds.push(timesheet.tutorId);
+             
+            }
+            
+          } else if (statusReport == 3 && timesheet.statusOfMoneyPaid == "PENDING") {
+            if (!uniqueTutorIds.includes(timesheet.tutorId)) {
+              data.push(timesheet)
+             
+              uniqueTutorIds.push(timesheet.tutorId);
+             
+            }
+          } else if (statusReport == 4 && timesheet.statusOfMoneyPaid == "REJECTED") {
+            if (!uniqueTutorIds.includes(timesheet.tutorId)) {
+              data.push(timesheet)
+             
+              uniqueTutorIds.push(timesheet.tutorId);
+             
+            }
+          }
+        });
+      if (statusReport !=1){
+        setTempWeeks(data)
+      }
+      else{
+          if (totalWeeks[selectedMonthIndex])
+          {
+          setTempWeeks(totalWeeks[selectedMonthIndex])
+          }
+      }
+ 
+
+  },[statusReport,selectedMonthIndex])
 
   return (
     <>
@@ -279,6 +345,29 @@ const TutorFinance = () => {
             justifyContent="flex-end"
             alignItems="flex-end"
           >
+                      <Grid
+            marginX={2}
+            >
+
+            <Typography fontWeight="bold">Status</Typography>
+              <Select
+                labelId="demo-select-small"
+                id="demo-select-small"
+                name="statusReport"
+                margin="normal"
+                value={statusReport}
+                label="Hours Per Day"
+                sx={{ marginLeft: "auto" }}
+                onChange={(event) => setStatusReport(event.target.value)}
+              >
+                <MenuItem value={1}>All</MenuItem>
+                <MenuItem value={2}>Accepted</MenuItem>
+                <MenuItem value={3}>Pending</MenuItem>
+                <MenuItem value={4}>Rejected</MenuItem>
+               
+              </Select>
+            
+            </Grid>
           
             <Grid>
               <Typography fontWeight="bold">Choose Year</Typography>
@@ -321,6 +410,8 @@ const TutorFinance = () => {
                       paddingX: 4,
                     }}
                     fullWidth={true}
+                    disabled={value == index}
+                    icon={<Badge badgeContent={Number(monthNotify[index])} color="secondary" > <MailIcon  color="action" /></Badge>}
                     label={`${month}`}
                     onClick={() => handleOpen(totalWeeks, totalWeeks[index], index)}
                   ></Tab>
@@ -348,7 +439,7 @@ const TutorFinance = () => {
                 <TableRow>
                   <TableCell>Name</TableCell>
                   <TableCell align="right" >Status</TableCell>
-                  <TableCell align="right">Action</TableCell>
+                  <TableCell align="right">Pending Number</TableCell>
                 </TableRow>
               </TableHead>
               {loadingOpen ? (
@@ -417,6 +508,7 @@ const TutorFinance = () => {
                                 <MoreHorizSharp />
                               </IconButton>
                             </TableCell>
+                            <TableCell align="right">{countNotification(timeSheets?.tutor?.id)}</TableCell>
                           </TableRow>
                         </>
                       );

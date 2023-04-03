@@ -43,6 +43,7 @@ const Login = () => {
       signin(formik.values.email, formik.values.password)
         .then((res) => res.json())
         .then((data) => {
+          console.log(data.status)
           if (data.success) {
             dispatch(
               login({
@@ -54,7 +55,13 @@ const Login = () => {
             );
             router.push("/dashboard");
           } else {
-            setErr(data.message);
+            if (data.status != 500)
+            {
+            setErr(data.message)
+            }
+            else{
+            setErr('Something went wrong')
+            }
           }
         })
         .catch((_err) => {

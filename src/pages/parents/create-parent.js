@@ -70,7 +70,7 @@ const StudentRegistration = () => {
   const [open, setOpen] = React.useState(false)
   const handleClose = () => {
     setOpen(false)
-    router.push('/')
+    router.push('/newParent')
   }
   const [studnets, setStudentField] = useState([
     {

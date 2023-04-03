@@ -31,6 +31,7 @@ import {
   TableRow,
   Avatar,
   Chip,
+  Badge,
 } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import { ReportListResults } from "../components/report/report-list-results";
@@ -56,6 +57,7 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { data } from "autoprefixer";
 import Backdrop from '@mui/material/Backdrop'
 import CircularProgress from '@mui/material/CircularProgress'
+import MailIcon from '@mui/icons-material/Mail';
 
 const Reports = () => {
   const [value, setValue] = useState(0);
@@ -82,6 +84,7 @@ const Reports = () => {
   const [selectMonth, setSelectedMonth] = useState(currentMonth);
   const [statusReport,setStatusReport] =useState(1);
   const [isLoading, setIsLoading] = useState(true)
+  const [monthNotify, setMonthNotify] = useState([]);
  
   const monthName = [
     "Jan",
@@ -146,22 +149,49 @@ const Reports = () => {
     let thirdData = [];
     let fourthData = [];
     let fiveData = [];
+    let firstNo = Number(0);
+    let secondNo  = Number(0);
+    let thirdNo =Number(0);
+    let fourthNo  = Number(0);
+    let fiveNo  = Number(0);
     let total = [];
     console.log(reports);
     console.log(total);
     console.log(week);
+
     newData.map((report) => {
       const date = report.reportDate;
       if (date >= week?.[0]?.[0] && date <= week?.[0]?.[1]) {
         firstData.push(report);
+        if (report.status == "PENDING")
+        {
+        firstNo = Number(firstNo)+1
+        }
       } else if (date >= week?.[1]?.[0] && date <= week?.[1]?.[1]) {
         secondData.push(report);
+        if (report.status == "PENDING")
+        {
+          secondNo = Number(secondNo)+1
+        }
       } else if (date >= week?.[2]?.[0] && date <= week?.[2]?.[1]) {
         thirdData.push(report);
+        if (report.status == "PENDING")
+        {
+          thirdNo = Number(thirdNo)+1
+        }
       } else if (date >= week?.[3]?.[0] && date <= week?.[3]?.[1]) {
         fourthData.push(report);
+        if (report.status == "PENDING")
+        {
+          fourthNo = Number(fourthNo)+1
+        }
       } else {
         fiveData.push(report);
+        if (report.status == "PENDING")
+        {
+          fiveNo = Number(fiveNo)+1
+        }
+
       }
     });
     total.push(firstData);
@@ -170,8 +200,14 @@ const Reports = () => {
     total.push(fourthData);
     total.push(fiveData);
     console.log(total);
-
+    let notifArr = []
+    notifArr.push(firstNo)
+    notifArr.push(secondNo)
+    notifArr.push(thirdNo)
+    notifArr.push(fourthNo)
+    notifArr.push(fiveNo)
     setTotalWeeks(total);
+    setMonthNotify(notifArr)
     console.log(weeks);
   };
   const router = useRouter();
@@ -366,6 +402,7 @@ const Reports = () => {
                       
                     }}
                     fullWidth={true}
+                    icon={<Badge badgeContent={Number(monthNotify[index])} color="secondary" > <MailIcon  color="action" /></Badge>}
                     label= {`${monthName[monthIndex]} ${week[0]} - ${week[1]}`}
                     onClick={() => handleOpen(totalWeeks, totalWeeks[index])}
                   >

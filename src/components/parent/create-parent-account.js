@@ -68,7 +68,7 @@ export const CreateParentAccountForm = (props) => {
       phone2: props.parent?.phone2,
       location: props.parent?.location,
       preferredBank: props.parent?.preferredBank,
-      profilePicture: props.parent?.profilePicture,
+     
     });
   }, [props.parent]);
 
@@ -81,7 +81,7 @@ export const CreateParentAccountForm = (props) => {
       phone2: initialValues?.phone2,
       location: initialValues?.location,
       preferredBank: initialValues?.preferredBank!=null ? initialValues?.preferredBank :"",
-      profilePicture: initialValues?.profilePicture,
+     
     },
     validationSchema: Yup.object({
       fullName: Yup.string().max(255).required("Full name is required"),
@@ -89,8 +89,8 @@ export const CreateParentAccountForm = (props) => {
       location: Yup.string().max(255).required("Location is required"),
       phone1: Yup.string().max(255).required("Phone is required"),
       phone2: Yup.string().max(255).nullable(),
-      preferredBank: Yup.string().max(255).required("Preferred bank is required"),
-      profilePicture: Yup.string().max(255),
+      preferredBank: Yup.string().max(255).nullable(),
+    
     }),
     onSubmit: () => {
       setLoggingIn(true);
@@ -116,7 +116,7 @@ export const CreateParentAccountForm = (props) => {
             // ? preserve memory leak
             // ? state is updated only if mounted
             setLoggingIn(false);
-            router.push("/parents");
+            router.push("/parents/profile/" +  initialValues.id)
           }
         });
     },
@@ -126,7 +126,8 @@ export const CreateParentAccountForm = (props) => {
     setErr("");
     setShowAlert(false);
     console.log(formik.isValid===true,formik.isValid)
-    if (formik.isValid===false){
+    console.log(formik)
+    if (formik.isValid=== true){
     const parentBody = { ...formik.values,status:"SUCCESS" };
     updateParent(user.accessToken, initialValues.id, parentBody)
       .then((res) => res.json())

@@ -157,7 +157,7 @@ const TFinance = () => {
                                 <TableCell align="center">
                                   {index == 0 && (
                                     <Button onClick={() => handleClickOpen(val.cloudinary_id)}>
-                                      <ArrowDropDownCircleOutlinedIcon color="disabled" />
+                                      <ArrowDropDownCircleOutlinedIcon color="action" />
                                     </Button>
                                   )}
                                 </TableCell>
@@ -181,6 +181,7 @@ const TFinance = () => {
           <Button
           
           variant="contained"
+          color="inherit"
           disabled={buttonDisable}
           onClick={()=>handlePayment()}
           >

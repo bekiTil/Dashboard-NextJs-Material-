@@ -104,6 +104,7 @@ const TimeSheets = () => {
   const [selectYear, setSelectedYear] = useState(currentYear);
   const [statusReport, setStatusReport] = useState(1);
   const [countofView,setCountOfView] = useState(0);
+  
   const years = [];
   
   for (let year = 2023; year <= 2050; year++) {
@@ -189,7 +190,7 @@ const TimeSheets = () => {
        
       }
       console.log(timesheet,"new")
-      if (timesheet.view =="PENDING"){
+      if (timesheet.statusOfAcceptance =="PENDING"){
         console.log('hidds')
         arrOfMonthNOt[timesheet.month - 1] = Number( arrOfMonthNOt[timesheet.month - 1])+ 1;
       }
@@ -288,7 +289,7 @@ const TimeSheets = () => {
     console.log(tutorId)
     totalMonths[selectedMonthIndex]?.map((val) => {
       if (val.tutorId == tutorId) {
-        if (val.view == "PENDING") {
+        if (val.statusOfAcceptance == "PENDING") {
           count += 1;
         }
       }
@@ -296,6 +297,49 @@ const TimeSheets = () => {
     console.log(totalMonths,selectedMonthIndex,"file change",count )
     return count;
   };
+  useEffect(()=>{
+    let data = [];
+    
+    const uniqueTutorIds = [];
+        console.log(WeeklyReport);
+        totalMonths[selectedMonthIndex]?.map((timesheet,index) => {
+         
+          if (statusReport == 2 && timesheet.statusOfAcceptance == "SUCCESS") {
+             if (!uniqueTutorIds.includes(timesheet.tutorId)) {
+              data.push(timesheet)
+             
+              uniqueTutorIds.push(timesheet.tutorId);
+             
+            }
+            
+          } else if (statusReport == 3 && timesheet.statusOfAcceptance == "PENDING") {
+            if (!uniqueTutorIds.includes(timesheet.tutorId)) {
+              data.push(timesheet)
+             
+              uniqueTutorIds.push(timesheet.tutorId);
+             
+            }
+          } else if (statusReport == 4 && timesheet.statusOfAcceptance == "REJECTED") {
+            if (!uniqueTutorIds.includes(timesheet.tutorId)) {
+              data.push(timesheet)
+             
+              uniqueTutorIds.push(timesheet.tutorId);
+             
+            }
+          }
+        });
+      if (statusReport !=1){
+        setTempWeeks(data)
+      }
+      else{
+          if (totalWeeks[selectedMonthIndex])
+          {
+          setTempWeeks(totalWeeks[selectedMonthIndex])
+          }
+      }
+ 
+
+  },[statusReport,selectedMonthIndex])
   
   return (
     <>
@@ -324,6 +368,29 @@ const TimeSheets = () => {
             justifyContent="flex-end"
             alignItems="flex-end"
           >
+            <Grid
+            marginX={2}
+            >
+
+            <Typography fontWeight="bold">Status</Typography>
+              <Select
+                labelId="demo-select-small"
+                id="demo-select-small"
+                name="statusReport"
+                margin="normal"
+                value={statusReport}
+                label="Hours Per Day"
+                sx={{ marginLeft: "auto" }}
+                onChange={(event) => setStatusReport(event.target.value)}
+              >
+                <MenuItem value={1}>All</MenuItem>
+                <MenuItem value={2}>Accepted</MenuItem>
+                <MenuItem value={3}>Pending</MenuItem>
+                <MenuItem value={4}>Rejected</MenuItem>
+               
+              </Select>
+            
+            </Grid>
             <Grid>
               <Typography fontWeight="bold">Choose Year</Typography>
               <Select
@@ -366,6 +433,7 @@ const TimeSheets = () => {
                     }}
                     icon={<Badge badgeContent={Number(monthNotify[index])} color="secondary" > <MailIcon  color="action" /></Badge>}
                     fullWidth={true}
+                    disabled={value == index}
                     label={`${month} `}
                     onClick={() => {
                       if (selectedMonthIndex != index) {
@@ -398,7 +466,7 @@ const TimeSheets = () => {
                 <TableRow>
                   <TableCell>Name</TableCell>
                   <TableCell align="right">Detail</TableCell>
-                  <TableCell >New</TableCell>
+                  <TableCell >Pending Number</TableCell>
                 </TableRow>
               </TableHead>
               {loadingOpen ? (
@@ -467,7 +535,7 @@ const TimeSheets = () => {
                                   <MoreHorizSharp />
                                 </IconButton>
                               </TableCell>
-                              <TableCell>{countNotification(timeSheets?.tutor?.id)}</TableCell>
+                              <TableCell align="right">{countNotification(timeSheets?.tutor?.id)}</TableCell>
                             </TableRow>
                           </>
                         );

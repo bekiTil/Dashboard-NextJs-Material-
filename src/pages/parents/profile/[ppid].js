@@ -39,6 +39,7 @@ import Backdrop from '@mui/material/Backdrop'
 import CircularProgress from '@mui/material/CircularProgress'
 
 import { DeleteOutlined, MoreHorizSharp } from "@mui/icons-material";
+import { updateStudentTutor } from "backend-utils/student-utils";
 
 const ParentDetail = () => {
   const user = useSelector(selectUser);
@@ -75,7 +76,7 @@ const ParentDetail = () => {
   }, [ppid]);
 
   const connectTutorChild = (tutorId, childId) => {
-    console.log(tutorId, childId, token);
+    
     updateStudentTutor(token, childId, tutorId, "SUCCESS")
       .then((res) => res.json())
       .then((data) => console.log(data))

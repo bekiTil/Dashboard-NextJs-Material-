@@ -33,7 +33,7 @@ export const DashboardNavbar = (props) => {
       dispatch(logout());
     })
    
-    router.push("/");
+    router.push("/login");
   };
   return (
     <>

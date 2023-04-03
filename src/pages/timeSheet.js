@@ -145,8 +145,8 @@ const TimeSheet = () => {
                           <TableCell align="center">Work Hour</TableCell>
                           <TableCell align="center">Month</TableCell>
                           <TableCell align="center">Status</TableCell>
-                          <TableCell align="center">Action</TableCell>
                           <TableCell align="center">Image</TableCell>
+                          <TableCell align="center">Action</TableCell>
                         </TableRow>
                       </TableHead>
 
@@ -204,6 +204,13 @@ const TimeSheet = () => {
                                   )} */}
                                 </TableCell>
                                 <TableCell align="center">
+                                  {index == 0 && (
+                                    <Button onClick={() => handleClickOpen(val.cloudinary_id)}>
+                                      <ArrowDropDownCircleOutlinedIcon color="action" />
+                                    </Button>
+                                  )}
+                                </TableCell>
+                                <TableCell align="center">
                                   {index == 0 && val.statusOfAcceptance === "PENDING" && (
                                     <Box display="flex" justifyContent="center" alignItems="center">
                                       <Button
@@ -227,13 +234,7 @@ const TimeSheet = () => {
                                   )}
                                 </TableCell>
 
-                                <TableCell align="center">
-                                  {index == 0 && (
-                                    <Button onClick={() => handleClickOpen(val.cloudinary_id)}>
-                                      <ArrowDropDownCircleOutlinedIcon color="disabled" />
-                                    </Button>
-                                  )}
-                                </TableCell>
+                               
                               </TableRow>
                             ))}
                           </>

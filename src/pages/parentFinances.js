@@ -31,6 +31,7 @@ import {
   TableRow,
   Avatar,
   Chip,
+  Badge,
 } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import { ReportListResults } from "../components/report/report-list-results";
@@ -58,6 +59,7 @@ import { current } from "@reduxjs/toolkit";
 import { getTimeSheetsBasedOnMonth } from "backend-utils/tutor-utils";
 import CircularProgress from "@mui/material/CircularProgress";
 import Backdrop from '@mui/material/Backdrop'
+import MailIcon from '@mui/icons-material/Mail';
 
 
 const ParentFinance = () => {
@@ -102,6 +104,7 @@ const ParentFinance = () => {
   const [tempWeeks, setTempWeeks] = useState([]);
   const [selectYear, setSelectedYear] = useState(currentYear);
   const [statusReport, setStatusReport] = useState(1);
+  const [monthNotify, setMonthNotify] = useState([]);
   const years = [];
   for (let year = 2023; year <= 2050; year++) {
     years.push(year);
@@ -181,6 +184,7 @@ const ParentFinance = () => {
     console.log(newData);
     const arrOfMonth = Array.from({ length: 12 }, () => []);
     const arrOfFilterdMonth = Array.from({ length: 12 }, () => []);
+    const arrOfMonthNOt = Array.from({ length: 12 }, () => [0]);
 
     const uniqueTutorIds = [];
     newData.map((timesheet) => {
@@ -188,6 +192,10 @@ const ParentFinance = () => {
         if (!uniqueTutorIds.includes(timesheet.parentId + timesheet.month )) {
           arrOfFilterdMonth[timesheet.month - 1].push(timesheet);
           uniqueTutorIds.push(timesheet.parentId + timesheet.month );
+        }
+        if (timesheet.statusOfMoneySent =="PENDING"){
+       
+          arrOfMonthNOt[timesheet.month - 1] = Number( arrOfMonthNOt[timesheet.month - 1])+ 1;
         }
 
         arrOfMonth[timesheet.month - 1].push(timesheet);
@@ -197,6 +205,7 @@ const ParentFinance = () => {
 
     setTotalWeeks(arrOfFilterdMonth);
     setTotalMonths(arrOfMonth);
+    setMonthNotify(arrOfMonthNOt);
   };
   const router = useRouter();
   if (!user) router.push("/login");
@@ -274,6 +283,64 @@ const ParentFinance = () => {
     setTempWeeks(data);
   }, [statusReport]);
 
+  const countNotification = (tutorId) => {
+    var count = 0;
+    console.log(tutorId)
+    totalMonths[selectedMonthIndex]?.map((val) => {
+      if (val.parentId == tutorId) {
+        if (val.statusOfMoneySent == "PENDING") {
+          count += 1;
+        }
+      }
+    });
+    console.log(totalMonths,selectedMonthIndex,"file change",count )
+    return count;
+  };
+
+  useEffect(()=>{
+    let data = [];
+    
+    const uniqueTutorIds = [];
+        console.log(WeeklyReport);
+        totalMonths[selectedMonthIndex]?.map((timesheet,index) => {
+         
+          if (statusReport == 2 && timesheet.statusOfMoneySent == "SUCCESS") {
+             if (!uniqueTutorIds.includes(timesheet.parentId)) {
+              data.push(timesheet)
+             
+              uniqueTutorIds.push(timesheet.parentId);
+             
+            }
+            
+          } else if (statusReport == 3 && timesheet.statusOfMoneySent == "PENDING") {
+            if (!uniqueTutorIds.includes(timesheet.parentId)) {
+              data.push(timesheet)
+             
+              uniqueTutorIds.push(timesheet.parentId);
+             
+            }
+          } else if (statusReport == 4 && timesheet.statusOfMoneySent == "REJECTED") {
+            if (!uniqueTutorIds.includes(timesheet.parentId)) {
+              data.push(timesheet)
+             
+              uniqueTutorIds.push(timesheet.parentId);
+             
+            }
+          }
+        });
+      if (statusReport !=1){
+        setTempWeeks(data)
+      }
+      else{
+          if (totalWeeks[selectedMonthIndex])
+          {
+          setTempWeeks(totalWeeks[selectedMonthIndex])
+          }
+      }
+ 
+
+  },[statusReport,selectedMonthIndex])
+
   return (
     <>
       <Head>
@@ -319,6 +386,30 @@ const ParentFinance = () => {
                 <MenuItem value={4}>Rejected</MenuItem>
               </Select>
             </Grid> */}
+            <Grid
+            marginX={2}
+            >
+
+            <Typography fontWeight="bold">Status</Typography>
+              <Select
+                labelId="demo-select-small"
+                id="demo-select-small"
+                name="statusReport"
+                margin="normal"
+                value={statusReport}
+                label="Hours Per Day"
+                sx={{ marginLeft: "auto" }}
+                onChange={(event) => setStatusReport(event.target.value)}
+              >
+                <MenuItem value={1}>All</MenuItem>
+                <MenuItem value={2}>Accepted</MenuItem>
+                <MenuItem value={3}>Pending</MenuItem>
+                <MenuItem value={4}>Rejected</MenuItem>
+               
+              </Select>
+            
+            </Grid>
+          
             <Grid>
               <Typography fontWeight="bold">Choose Year</Typography>
               <Select
@@ -360,7 +451,9 @@ const ParentFinance = () => {
                       paddingX: 4,
                     }}
                     fullWidth={true}
+                    disabled={value == index}
                     label={`${month}`}
+                    icon={<Badge badgeContent={Number(monthNotify[index])} color="secondary" > <MailIcon  color="action" /></Badge>}
                     onClick={() => handleOpen(totalWeeks, totalWeeks[index], index)}
                   ></Tab>
 
@@ -387,7 +480,7 @@ const ParentFinance = () => {
                 <TableRow>
                   <TableCell>Name</TableCell>
                   <TableCell align="right" >Status</TableCell>
-                  <TableCell align="right">Action</TableCell>
+                  <TableCell align="right">Pending Number</TableCell>
                 </TableRow>
               </TableHead>
               {loadingOpen ? (
@@ -447,7 +540,7 @@ const ParentFinance = () => {
                                   router.push({
                                     pathname: "/parentFinance",
                                     query: {
-                                      tutorId: timeSheets.tutorId,
+                                      tutorId: timeSheets.parentId,
                                       myObject: JSON.stringify(totalMonths[selectedMonthIndex]),
                                     },
                                   })
@@ -456,6 +549,7 @@ const ParentFinance = () => {
                                 <MoreHorizSharp />
                               </IconButton>
                             </TableCell>
+                            <TableCell align="right">{countNotification(timeSheets?.parentId)}</TableCell>
                           </TableRow>
                         </>
                       );
