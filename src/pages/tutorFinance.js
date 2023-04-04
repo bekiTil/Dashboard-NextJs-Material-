@@ -24,6 +24,7 @@ import {
   DialogActions,
   Chip,
   CardActions,
+  TextField,
 } from "@mui/material";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../redux/userSlice";
@@ -79,7 +80,45 @@ const TFinance = () => {
     setSelectedImage(image);
     setOpen(true);
   };
-
+  const countNumberOfHOurs = ()=>{
+    let hour = 0;
+    listOfTimeSheet.map((val,index)=>{
+      val.listStudent?.listStudent.map((student, index)=>{
+        hour= Number(student?.workHour) + Number(hour)
+      }
+      )
+    })
+    return hour
+  }
+  const countNumberOfMoney = ()=>{
+    let hour = 0;
+    listOfTimeSheet.map((val,index)=>{
+      val.listStudent?.listStudent.map((student, index)=>{
+        hour= Number(student?.workHour) + Number(hour)
+      }
+      )
+    })
+    return hour * 250;
+  }
+  const countStatus =  ()=>{
+    let sta = 0;
+    listOfTimeSheet.map((val,index)=>{
+      if (val.statusOfMoneyPaid === "PENDING"){
+        console.log(val,"h")
+        sta = Number(sta)+ 1;
+        console.log(val,"coun")
+      }
+    })
+   
+    if (sta ==0)
+    {
+      return true
+    }
+    else {
+      return false
+    }
+   
+  }
   const handlePayment = ()=>{
     
     setButtonDisable(true)
@@ -177,18 +216,43 @@ const TFinance = () => {
       </Box>
 
       {
-      <Box padding={1} display="flex" justifyContent="right" alignItems="flex-end">
+         <Grid container>
+          <Grid item xs={12} sm={12} md={4}>
+           <TextField
+            margin="normal"
+           disabled={true}
+           value={countNumberOfHOurs()}
+           >
+           
+           </TextField>
+          </Grid>
+          <Grid item xs={12} sm={12} md={4}>
+            
+          <TextField
+           disabled={true}
+           margin="normal"
+           value={countNumberOfMoney()}
+           >
+            
+           </TextField>
+
+          </Grid>
+          <Grid item xs={12} sm={12} md={4}>
+         
           <Button
-          
+          sx={{ mt:2 }}
           variant="contained"
-          color="inherit"
-          disabled={buttonDisable}
+          color="info"
+          disabled={countStatus()}
           onClick={()=>handlePayment()}
           >
             Payment Made
 
           </Button>
-          </Box>
+          
+        
+          </Grid>
+          </Grid>
 }
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Image Preview</DialogTitle>
