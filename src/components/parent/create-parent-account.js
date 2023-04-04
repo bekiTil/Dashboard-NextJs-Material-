@@ -116,7 +116,7 @@ export const CreateParentAccountForm = (props) => {
             // ? preserve memory leak
             // ? state is updated only if mounted
             setLoggingIn(false);
-            router.push("/parents/profile/" +  initialValues.id)
+            router.push("/parents");
           }
         });
     },

@@ -75,13 +75,7 @@ const TimeSheet = () => {
     });
     console.log(temp[0].tutorId, "the value");
     setListOfTimeSheet(temp);
-    temp.map((val, index) =>
-      UpdateAnImage(user.accessToken, val.id, { view: "SEEN" })
-        .then((data) => console.log(data))
-        .catch((error) => {
-          console.log(error);
-        })
-    );
+    
   }, []);
 
   const handleClickOpen = (image) => {

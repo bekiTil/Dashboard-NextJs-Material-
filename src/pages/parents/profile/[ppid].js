@@ -76,18 +76,26 @@ const ParentDetail = () => {
   }, [ppid]);
 
   const connectTutorChild = (tutorId, childId) => {
-    
+    setChangeButton(true)
     updateStudentTutor(token, childId, tutorId, "SUCCESS")
       .then((res) => res.json())
       .then((data) => console.log(data))
       .catch((err) => {
         setErr("Something went wrong");
+      }).finally(()=>{
+        setChangeButton(false)
+        router.push('/parents/profile'+ parentData?.id)
       });
   };
   const handleClose = () => {
     setOpen(false);
-    router.push('/dashboard')
+   
   };
+  const goToHome = ()=>{
+    setOpen(false)
+    router.push('/dashboard');
+
+  }
 
   
   const handleTutor = (index, status) => {
@@ -287,15 +295,19 @@ const ParentDetail = () => {
                     </CardContent>
                     <Divider />
                     <CardActions>
+                      {parentData?.status == "SUCCESS" && (
                       <Button
                         onClick={() => handleTutor(index, student.status)}
                         color="primary"
                         fullWidth
+
+                        
                         variant="text"
                         disabled={changebutton}
                       >
                         Tutoring Status: {student.status}
                       </Button>
+                      )}
                     </CardActions>
                   </Card>
                 </Grid>
@@ -345,7 +357,7 @@ const ParentDetail = () => {
                             </TableCell>
                             <TableCell align="right">{tutor.location}</TableCell>
                             <TableCell align="right">
-                              <Button onClick={() => connectTutorChild(tutor.id, childId)}>
+                              <Button disabled={changebutton} variant="contained" onClick={() => connectTutorChild(tutor.id, childId)}>
                                 Choose
                               </Button>
                             </TableCell>
@@ -355,8 +367,10 @@ const ParentDetail = () => {
                         aria-label="upload picture"
                         disabled={isLoading}
                         component="span"
-                        onClick={() => { setIsLoading(true);
-                          router.push("/parents/profile/" + customer.id)}}
+                        onClick={() => {
+                          setOpen(false);
+                          setIsLoading(true);
+                          router.push("/tutors/" + tutor.id)}}
                       >
                         <MoreHorizSharp />
                       </IconButton>
@@ -370,18 +384,34 @@ const ParentDetail = () => {
               </TableContainer>
             )}
             {existedTutor != null && (
-              <>
+              <div className="w-fit">
                 <Typography color="textPrimary" gutterBottom variant="h5">
                   {existedTutor?.fullName}
                 </Typography>
                 <Typography color="textSecondary" variant="body2">
                   Email: {existedTutor?.email}
                 </Typography>
-              </>
+                <Typography color="textSecondary" variant="body2">
+                Detail:
+                <IconButton
+                        size="small"
+                        sx={{display:'inline-flex'}}
+                        color="info"
+                        aria-label="upload picture"
+                        disabled={isLoading}
+                        component="span"
+                        onClick={() => { setIsLoading(true);
+                          router.push("/tutors/" + existedTutor?.id)}}
+                      >
+                      <MoreHorizSharp />
+                      </IconButton>
+                      </Typography>
+                
+              </div>
             )}
           </DialogContent>
           <DialogActions>
-            <Button color="primary" variant="contained" onClick={handleClose} autoFocus>
+            <Button color="primary" variant="contained" onClick={goToHome} autoFocus>
               Go to Home
             </Button>
             {existedTutor === null &&  (

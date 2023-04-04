@@ -44,7 +44,7 @@ import Rating from "@mui/material/Rating";
 const ReportDetail = () => {
   const user = useSelector(selectUser);
   const router = useRouter();
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(-1);
   const [report, setReportDetail] = useState(null);
   const { rid } = router.query;
   const [err, setErr] = useState("");
@@ -290,6 +290,7 @@ const ReportDetail = () => {
         name="simple-controlled"
         color="primary"
         value={value}
+        
         onChange={(event, newValue) => {
           report.rate = newValue;
           setValue(newValue);
@@ -318,6 +319,7 @@ const ReportDetail = () => {
             color="error"
             onClick={() => {
               report.status = "FAILED";
+              
               UpdateAReport(token, rid, { status: "FAILED", rate: value });
               router.push('/report/'+rid)
             }}

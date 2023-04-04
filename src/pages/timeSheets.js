@@ -466,7 +466,7 @@ const TimeSheets = () => {
                 <TableRow>
                   <TableCell>Name</TableCell>
                   <TableCell align="right">Detail</TableCell>
-                  <TableCell >Pending Number</TableCell>
+                  <TableCell  align="right">Pendings </TableCell>
                 </TableRow>
               </TableHead>
               {loadingOpen ? (

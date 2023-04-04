@@ -439,7 +439,7 @@ const TutorFinance = () => {
                 <TableRow>
                   <TableCell>Name</TableCell>
                   <TableCell align="right" >Status</TableCell>
-                  <TableCell align="right">Pending Number</TableCell>
+                  <TableCell align="right">Pendings</TableCell>
                 </TableRow>
               </TableHead>
               {loadingOpen ? (
