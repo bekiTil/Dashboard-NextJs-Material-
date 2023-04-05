@@ -303,8 +303,10 @@ const ReportDetail = () => {
            {report?.status == "PENDING" && (
         <Stack direction="row" spacing={2}>
           <Button
+             
             variant="contained"
             color="success"
+            disabled={value ==-1} 
             onClick={() => {
               report.status = "SUCCESS";
               UpdateAReport(token, rid, { status: "SUCCESS", rate: value });
@@ -317,6 +319,7 @@ const ReportDetail = () => {
           <Button
             variant="contained"
             color="error"
+            disabled={value == -1}
             onClick={() => {
               report.status = "REJECTED";
               
