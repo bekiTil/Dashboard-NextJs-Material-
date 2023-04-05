@@ -29,27 +29,32 @@ const items = [
     href: "/dashboard",
     icon: <ChartBarIcon fontSize="small" />,
     title: "Home",
+    role:["SUPERADMIN","ADMINONE","ADMINTWO","ADMINTHREE"]
   },
   {
     href: "/newTutor",
     icon: <UsersIcon fontSize="small" />,
     title: "New Tutors",
+    role:["SUPERADMIN","ADMINONE"]
   },
   {
     href: "/tutors",
     icon: <UsersIcon fontSize="small" />,
     title: "Active Tutors",
+    role:["SUPERADMIN","ADMINONE"]
   },
   {
     href: "/newParent",
     icon: <UsersIcon fontSize="small" />,
     title: "New Parents",
+    role:["SUPERADMIN","ADMINONE"]
   },
  
   {
     href: "/parents",
     icon: <UsersIcon fontSize="small" />,
     title: "Active Parents",
+    role:["SUPERADMIN","ADMINONE"]
   },
  
   // {
@@ -71,21 +76,25 @@ const items = [
     href: "/reports",
     icon: <UploadIcon fontSize="small" />,
     title: "Reports",
+    role:["SUPERADMIN","ADMINONE"]
   },
   {
     href: "/timeSheets",
     icon: <UploadIcon fontSize="small" />,
     title: "TimeSheet",
+    role:["SUPERADMIN","ADMINTWO","ADMINTHREE"]
   },
   {
     href: "/parentFinances",
     icon: <UploadIcon fontSize="small" />,
     title: "Parnet Finance",
+    role:["SUPERADMIN","ADMINTHREE"]
   },
   {
     href: "/tutorFinances",
     icon: <UploadIcon fontSize="small" />,
     title: "Tutor Finance",
+    role:["SUPERADMIN","ADMINTHREE"]
   },
   // {
   //   href: "/account",
@@ -116,6 +125,7 @@ const items = [
 
 export const DashboardSidebar = (props) => {
   const user = useSelector(selectUser);
+  const userRole = user.user.role;
   const { open, onClose } = props;
   const router = useRouter();
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up("xl"), {
@@ -197,10 +207,15 @@ export const DashboardSidebar = (props) => {
           }}
         />
         <Box sx={{ flexGrow: 1 }}>
+  {items.filter((item) => item.role.includes(userRole)).map((item) => (
+    <NavItem key={item.title} icon={item.icon} href={item.href} title={item.title} />
+  ))}
+</Box>
+        {/* <Box sx={{ flexGrow: 1 }}>
           {items.map((item) => (
             <NavItem key={item.title} icon={item.icon} href={item.href} title={item.title} />
           ))}
-        </Box>
+        </Box> */}
         <Divider sx={{ borderColor: "#2D3748" }} />
         {/* <Box
           sx={{

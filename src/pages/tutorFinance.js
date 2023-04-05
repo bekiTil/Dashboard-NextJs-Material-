@@ -65,13 +65,19 @@ const TFinance = () => {
   const [open, setOpen] = useState(false);
   const user = useSelector(selectUser);
   const [buttonDisable, setButtonDisable] = useState(false);
+  const [pendings, setPendings] = useState(false);
+
   useEffect(() => {
     let temp = [];
 
     parsedArray.map((val) => {
       if (val.tutorId == tutorId) {
         temp.push(val);
+        if (val.statusOfMoneyPaid == "PENDING"){
+          setPendings(true)
+        }
       }
+      
     });
     setListOfTimeSheet(temp);
   }, []);
@@ -100,25 +106,7 @@ const TFinance = () => {
     })
     return hour * 250;
   }
-  const countStatus =  ()=>{
-    let sta = 0;
-    listOfTimeSheet.map((val,index)=>{
-      if (val.statusOfMoneyPaid === "PENDING"){
-        console.log(val,"h")
-        sta = Number(sta)+ 1;
-        console.log(val,"coun")
-      }
-    })
-   
-    if (sta ==0)
-    {
-      return true
-    }
-    else {
-      return false
-    }
-   
-  }
+
   const handlePayment = ()=>{
     
     setButtonDisable(true)
@@ -239,16 +227,18 @@ const TFinance = () => {
           </Grid>
           <Grid item xs={12} sm={12} md={4}>
          
-          <Button
+       { pendings &&  <Button
           sx={{ mt:2 }}
           variant="contained"
           color="info"
-          disabled={countStatus()}
+          disabled={buttonDisable}
+          
           onClick={()=>handlePayment()}
           >
             Payment Made
 
           </Button>
+}
           
         
           </Grid>
