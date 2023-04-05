@@ -318,9 +318,9 @@ const ReportDetail = () => {
             variant="contained"
             color="error"
             onClick={() => {
-              report.status = "FAILED";
+              report.status = "REJECTED";
               
-              UpdateAReport(token, rid, { status: "FAILED", rate: value });
+              UpdateAReport(token, rid, { status: "REJECTED", rate: value });
               router.push('/report/'+rid)
             }}
           >
@@ -328,7 +328,7 @@ const ReportDetail = () => {
           </Button>
         </Stack>
       )}
-      {report?.status == "FAILED" && <Alert severity="warning">Rejected</Alert>}
+      {report?.status == "REJECTED" && <Alert severity="warning">Rejected</Alert>}
       {report?.status == "SUCCESS" && <Alert severity="success">Accepted</Alert>}
     </Grid>
   );

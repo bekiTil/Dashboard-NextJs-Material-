@@ -86,7 +86,7 @@ export const CustomerListResults = ({ customers, searchTerm, ...rest }) => {
     deleteTutor(token, id)
       .then((res) => res.json())
       .then((_data) => {
-        router.push("/tutors");
+        router.push("/newTutor");
       })
       .catch((_) => {
         setErr("Something went wrong");

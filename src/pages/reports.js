@@ -476,7 +476,7 @@ const Reports = () => {
                               {report.status === "SUCCESS" && (
                                 <Chip variant="outlined" label="SUCCESS" color="success" />
                               )}
-                              {report.status === "FAILED" && (
+                              {report.status === "REJECTED" && (
                                 <Chip  variant="outlined"  label="REJECTED" color="error" />
                               )}
                               {report.status === "PENDING" && (
