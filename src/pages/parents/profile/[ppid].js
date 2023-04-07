@@ -202,6 +202,9 @@ const ParentDetail = () => {
                     <Typography color="textSecondary" variant="body2">
                       Location: {parentData?.location}
                     </Typography>
+                    <Button variant="contained" onClick={()=>{router.push("/parents/" + parentData?.id)}}>
+                      Add Child
+                    </Button>
                   </Box>
                 </CardContent>
               </Card>
@@ -249,6 +252,8 @@ const ParentDetail = () => {
                         <Typography color="textPrimary" gutterBottom variant="h5">
                           Student {index + 1}
                         </Typography>
+                        <Box sx={{ width: 1 }}>
+                        
                         <Typography color="textSecondary" variant="body2">
                           Full Name: {student.fullName}
                         </Typography>
@@ -291,6 +296,7 @@ const ParentDetail = () => {
                         <Typography color="textSecondary" variant="body2">
                           Subjects: {student.subjects.toString()}
                         </Typography>
+                        </Box>
                       </Box>
                     </CardContent>
                     <Divider />

@@ -499,7 +499,7 @@ const ParentFinance = () => {
                       if (searchTerm == "") {
                         return val;
                       } else if (
-                        val.tutor?.fullName.toLowerCase().includes(searchTerm.toLowerCase())
+                        val.parent?.fullName.toLowerCase().includes(searchTerm.toLowerCase())
                       ) {
                         return val;
                       }
@@ -523,10 +523,10 @@ const ParentFinance = () => {
                                   // src={customer.avatarUrl}
                                   sx={{ mr: 2 }}
                                 >
-                                  {getInitials(timeSheets.tutor?.fullName)}
+                                  {getInitials(timeSheets.parent?.fullName)}
                                 </Avatar>
                                 <Typography color="textPrimary" variant="body1">
-                                  {timeSheets.tutor?.fullName}
+                                  {timeSheets.parent?.fullName}
                                 </Typography>
                               </Box>
                             </TableCell>
