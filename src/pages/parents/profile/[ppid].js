@@ -35,11 +35,12 @@ import { getAParent } from "backend-utils/parent-utils";
 import { DashboardLayout } from "src/components/dashboard-layout";
 import { selectUser } from "redux/userSlice";
 import { updateStudent } from "backend-utils/student-utils";
-import Backdrop from '@mui/material/Backdrop'
-import CircularProgress from '@mui/material/CircularProgress'
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 
 import { DeleteOutlined, MoreHorizSharp } from "@mui/icons-material";
 import { updateStudentTutor } from "backend-utils/student-utils";
+import { removeStudentTutor } from "backend-utils/student-utils";
 
 const ParentDetail = () => {
   const user = useSelector(selectUser);
@@ -48,11 +49,11 @@ const ParentDetail = () => {
   const [parentData, setParentData] = useState(null);
   const [err, setErr] = useState("");
   const [open, setOpen] = useState("");
-  const [existedTutor, setExistedTutor] = useState(null);
+  const [existedTutor, setExistedTutor] = useState([]);
   const [prospectTutor, setProspectTutor] = useState(null);
   const [childId, setChildId] = useState(null);
-  const [isLoading, setIsLoading] = useState(true)
-  const [changebutton ,setChangeButton]  = useState(false)
+  const [isLoading, setIsLoading] = useState(true);
+  const [changebutton, setChangeButton] = useState(false);
   if (user) {
     var token = user.accessToken;
   }
@@ -70,37 +71,36 @@ const ParentDetail = () => {
       })
       .catch((err) => {
         setErr("Something went wrong");
-      }).finally(()=>{
-        setIsLoading(false)
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, [ppid]);
 
   const connectTutorChild = (tutorId, childId) => {
-    setChangeButton(true)
+    setChangeButton(true);
     updateStudentTutor(token, childId, tutorId, "SUCCESS")
       .then((res) => res.json())
       .then((data) => console.log(data))
       .catch((err) => {
         setErr("Something went wrong");
-      }).finally(()=>{
-        setChangeButton(false)
-        router.push('/parents/profile'+ parentData?.id)
+      })
+      .finally(() => {
+        setChangeButton(false);
+        router.push("/parents/profile" + parentData?.id);
       });
   };
   const handleClose = () => {
     setOpen(false);
-   
   };
-  const goToHome = ()=>{
-    setOpen(false)
-    router.push('/dashboard');
+  const goToHome = () => {
+    setOpen(false);
+    router.push("/dashboard");
+  };
 
-  }
-
-  
   const handleTutor = (index, status) => {
     setChildId(null);
-    setExistedTutor(null);
+    setExistedTutor([]);
     setProspectTutor(null);
     setChangeButton(true);
     if (status === "PENDING") {
@@ -128,22 +128,59 @@ const ParentDetail = () => {
           setChangeButton(false);
         });
     } else {
-      getATutor(token, parentData?.students[index].tutorIds)
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.success) {
-            setExistedTutor(data.user);
-          } else {
-            setErr(data.message);
+      setChildId(parentData?.students[index].id);
+      async function fetchData() {
+        const tutorIds = parentData?.students[index].tutorIds;
+
+        if (tutorIds && tutorIds.length > 0) {
+          try {
+            const existedTutors = [];
+            const errorMessages = [];
+
+            for (const id of tutorIds) {
+              const response = await getATutor(token, id);
+              const data = await response.json();
+              console.log(id, data, response, "what the hell");
+              if (data.success) {
+                existedTutors.push(data.user);
+              } else {
+                errorMessages.push(data.message);
+              }
+            }
+
+            setExistedTutor(existedTutors);
+            setErr(errorMessages.join(", "));
+          } catch (err) {
+            setErr("Something went wrong");
           }
-        })
-        .catch((err) => {
-          setErr("Something went wrong");
-        })
-        .finally(() => {
-          setOpen(true);
-          setChangeButton(false);
-        });
+        } else {
+          // handle case where there are no tutor IDs to fetch
+        }
+      }
+
+      fetchData().finally(() => {
+        console.log();
+        setOpen(true);
+        setChangeButton(false);
+      });
+
+      // parentData?.students[index].tutorIds?.map((ids)=>{ getATutor(token,ids)
+      //   .then((res) => res.json())
+      //   .then((data) => {
+      //     console.log( parentData?.students[index].tutorIds,"what a hell")
+      //     if (data.success) {
+      //       setExistedTutor(data.user);
+      //     } else {
+      //       setErr(data.message);
+      //     }
+      //   })
+      //   .catch((err) => {
+      //     setErr("Something went wrong");
+      //   })
+      //   .finally(() => {
+      //     setOpen(true);
+      //     setChangeButton(false);
+      //   });})
     }
   };
   return (
@@ -152,7 +189,7 @@ const ParentDetail = () => {
         <title>Account | Temaribet</title>
       </Head>
       <Backdrop
-         sx={{ color: '#fff', backgroundColor: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        sx={{ color: "#fff", backgroundColor: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={isLoading}
       >
         <CircularProgress color="info" />
@@ -202,7 +239,12 @@ const ParentDetail = () => {
                     <Typography color="textSecondary" variant="body2">
                       Location: {parentData?.location}
                     </Typography>
-                    <Button variant="contained" onClick={()=>{router.push("/parents/" + parentData?.id)}}>
+                    <Button
+                      variant="contained"
+                      onClick={() => {
+                        router.push("/parents/" + parentData?.id);
+                      }}
+                    >
                       Add Child
                     </Button>
                   </Box>
@@ -253,66 +295,63 @@ const ParentDetail = () => {
                           Student {index + 1}
                         </Typography>
                         <Box sx={{ width: 1 }}>
-                        
-                        <Typography color="textSecondary" variant="body2">
-                          Full Name: {student.fullName}
-                        </Typography>
-                        <Typography color="textSecondary" variant="body2">
-                          Nick Name: {student.nickName}
-                        </Typography>
-                        <Typography color="textSecondary" variant="body2">
-                          Gender: {student.gender}
-                        </Typography>
-                        <Typography color="textSecondary" variant="body2">
-                          Age: {student.age}
-                        </Typography>
-                        <Typography color="textSecondary" variant="body2">
-                          Grade: {student.grade}
-                        </Typography>
-                        <Typography color="textSecondary" variant="body2">
-                          School: {student.school}
-                        </Typography>
-                        <Typography color="textSecondary" variant="body2">
-                          Address: {student.address}
-                        </Typography>
-                        <Typography color="textSecondary" variant="body2">
-                          Hobby: {student.hobby}
-                        </Typography>
-                        <Typography color="textSecondary" variant="body2">
-                          Previous Tutored: {student.prevTutored}
-                        </Typography>
-                        <Typography color="textSecondary" variant="body2">
-                          Previous Tutor Experience: {student.prevTutorExperience}
-                        </Typography>
-                        <Typography color="textSecondary" variant="body2">
-                          Ideal Tutor: {student.idealTutor}
-                        </Typography>
-                        <Typography color="textSecondary" variant="body2">
-                          Work Days: {student.workDays}
-                        </Typography>
-                        <Typography color="textSecondary" variant="body2">
-                          Work Hour: {student.workHour}
-                        </Typography>
-                        <Typography color="textSecondary" variant="body2">
-                          Subjects: {student.subjects.toString()}
-                        </Typography>
+                          <Typography color="textSecondary" variant="body2">
+                            Full Name: {student.fullName}
+                          </Typography>
+                          <Typography color="textSecondary" variant="body2">
+                            Nick Name: {student.nickName}
+                          </Typography>
+                          <Typography color="textSecondary" variant="body2">
+                            Gender: {student.gender}
+                          </Typography>
+                          <Typography color="textSecondary" variant="body2">
+                            Age: {student.age}
+                          </Typography>
+                          <Typography color="textSecondary" variant="body2">
+                            Grade: {student.grade}
+                          </Typography>
+                          <Typography color="textSecondary" variant="body2">
+                            School: {student.school}
+                          </Typography>
+                          <Typography color="textSecondary" variant="body2">
+                            Address: {student.address}
+                          </Typography>
+                          <Typography color="textSecondary" variant="body2">
+                            Hobby: {student.hobby}
+                          </Typography>
+                          <Typography color="textSecondary" variant="body2">
+                            Previous Tutored: {student.prevTutored}
+                          </Typography>
+                          <Typography color="textSecondary" variant="body2">
+                            Previous Tutor Experience: {student.prevTutorExperience}
+                          </Typography>
+                          <Typography color="textSecondary" variant="body2">
+                            Ideal Tutor: {student.idealTutor}
+                          </Typography>
+                          <Typography color="textSecondary" variant="body2">
+                            Work Days: {student.workDays}
+                          </Typography>
+                          <Typography color="textSecondary" variant="body2">
+                            Work Hour: {student.workHour}
+                          </Typography>
+                          <Typography color="textSecondary" variant="body2">
+                            Subjects: {student.subjects.toString()}
+                          </Typography>
                         </Box>
                       </Box>
                     </CardContent>
                     <Divider />
                     <CardActions>
                       {parentData?.status == "SUCCESS" && (
-                      <Button
-                        onClick={() => handleTutor(index, student.status)}
-                        color="primary"
-                        fullWidth
-
-                        
-                        variant="text"
-                        disabled={changebutton}
-                      >
-                        Tutoring Status: {student.status}
-                      </Button>
+                        <Button
+                          onClick={() => handleTutor(index, student.status)}
+                          color="primary"
+                          fullWidth
+                          variant="text"
+                          disabled={changebutton}
+                        >
+                          Tutoring Status: {student.status}
+                        </Button>
                       )}
                     </CardActions>
                   </Card>
@@ -331,8 +370,8 @@ const ParentDetail = () => {
             <label className="font-minionPro text-[#fdd507] md:text-3xl ">Successful</label>
           </DialogTitle>
 
-          <DialogContent dividers>
-            {existedTutor === null && prospectTutor === null && (
+          <DialogContent dividers  >
+            {existedTutor.length === 0 && prospectTutor === null && (
               <>
                 <Typography>NO TUTOR NEAR</Typography>
               </>
@@ -363,23 +402,28 @@ const ParentDetail = () => {
                             </TableCell>
                             <TableCell align="right">{tutor.location}</TableCell>
                             <TableCell align="right">
-                              <Button disabled={changebutton} variant="contained" onClick={() => connectTutorChild(tutor.id, childId)}>
+                              <Button
+                                disabled={changebutton}
+                                variant="contained"
+                                onClick={() => connectTutorChild(tutor.id, childId)}
+                              >
                                 Choose
                               </Button>
                             </TableCell>
                             <TableCell>
-                            <IconButton
-                        color="info"
-                        aria-label="upload picture"
-                        disabled={isLoading}
-                        component="span"
-                        onClick={() => {
-                          setOpen(false);
-                          setIsLoading(true);
-                          router.push("/tutors/" + tutor.id)}}
-                      >
-                        <MoreHorizSharp />
-                      </IconButton>
+                              <IconButton
+                                color="info"
+                                aria-label="upload picture"
+                                disabled={isLoading}
+                                component="span"
+                                onClick={() => {
+                                  setOpen(false);
+                                  setIsLoading(true);
+                                  router.push("/tutors/" + tutor.id);
+                                }}
+                              >
+                                <MoreHorizSharp />
+                              </IconButton>
                             </TableCell>
                           </TableRow>
                         </>
@@ -389,44 +433,90 @@ const ParentDetail = () => {
                 </Table>
               </TableContainer>
             )}
-            {existedTutor != null && (
-              <div className="w-fit">
-                <Typography color="textPrimary" gutterBottom variant="h5">
-                  {existedTutor?.fullName}
-                </Typography>
-                <Typography color="textSecondary" variant="body2">
-                  Email: {existedTutor?.email}
-                </Typography>
-                <Typography color="textSecondary" variant="body2">
-                Detail:
-                <IconButton
-                        size="small"
-                        sx={{display:'inline-flex'}}
-                        color="info"
-                        aria-label="upload picture"
-                        disabled={isLoading}
-                        component="span"
-                        onClick={() => { setIsLoading(true);
-                          router.push("/tutors/" + existedTutor?.id)}}
-                      >
-                      <MoreHorizSharp />
-                      </IconButton>
+            {existedTutor.length != 0 &&
+              existedTutor.map((tutorCurrent) => {
+                return (
+                 <div className="w-fit">
+                    <Card  sx={{ width: '100%', padding:2, boxShadow:5 , margin:1,  bgcolor: 'background.paper' }}>
+                      <Typography color="textPrimary" gutterBottom variant="h5">
+                        {tutorCurrent?.fullName}
                       </Typography>
-                
-              </div>
-            )}
+                      <Typography color="textSecondary" variant="body2">
+                        Email: {tutorCurrent?.email}
+                      </Typography>
+                      <Typography color="textSecondary" variant="body2">
+                        Detail:
+                        <IconButton
+                          size="small"
+                          sx={{ display: "inline-flex" }}
+                          color="info"
+                          aria-label="upload picture"
+                          disabled={isLoading}
+                          component="span"
+                          onClick={() => {
+                            setIsLoading(true);
+                            router.push("/tutors/" + tutorCurrent?.id);
+                          }}
+                        >
+                          <MoreHorizSharp />
+                        </IconButton>
+                      </Typography>
+                      <Typography color="textSecondary" variant="body2">
+                        Remove Tutor:
+                        <IconButton
+                          size="small"
+                          sx={{ display: "inline-flex" }}
+                          color="info"
+                          aria-label="upload picture"
+                          disabled={isLoading}
+                          component="span"
+                          onClick={() => {
+                            setIsLoading(true);
+                            setOpen(false);
+                            removeStudentTutor(token, childId, tutorCurrent?.id)
+                              .then((data) => data.json())
+                              .then((data) => console.log(data))
+                              .catch((err) => {
+                                console.log(err);
+                              })
+                              .finally(() => {
+                                setIsLoading(false);
+                                
+                               router.reload()
+                              });
+                          }}
+                        >
+                          <DeleteOutlined />
+                        </IconButton>
+                      </Typography>
+                    </Card>
+                    </div>
+                  
+                );
+              })}
           </DialogContent>
           <DialogActions>
             <Button color="primary" variant="contained" onClick={goToHome} autoFocus>
               Go to Home
             </Button>
-            {existedTutor === null &&  (
-              <Button color="primary" variant="contained" 
-              
-              onClick={() => router.push("/parents/student/" + childId)}
-              
-              autoFocus>
+            {existedTutor.length ==0 && (
+              <Button
+                color="primary"
+                variant="contained"
+                onClick={() => router.push("/parents/student/" + childId)}
+                autoFocus
+              >
                 Get Tutor
+              </Button>
+            )}
+             {existedTutor.length >0 && (
+              <Button
+                color="primary"
+                variant="contained"
+                onClick={() => router.push("/parents/student/" + childId)}
+                autoFocus
+              >
+                Add Tutor
               </Button>
             )}
           </DialogActions>

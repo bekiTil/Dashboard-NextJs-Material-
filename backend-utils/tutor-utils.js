@@ -44,6 +44,7 @@ const getATutorwithLocation = async (token, location) => {
 
 
 const getATutor = async (token, id) => {
+  console.log(id)
   const response = await fetch(`${API_URL}api/v1/tutor/${id}`, {
     method: "GET",
     headers: {
