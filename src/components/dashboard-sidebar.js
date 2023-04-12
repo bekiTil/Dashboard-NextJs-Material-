@@ -41,20 +41,20 @@ const items = [
     href: "/tutors",
     icon: <UsersIcon fontSize="small" />,
     title: "Active Tutors",
-    role:["SUPERADMIN","ADMINONE"]
+    role:["SUPERADMIN","ADMINONE","ADMINTWO"]
   },
   {
     href: "/newParent",
     icon: <UsersIcon fontSize="small" />,
     title: "New Parents",
-    role:["SUPERADMIN","ADMINONE"]
+    role:["SUPERADMIN"]
   },
  
   {
     href: "/parents",
     icon: <UsersIcon fontSize="small" />,
     title: "Active Parents",
-    role:["SUPERADMIN","ADMINONE"]
+    role:["SUPERADMIN","ADMINTWO","ADMINTHREE"]
   },
  
   // {
@@ -82,7 +82,7 @@ const items = [
     href: "/timeSheets",
     icon: <UploadIcon fontSize="small" />,
     title: "TimeSheet",
-    role:["SUPERADMIN","ADMINTWO","ADMINTHREE"]
+    role:["SUPERADMIN","ADMINONE"]
   },
   {
     href: "/parentFinances",
