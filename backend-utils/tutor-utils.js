@@ -55,7 +55,7 @@ const getATutor = async (token, id) => {
   return response;
 };
 
-const updateTutor = async (token, id, jobId, status) => {
+const updateTutor = async (token, id, status) => {
   const response = await fetch(`${API_URL}api/v1/tutor/${id}`, {
     method: "PATCH",
     headers: {
@@ -63,8 +63,7 @@ const updateTutor = async (token, id, jobId, status) => {
       authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
-      hiredJobId: jobId,
-      status,
+     ... status
     }),
   });
   return response;

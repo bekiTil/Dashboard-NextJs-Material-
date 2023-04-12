@@ -10,6 +10,17 @@ const getPendingParents = async (token) => {
   });
   return response;
 };
+
+const getFailedParents = async (token) => {
+  const response = await fetch(`${API_URL}api/v1/parent/failed`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      authorization: `Bearer ${token}`,
+    },
+  });
+  return response;
+};
 const getParents = async (token) => {
   const response = await fetch(`${API_URL}api/v1/parent`, {
     method: "GET",
@@ -81,4 +92,4 @@ const numberByMonth = async (token)=>{
   return response;
 }
 
-export { getParents, createParent, getAParent, updateParent, deleteParent,getPendingParents, numberByMonth};
+export { getParents, createParent, getAParent, updateParent, deleteParent,getPendingParents, numberByMonth,getFailedParents};

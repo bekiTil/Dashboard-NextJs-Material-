@@ -96,6 +96,12 @@ const items = [
     title: "Tutor Finance",
     role:["SUPERADMIN","ADMINTHREE"]
   },
+  {
+    href: "/task",
+    icon: <UploadIcon fontSize="small" />,
+    title: "Task",
+    role:["SUPERADMIN"]
+  },
   // {
   //   href: "/account",
   //   icon: <UserIcon fontSize="small" />,
@@ -126,6 +132,8 @@ const items = [
 export const DashboardSidebar = (props) => {
   const user = useSelector(selectUser);
   const userRole = user.user.role;
+  console.log(userRole);
+  console.log("userRole")
   const { open, onClose } = props;
   const router = useRouter();
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up("xl"), {

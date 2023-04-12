@@ -31,7 +31,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { getATutor, getATutorwithLocation } from "backend-utils/tutor-utils";
 import moment from "moment";
-import { getAParent } from "backend-utils/parent-utils";
+import { getAParent, updateParent } from "backend-utils/parent-utils";
 import { DashboardLayout } from "src/components/dashboard-layout";
 import { selectUser } from "redux/userSlice";
 import { updateStudent } from "backend-utils/student-utils";
@@ -359,6 +359,24 @@ const ParentDetail = () => {
               );
             })}
           </Grid>
+
+          {parentData?.status == "SUCCESS"  && <Button
+          sx={{m:2}}
+            variant="contained"
+            color="error"
+            disabled={isLoading}
+            onClick={() => {
+                setIsLoading(true)
+              
+              updateParent(token, ppid, { status: "FAILED"}).finally(()=>{
+                router.push('/parents/')
+              });
+             
+            }}
+          >
+          Ask SuperAdmin to Delete This Parent
+          </Button>
+}
         </Container>
         <Dialog
           open={open}
