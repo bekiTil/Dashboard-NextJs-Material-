@@ -16,6 +16,7 @@ import {
   DialogContentText,
   DialogTitle,
   IconButton,
+  Stack,
   Alert,
 } from "@mui/material";
 import Table from "@mui/material/Table";
@@ -41,11 +42,12 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { DeleteOutlined, MoreHorizSharp } from "@mui/icons-material";
 import { updateStudentTutor } from "backend-utils/student-utils";
 import { removeStudentTutor } from "backend-utils/student-utils";
+import { deleteParent } from "backend-utils/parent-utils";
 
 const ParentDetail = () => {
   const user = useSelector(selectUser);
   const router = useRouter();
-  const { ppid } = router.query;
+  const { id } = router.query;
   const [parentData, setParentData] = useState(null);
   const [err, setErr] = useState("");
   const [open, setOpen] = useState("");
@@ -58,7 +60,7 @@ const ParentDetail = () => {
     var token = user.accessToken;
   }
   useEffect(() => {
-    getAParent(token, ppid)
+    getAParent(token, id)
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
@@ -75,7 +77,7 @@ const ParentDetail = () => {
       .finally(() => {
         setIsLoading(false);
       });
-  }, [ppid]);
+  }, [id]);
 
   const connectTutorChild = (tutorId, childId) => {
     setChangeButton(true);
