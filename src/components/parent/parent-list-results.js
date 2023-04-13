@@ -102,6 +102,33 @@ export const ParentListResults = ({ customers, searchTerm, ...rest }) => {
           setIsLoading(false)
       });
   };
+  function getDurationString(createdAt) {
+    console.log(createdAt)
+    console.log("see it ")
+    const createdDate = new Date(createdAt);
+    const now = new Date().getTime(); // Get the current timestamp in milliseconds
+    const diff = now - createdDate; // Calculate the difference between the current time and the creation time
+    const seconds = Math.floor(diff / 1000); // Convert the difference to seconds
+  
+    if (seconds < 60) {
+      // If less than 1 minute has passed
+      return "just now";
+    } else if (seconds < 60 * 60) {
+      // If less than 1 hour has passed
+      const minutes = Math.floor(seconds / 60);
+      return `${minutes}m`;
+    } else if (seconds < 60 * 60 * 24) {
+      // If less than 1 day has passed
+      const hours = Math.floor(seconds / (60 * 60));
+      return `${hours}h`;
+    
+    } else {
+      // If more than 1 day has passed
+      const days = Math.floor(seconds / (60 * 60 * 24));
+      return `${days}d`;
+    }
+  }
+  
 
   return (
     <Card {...rest}>
@@ -130,7 +157,7 @@ export const ParentListResults = ({ customers, searchTerm, ...rest }) => {
                 <TableCell>Name</TableCell>
                 <TableCell>Location</TableCell>
                 <TableCell>Phone</TableCell>
-                
+                {customers[0]?.status =='PENDING' && <TableCell>Duration</TableCell>}
                 <TableCell>Action</TableCell>
               </TableRow>
             </TableHead>
@@ -178,6 +205,16 @@ export const ParentListResults = ({ customers, searchTerm, ...rest }) => {
                     </TableCell>
                     <TableCell>{customer.location}</TableCell>
                     <TableCell>{customer.phone1}</TableCell>
+                    
+                    {customer.status=="PENDING" && 
+                    <TableCell>
+                 <Typography variant="body2" color="textSecondary">
+                    {getDurationString(customer.createdAt)}
+                    </Typography>
+                    </TableCell>
+                   
+                  
+}
                    
                     <TableCell>
                       { customer.status ==="PENDING" && 

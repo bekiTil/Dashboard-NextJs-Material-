@@ -13,7 +13,7 @@ const signin = async (email, password) => {
   return response;
 };
 
-const register = async (email,password,role="SUPERADMIN") =>{
+const register = async (email,password,role="ADMINTHREE") =>{
   console.log(email,password)
   const response = await fetch(`${API_URL}api/v1/user/adminRegister`,{
     method : "POST",
