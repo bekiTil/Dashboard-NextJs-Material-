@@ -79,6 +79,18 @@ const items = [
     role:["SUPERADMIN","ADMINONE"]
   },
   {
+    href: "/tutorFollowup",
+    icon: <UploadIcon fontSize="small" />,
+    title: "Tutor Followup",
+    role:["SUPERADMIN","ADMINONE"]
+  },
+  {
+    href: "/parentFollowup",
+    icon: <UploadIcon fontSize="small" />,
+    title: "Parent Followup",
+    role:["SUPERADMIN","ADMINONE"]
+  },
+  {
     href: "/timeSheets",
     icon: <UploadIcon fontSize="small" />,
     title: "TimeSheet",
@@ -131,7 +143,7 @@ const items = [
 
 export const DashboardSidebar = (props) => {
   const user = useSelector(selectUser);
-  const userRole = user.user.role;
+  const userRole = user.user?.role;
   console.log(userRole);
   console.log("userRole")
   const { open, onClose } = props;
