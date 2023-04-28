@@ -30,7 +30,20 @@ const getAllTutors = async (token) => {
   });
   return response;
 };
-
+const createTutorFollowup = async (token, parentBody) => {
+  const response = await fetch(`${API_URL}api/v1/tutor/followUp`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      ...parentBody,
+    }),
+  });
+  console.log(response)
+  return response;
+};
 const getATutorwithLocation = async (token, location) => {
   const response = await fetch(`${API_URL}api/v1/tutor/location/${location}`, {
     method: "GET",
@@ -138,4 +151,4 @@ const UpdateAnImageWithAMessage = async (token,id,imageBody)=>{
   return response;
 }
 
-export { getTutors, updateTutor, deleteTutor, getATutor ,getATutorwithLocation,getPendingTutors,getTimeSheetsBasedOnMonth, UpdateAnImage, getAllTutors,UpdateAnImageWithAMessage};
+export { getTutors, updateTutor, deleteTutor, getATutor ,getATutorwithLocation,getPendingTutors,getTimeSheetsBasedOnMonth, UpdateAnImage, getAllTutors,UpdateAnImageWithAMessage , createTutorFollowup};

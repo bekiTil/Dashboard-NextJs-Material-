@@ -5,7 +5,7 @@ import jwtDecode from 'jwt-decode';
 import { selectUser,logout } from 'redux/userSlice';
 
 export default function withAuth(Component) {
-  return function WithAuth(props) {
+  const WithAuth = (props) => {
     const user = useSelector(selectUser);
     const router = useRouter();
     const dispatch = useDispatch();
@@ -24,4 +24,9 @@ export default function withAuth(Component) {
 
     return <Component {...props} />;
   };
+
+  return WithAuth;
 }
+
+
+  

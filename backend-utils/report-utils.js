@@ -10,7 +10,17 @@ const getReports = async (token) => {
   });
   return response;
 };
-
+const getAReportWithSpecificWeek = async (token,tutorId,year,month,week) =>{
+  console.log(token,tutorId, "ds", year,month,week)
+  const response = await fetch(`${API_URL}api/v1/report/specific/${tutorId}/${year}/${month}/${week}` ,{
+    method: "GET",
+    headers :{
+      "Content-Type": "application/json",
+      authorization: `Bearer ${token}`,
+    },
+  })
+  return response;
+}
 const getAReport = async (token,id)=>{
   
   const response = await fetch(`${API_URL}api/v1/report/${id}`, {
@@ -55,4 +65,4 @@ const getReportsBasedOnWeek = async (token,year,month)=>{
 
 }
 
-export { getReports,getReportsBasedOnWeek ,getAReport,UpdateAReport};
+export { getReports,getReportsBasedOnWeek ,getAReport,UpdateAReport, getAReportWithSpecificWeek};

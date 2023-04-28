@@ -70,6 +70,21 @@ const createParent = async (token, parentBody) => {
   return response;
 };
 
+const createParentFollowup = async (token, parentBody) => {
+  const response = await fetch(`${API_URL}api/v1/parent/followUp`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      ...parentBody,
+    }),
+  });
+  console.log(response)
+  return response;
+};
+
 const deleteParent = async (token, id) => {
   const response = await fetch(`${API_URL}api/v1/parent/${id}`, {
     method: "DELETE",
@@ -92,4 +107,4 @@ const numberByMonth = async (token)=>{
   return response;
 }
 
-export { getParents, createParent, getAParent, updateParent, deleteParent,getPendingParents, numberByMonth,getFailedParents};
+export { getParents, createParent, getAParent, updateParent, deleteParent,getPendingParents, numberByMonth,getFailedParents, createParentFollowup};
