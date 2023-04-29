@@ -201,7 +201,7 @@ const ParentFollowupPage = () => {
               ))}
             </Select>
           </Grid>
-          <Grid item xs={16} md={16} lg={16}>
+          <Grid item xs={16} md={8}>
             <InputLabel id="demo-select-small">Comment</InputLabel>
             <TextField
               fullWidth

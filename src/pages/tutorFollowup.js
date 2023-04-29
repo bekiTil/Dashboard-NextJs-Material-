@@ -239,7 +239,7 @@ const TutorStandupPage = () => {
               ))}
             </Select>
           </Grid>
-          <Grid item xs={16} md={16} lg={16}>
+          <Grid item xs={16} md={8}>
             <InputLabel id="demo-select-small">Strength</InputLabel>
             <TextField
               fullWidth
@@ -252,7 +252,7 @@ const TutorStandupPage = () => {
               onChange={(event) => handleStrength(event)}
             />
           </Grid>
-          <Grid item xs={16} md={16} lg={16}>
+          <Grid item xs={16} md={8}>
             <InputLabel id="demo-select-small">Weakness</InputLabel>
             <TextField
               fullWidth
@@ -265,7 +265,7 @@ const TutorStandupPage = () => {
               onChange={(event) => handleWeakness(event)}
             />
           </Grid>
-          <Grid item xs={16} md={16} lg={16}>
+          <Grid item xs={16} md={8}>
             <InputLabel id="demo-select-small">Opportunity</InputLabel>
             <TextField
               fullWidth
@@ -278,7 +278,7 @@ const TutorStandupPage = () => {
               onChange={(event) => handleOpportunity(event)}
             />
           </Grid>
-          <Grid item xs={16} md={16} lg={16}>
+          <Grid item xs={16} md={8}>
             <InputLabel id="demo-select-small">Threat</InputLabel>
             <TextField
               fullWidth
@@ -291,7 +291,7 @@ const TutorStandupPage = () => {
               onChange={(event) => handleThreat(event)}
             />
           </Grid>
-          <Grid item xs={16} md={16} lg={16}>
+          <Grid item xs={16} md={8}>
             <InputLabel id="demo-select-small">Assesment</InputLabel>
             <TextField
               fullWidth
