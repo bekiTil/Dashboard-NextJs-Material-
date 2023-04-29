@@ -214,7 +214,7 @@ const ParentFollowupPage = () => {
               rows={8}
             />
           </Grid>
-
+          <Grid container p={4} rowSpacing={1} columnSpacing={2}>
           <Grid item xs={16} md={4} lg={4}>
             <InputLabel id="demo-select-small" sx={{ marginBottom: 2 }}>
               Satisfaction
@@ -240,6 +240,7 @@ const ParentFollowupPage = () => {
               <MenuItem value="Needs Improvement">Needs Improvement</MenuItem>
               <MenuItem value="Behind Schedule">Behind Schedule</MenuItem>
             </Select>
+          </Grid>
           </Grid>
         </Grid>
 

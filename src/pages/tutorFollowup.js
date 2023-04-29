@@ -304,6 +304,7 @@ const TutorStandupPage = () => {
               onChange={(event) => handleAssesment(event)}
             />
           </Grid>
+          <Grid container p={4} rowSpacing={1} columnSpacing={2}>
           <Grid item xs={16} md={4} lg={4}>
             <InputLabel id="demo-select-small" sx={{ marginBottom: 2 }}>
               Satisfaction
@@ -350,6 +351,7 @@ const TutorStandupPage = () => {
               <MenuItem value="Authentic">Authentic</MenuItem>
               <MenuItem value="Inauthentic">Inauthentic</MenuItem>
             </Select>
+          </Grid>
           </Grid>
         </Grid>
 
