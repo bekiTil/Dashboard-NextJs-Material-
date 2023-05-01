@@ -73,6 +73,7 @@ const StudentRegistration = () => {
   const ethiopian_phone_number_regexp =
     /(\+\s*2\s*5\s*1\s*9\s*(([0-9]\s*){8}\s*))|(0\s*9\s*(([0-9]\s*){8}))/;
   const subjects = [
+    "General Science",
     "Physics",
     "Maths",
     "Chemistry",
@@ -82,6 +83,13 @@ const StudentRegistration = () => {
     "Amharic",
     "English",
     "Programming",
+    "History",
+    "Art",
+    "Economics",
+    "Other Social Studies",
+    "Foreign Languages (Spanish, French, German, etc.)",
+    "Test Preparation (SAT, ACT, etc.)",
+   
   ];
   const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = React.useState(false);
