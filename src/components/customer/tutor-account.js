@@ -23,7 +23,7 @@ export const TutorProfile = (props) => {
       <CardContent>
         <Box
           sx={{
-            alignItems: "center",
+           
             display: "flex",
             flexDirection: "column",
           }}
