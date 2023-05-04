@@ -26,6 +26,8 @@ export const TutorProfile = (props) => {
             alignItems: "center",
             display: "flex",
             flexDirection: "column",
+            wordWrap: "break-word",
+            wordBreak: "break-all",
           }}
         >
           <Avatar
@@ -41,59 +43,59 @@ export const TutorProfile = (props) => {
             {props.user?.fullName}
           </Typography>
           <Box>
-          <Typography color="textSecondary" variant="body2">
-            Email: {props.user?.email}
+          <Typography color="textSecondary" variant="body2" >
+           <b>Email</b> : {props.user?.email}
+          </Typography>
+          <Typography color="textSecondary" variant="body2" >
+           <b>Location</b> : {props.user?.location}
+          </Typography>
+          <Typography color="textSecondary" variant="body2" >
+            <b>Phone</b>: {props.user?.phone}
+          </Typography>
+          <Typography color="textSecondary" variant="body2" >
+            <b>Gender</b>: {props.user?.gender}
+          </Typography>
+          <Typography color="textSecondary" variant="body2" >
+            <b>Age</b>: {props.user?.age}
+          </Typography>
+          <Typography color="textSecondary" variant="body2" >
+            <b>Academic Status</b>: {props.user?.acadStatus}
+          </Typography>
+          <Typography color="textSecondary" variant="body2" >
+            <b>UEE</b>: {props.user?.UEE}
+          </Typography>
+          <Typography color="textSecondary" variant="body2" >
+            <b>cGPA</b>: {props.user?.cGPA}
+          </Typography>
+          <Typography color="textSecondary" variant="body2"  >
+            <b>Field of Study</b>: {props.user?.field}
+          </Typography>
+          <Typography color="textSecondary" variant="body2" >
+            <b>University/College</b>: {props.user?.college}
           </Typography>
           <Typography color="textSecondary" variant="body2">
-            Location: {props.user?.location}
+           <b>Volunteerism</b> : {props.user?.volenteerism}
+          </Typography>
+          <Typography color="textSecondary" variant="body2" >
+            <b>Hobby</b>: {props.user?.hobby}
+          </Typography>
+          <Typography color="textSecondary" variant="body2" >
+            <b>Has Tutored Previously</b>: {props.user?.prevTutored}
+          </Typography>
+          <Typography color="textSecondary" variant="body2" >
+            <b>Previous Tutor Experience</b>: {props.user?.prevTutorExperience}
+          </Typography>
+          <Typography color="textSecondary" variant="body2"  >
+            <b>Ideal Tutor</b>: {props.user?.idealTutor}
+          </Typography>
+          <Typography color="textSecondary" variant="body2" >
+            <b>Work days</b>: {props.user?.workDays}
+          </Typography>
+          <Typography color="textSecondary" variant="body2" >
+            <b>Work hours</b>: {props.user?.workHour}
           </Typography>
           <Typography color="textSecondary" variant="body2">
-            Phone: {props.user?.phone}
-          </Typography>
-          <Typography color="textSecondary" variant="body2">
-            Gender: {props.user?.gender}
-          </Typography>
-          <Typography color="textSecondary" variant="body2">
-            Age: {props.user?.age}
-          </Typography>
-          <Typography color="textSecondary" variant="body2">
-            Academic Status: {props.user?.acadStatus}
-          </Typography>
-          <Typography color="textSecondary" variant="body2">
-            UEE: {props.user?.UEE}
-          </Typography>
-          <Typography color="textSecondary" variant="body2">
-            cGPA: {props.user?.cGPA}
-          </Typography>
-          <Typography color="textSecondary" variant="body2">
-            Field of Study: {props.user?.field}
-          </Typography>
-          <Typography color="textSecondary" variant="body2">
-            University/College: {props.user?.college}
-          </Typography>
-          <Typography color="textSecondary" variant="body2">
-            Volunteerism: {props.user?.volenteerism}
-          </Typography>
-          <Typography color="textSecondary" variant="body2">
-            Hobby: {props.user?.hobby}
-          </Typography>
-          <Typography color="textSecondary" variant="body2">
-            Has Tutored Previously: {props.user?.prevTutored}
-          </Typography>
-          <Typography color="textSecondary" variant="body2">
-            Previous Tutor Experience: {props.user?.prevTutorExperience}
-          </Typography>
-          <Typography color="textSecondary" variant="body2">
-            Ideal Tutor: {props.user?.idealTutor}
-          </Typography>
-          <Typography color="textSecondary" variant="body2">
-            Work days: {props.user?.workDays}
-          </Typography>
-          <Typography color="textSecondary" variant="body2">
-            Work hours: {props.user?.workHour}
-          </Typography>
-          <Typography color="textSecondary" variant="body2">
-            Subjects: {props.user?.subjects.toString()}
+            <b>Subjects</b>: {props.user?.subjects.toString()}
           </Typography>
           </Box>
         </Box>
