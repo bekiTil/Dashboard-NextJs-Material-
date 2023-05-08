@@ -7,7 +7,6 @@ import {
   TextField,
   Card,
   CardActions,
-  CardContent,
   Container,
   Divider,
   Grid,
@@ -19,6 +18,9 @@ import {
   DialogContentText,
   DialogTitle,
   Alert,
+  CardHeader,
+  CardContent,
+  Chip,
 } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -27,13 +29,13 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import Backdrop from '@mui/material/Backdrop'
-import CircularProgress from '@mui/material/CircularProgress'
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
 
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 
-import React,{ useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getATutor, getATutorwithLocation, getTutors } from "backend-utils/tutor-utils";
 import moment from "moment";
 import { getAParent } from "backend-utils/parent-utils";
@@ -47,33 +49,33 @@ import Rating from "@mui/material/Rating";
 const ReportDetail = () => {
   const user = useSelector(selectUser);
   const router = useRouter();
-  const { tutorId, year,month, week } = router.query;
+  const { tutorId, year, month, week } = router.query;
   const [value, setValue] = useState(-1);
-  const [reportList , setReportList] = useState([])
+  const [reportList, setReportList] = useState([]);
   const [report, setReportDetail] = useState(null);
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true);
   if (tutorId == undefined || year == undefined || month == null || week == null) {
     router.push("/reports");
   }
-  
+
   const [err, setErr] = useState("");
   const [ratings, setRatings] = useState({}); // state to store the ratings for each object
 
-const handleRatingChange = (id, value) => {
-  setRatings({ ...ratings, [id]: value }); // update the rating for the object with the given id
-};
+  const handleRatingChange = (id, value) => {
+    setRatings({ ...ratings, [id]: value }); // update the rating for the object with the given id
+  };
   if (user) {
     var token = user.accessToken;
   }
   useEffect(() => {
-    console.log(tutorId,year,month,week)
-    getAReportWithSpecificWeek(token,tutorId,year,month,week)
+    console.log(tutorId, year, month, week);
+    getAReportWithSpecificWeek(token, tutorId, year, month, week)
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
         if (data.success) {
-            console.log(data)
-        setReportList(data.reports)
+          console.log(data);
+          setReportList(data.reports);
           setReportDetail(data.user);
           console.log(data.user.reports.inputFields);
         } else {
@@ -82,158 +84,262 @@ const handleRatingChange = (id, value) => {
       })
       .catch((err) => {
         setErr("Something went Wrong");
-      }).finally(()=>setIsLoading(false));
+      })
+      .finally(() => setIsLoading(false));
   }, []);
 
-  
-useEffect(() => {
+  useEffect(() => {
     // initialize the ratings object with default values of -1 for each object
     const defaultRatings = {};
-    reportList.forEach((object,index) => {
+    reportList.forEach((object, index) => {
       defaultRatings[index] = -1;
     });
     setRatings(defaultRatings);
   }, [reportList]);
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
 
   return (
     <div>
-        <Backdrop
-         sx={{ color: '#fff', backgroundColor: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      <Backdrop
+        sx={{ color: "#fff", backgroundColor: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={isLoading}
       >
         <CircularProgress color="info" />
       </Backdrop>
-        {reportList.map((report,index)=>{
 
-    return (        
-    <Grid alignItems="center" m={2} p={2}>
-     <div>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-            <TableRow>
-          <TableCell>Name</TableCell>
-          <TableCell rowSpan={2}>Report</TableCell>
-        </TableRow>
-        
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {report?.reports?.inputFields?.map((item, index) => (
-              <Box key={index}  component="main" boxShadow={1}>
-              <TableRow   key={index}>
-                <TableCell>{item.name}</TableCell>
-                <TableCell>
-                  <Typography variant="subtitle1">On the Content</Typography>
-                  {renderSubjectsTable(item.subjects)}
-                <br></br>
-                <Typography variant ="subtitle1">On Result</Typography>
-                 {renderAssessmentsTable(item.assesments)}
-                 </TableCell>
-                {/* <TableCell></TableCell> */}
-              </TableRow>
-              </Box>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </div>
-
-      
-      { report?.status == "PENDING" && ( 
-      <Box>
-      <Typography component="legend">Rate the Report </Typography>
-      <Rating
-        name="simple-controlled"
-        color="primary"
-        value={ratings[index] || 0}
-          onChange={(event, newValue) => handleRatingChange(index, newValue)}
-        
-        
-        
-       
-      />
-      </Box>
-      )
-}
-      
-           {report?.status == "PENDING" && (
-        <Stack direction="row" spacing={2}>
-          <Button
+      {reportList.map((report, index) => {
+        return (
+          <>
+            <Grid alignItems="center" m={2} p={2}>
+              <Typography  variant="subtitle1">Report  {index + 1}</Typography>
+              <Card>
+                <CardContent>
+                  <Typography variant="h6" gutterBottom>
+                    Report Date
+                  </Typography>
+                  <Grid container spacing={3}>
+                    <Grid item xs={12} sm={3}>
+                      <Typography>{monthNames[report.reportMonth-1]} {report.reportDate} , {report.reportYear}</Typography>
+                     
+                    </Grid>
+                    <Grid item xs={12} sm={3}>
+                    <Typography>Total Hours: {report.totalHours}</Typography>
+                     
+                    </Grid>
+                    <Grid item xs={12} sm={3}>
+                    <Typography>Total Days: {report.totalDays}</Typography>
+                    </Grid>
+                    
+                  </Grid>
+                </CardContent>
+              </Card>
+              <div className="my-1">
+              <Card>
+                <CardContent>
+              <Typography variant="h6" gutterBottom>
+                    Report Summary
+                  </Typography>
+                <TableContainer component={Paper}>
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableRow>
+                          <TableCell>Name</TableCell>
+                          <TableCell rowSpan={2}>Report</TableCell>
+                        </TableRow>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {report?.reports?.inputFields?.map((item, index) => (
+                        <Box key={index} component="main" boxShadow={1}>
+                          <TableRow key={index}>
+                            <TableCell>{item.name}</TableCell>
+                            <TableCell>
+                              <Typography variant="subtitle1">On the Content</Typography>
+                              {renderSubjectsTable(item.subjects)}
+                              <br></br>
+                              <Typography variant="subtitle1">On Result</Typography>
+                              {renderAssessmentsTable(item.assesments)}
+                            </TableCell>
+                            {/* <TableCell></TableCell> */}
+                          </TableRow>
+                        </Box>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+                </CardContent>
+                </Card>
+              </div>
+              <Card>
+                <CardContent>
+              <Typography variant="h6" gutterBottom>
+              On the Tutorial Delivery
+                  </Typography>
+                    <Typography variant="h6"></Typography>
+                  <Grid container spacing={2}>
+                 
+                  <Grid item xs={12} sm={6}>
+                    <Typography>1.How do the tutorials go?</Typography>
+                    <Typography paddingLeft={2} >{report.feedback}</Typography>
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Typography >2.Was there any challenge?</Typography>
+                    <Typography paddingLeft={2} >{report.pastChallenge}</Typography>
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Typography >
+                      3.What are you going to the challenge?
+                    </Typography>
+                    <Typography paddingLeft={2} >{report.futureChallenge}</Typography>
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Typography>
+                      4.How can we help you with the challenge?
+                    </Typography>
+                    <Typography paddingLeft={2} >{report.helpChallenge}</Typography>
+                  </Grid>
+                  </Grid>
+                 
+               </CardContent>
+               </Card>
              
-            variant="contained"
-            color="success"
-            disabled={ratings[index] == -1} 
-            onClick={() => {
-              report.status = "SUCCESS";
-              UpdateAReport(token, report?.id, { status: "SUCCESS", rate: ratings[index] });
-              router.push({
-                pathname: "/report/detail",
-                query: {
-                  tutorId: tutorId,
-                  year: year,
-                  month:month,
-                  week: week,
-                
-                },
-              
-              })
-            }}
-          >
-            Accept
-          </Button>
+               <Card sx={{ my: 2 }} >
+                <CardContent>
+              <Typography variant="h6" gutterBottom>
+              On Professionality (10%)
+                </Typography>
+   
+  
+  <Grid container alignItems="center" m={2} p={2}>
+  <Grid item xs={12} sm={6}>
+    <Typography variant="subtitle1">Dressing:</Typography>
+    <Chip label={`${report.dressing}/10`} variant="outlined" />
+  </Grid>
+  <Grid item xs={12} sm={6}>
+    <Typography variant="subtitle1">Grooming:</Typography>
+    <Chip label={`${report.grooming}/10`} variant="outlined" />
+  </Grid>
+  <Grid item xs={12} sm={6}>
+    <Typography variant="subtitle1">Hygiene:</Typography>
+    <Chip label={`${report.hygiene}/10`} variant="outlined" />
+  </Grid>
+  <Grid item xs={12} sm={6}>
+    <Typography variant="subtitle1">Punctuality:</Typography>
+    <Chip label={`${report.punctuality}/10`} variant="outlined" />
+  </Grid>
+  <Grid item xs={12} sm={6}>
+    <Typography variant="subtitle1">Manner:</Typography>
+    <Chip label={`${report.manner}/10`} variant="outlined" />
+  </Grid>
+  <Grid item xs={12} sm={6}>
+    <Typography variant="subtitle1">Eloquence:</Typography>
+    <Chip label={`${report.elequence}/10`} variant="outlined" />
+  </Grid>
+</Grid>
+</CardContent>
+</Card>
 
-          <Button
-            variant="contained"
-            color="error"
-            disabled={ratings[index] == -1}
-            onClick={() => {
-              report.status = "REJECTED";
-              
-              UpdateAReport(token, report?.id, { status: "REJECTED", rate: ratings[index] });
-              router.push({
-                pathname: "/report/detail",
-                query: {
-                  tutorId: tutorId,
-                  year: year,
-                  month:month,
-                  week: week,
-                
-                },
-              
-              })
-            }}
-          >
-            Reject
-          </Button>
-        </Stack>
-      )}
-      {report?.status == "REJECTED" && <Alert severity="warning">Rejected</Alert>}
-      {report?.status == "SUCCESS" && <Alert severity="success">Accepted</Alert>}
-    </Grid>
-    )
-    })}
+             
+
+              {report?.status == "PENDING" && (
+                <Box marginTop={2}>
+                  <Typography component="legend">Rate the Report </Typography>
+                  <Rating
+                    name="simple-controlled"
+                    color="primary"
+                    value={ratings[index] || 0}
+                    onChange={(event, newValue) => handleRatingChange(index, newValue)}
+                  />
+                </Box>
+              )}
+
+              {report?.status == "PENDING" && (
+                <Stack direction="row" spacing={2}>
+                  <Button
+                    variant="contained"
+                    color="success"
+                    disabled={ratings[index] == -1}
+                    onClick={() => {
+                      report.status = "SUCCESS";
+                      UpdateAReport(token, report?.id, { status: "SUCCESS", rate: ratings[index] });
+                      router.push({
+                        pathname: "/report/detail",
+                        query: {
+                          tutorId: tutorId,
+                          year: year,
+                          month: month,
+                          week: week,
+                        },
+                      });
+                    }}
+                  >
+                    Accept
+                  </Button>
+
+                  <Button
+                    variant="contained"
+                    color="error"
+                    disabled={ratings[index] == -1}
+                    onClick={() => {
+                      report.status = "REJECTED";
+
+                      UpdateAReport(token, report?.id, {
+                        status: "REJECTED",
+                        rate: ratings[index],
+                      });
+                      router.push({
+                        pathname: "/report/detail",
+                        query: {
+                          tutorId: tutorId,
+                          year: year,
+                          month: month,
+                          week: week,
+                        },
+                      });
+                    }}
+                  >
+                    Reject
+                  </Button>
+                </Stack>
+              )}
+              {report?.status == "REJECTED" && <Alert severity="warning">Rejected</Alert>}
+              {report?.status == "SUCCESS" && <Alert severity="success">Accepted</Alert>}
+            </Grid>
+          </>
+        );
+      })}
     </div>
   );
 };
 
-const renderAssessmentsTable =(assessments) => 
-  (
-    <TableContainer component={Paper}>
-      <Table>
-        <TableHead>
-          <TableRow>
-           
-            <TableCell>Course</TableCell>
-            <TableCell>Unit</TableCell>
-            <TableCell>Type</TableCell>
-            <TableCell>Result</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-        {assessments.map((assessment, index) => (
-          assessment.units.map((unit, index) => (
+const renderAssessmentsTable = (assessments) => (
+  <TableContainer component={Paper}>
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableCell>Course</TableCell>
+          <TableCell>Unit</TableCell>
+          <TableCell>Type</TableCell>
+          <TableCell>Result</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {assessments.map((assessment, index) =>
+          assessment.units.map((unit, index) =>
             unit.types.map((type, index) => (
               <TableRow key={index}>
                 <TableCell>{assessment.assesment}</TableCell>
@@ -242,16 +348,15 @@ const renderAssessmentsTable =(assessments) =>
                 <TableCell>{type.result}</TableCell>
               </TableRow>
             ))
-          ))
-        ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
+          )
+        )}
+      </TableBody>
+    </Table>
+  </TableContainer>
+);
 
-
-  const renderSubjectsTable = (subjects) => (
-    <TableContainer component={Paper}>
+const renderSubjectsTable = (subjects) => (
+  <TableContainer component={Paper}>
     <Table>
       <TableHead>
         <TableRow>
@@ -262,8 +367,8 @@ const renderAssessmentsTable =(assessments) =>
         </TableRow>
       </TableHead>
       <TableBody>
-        {subjects.map((subject, index) => (
-          subject.chapters.map((chapter, index) => (
+        {subjects.map((subject, index) =>
+          subject.chapters.map((chapter, index) =>
             chapter.topics.map((topic, index) => (
               <TableRow key={index}>
                 <TableCell>{subject.subject}</TableCell>
@@ -272,12 +377,12 @@ const renderAssessmentsTable =(assessments) =>
                 <TableCell>{topic.understanding}</TableCell>
               </TableRow>
             ))
-          ))
-        ))}
+          )
+        )}
       </TableBody>
     </Table>
   </TableContainer>
-  );
+);
 
 ReportDetail.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
