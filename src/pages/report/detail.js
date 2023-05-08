@@ -32,7 +32,8 @@ import CircularProgress from '@mui/material/CircularProgress'
 
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+
+import React,{ useEffect, useState } from "react";
 import { getATutor, getATutorwithLocation, getTutors } from "backend-utils/tutor-utils";
 import moment from "moment";
 import { getAParent } from "backend-utils/parent-utils";
@@ -106,216 +107,38 @@ useEffect(() => {
 
     return (        
     <Grid alignItems="center" m={2} p={2}>
-      {report?.reports?.inputFields?.map((tutee, index) => {
-        return (
-          <div  className="grid grid-cols-1 gap-4">
-            <div className="flex flex-row">
-              <div className="">
-                <label className="col mt-2 text-lg font-semibold md:text-xl">Tutee Name</label>
+     <div>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+            <TableRow>
+          <TableCell>Name</TableCell>
+          <TableCell rowSpan={2}>Report</TableCell>
+        </TableRow>
+        
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {report?.reports?.inputFields?.map((item, index) => (
+              <Box key={index}  component="main" boxShadow={1}>
+              <TableRow   key={index}>
+                <TableCell>{item.name}</TableCell>
+                <TableCell>
+                  <Typography variant="subtitle1">On the Content</Typography>
+                  {renderSubjectsTable(item.subjects)}
                 <br></br>
-                <input
-                  className="mr-1 w-full h-full rounded-lg border border-gray-400 bg-gray-200 text-gray-700  transition duration-500 focus:border-gray-900 focus:outline-none md:w-3/4"
-                  name="name"
-                  type="text"
-                  placeholder="Full Name"
-                  required={true}
-                  value={tutee.name}
-                  disabled={true}
-                />
-              </div>
-            </div>
-            <div className=" w-fit my-10 border border-gray-200 rounded-lg shadow-md md:px-3 md:py-2 ">
-              <div className="text-lg">On the Content</div>
-
-              {tutee.subjects.map((sub, valu) => {
-                return (
-                  <div className=" mt-10  flex flex-row px-3 py-2">
-                    <div className="col basis-1/4 mr-2 md:mr-0">
-                      {index == 0 && valu == 0 && (
-                        <div className=" inline-block w-fit md:w-2/3   rounded bg-[#1A3765] px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out">
-                          Subject
-                        </div>
-                      )}
-                      <input
-                        className="mr-1 my-2 w-fit py-4 break-words rounded-lg text-xs border border-gray-400 bg-gray-200 text-gray-700  transition duration-500 focus:border-gray-900 focus:outline-none"
-                        type="text"
-                        placeholder="Subject"
-                        name="subject"
-                        disabled={true}
-                        value={sub.subject}
-                      />
-                    </div>
-                    <div className="col flex basis-3/4 flex-col">
-                      {sub.chapters.map((chap, chapter_index) => {
-                        return (
-                          <div className="row flex flex-row" key={chapter_index}>
-                            <div className="col mr-2 md:mr-0">
-                              {index == 0 && valu == 0 && chapter_index == 0 && (
-                                <div className=" w-fit  md:w-2/3 rounded bg-[#1A3765] px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out">
-                                  {" "}
-                                  Chapter
-                                </div>
-                              )}
-                              <input
-                                className="mr-1  my-2 w-fit py-4 break-words rounded-lg text-xs border border-gray-400 bg-gray-200 text-gray-700  transition duration-500 focus:border-gray-900 focus:outline-none"
-                                type="text"
-                                placeholder="Chapter"
-                                name="chapter"
-                                disabled={true}
-                                value={chap.chapter}
-                              />
-                            </div>
-                            <div className="col flex basis-2/3 flex-col">
-                              {chap.topics.map((top, topic_index) => {
-                                return (
-                                  <div className="row flex flex-row" key={topic_index}>
-                                    <div className="col mr-2 md:mr-0">
-                                      {index == 0 &&
-                                        valu == 0 &&
-                                        chapter_index == 0 &&
-                                        topic_index == 0 && (
-                                          <div className="w-fit md:w-2/3  rounded bg-[#1A3765] px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out">
-                                            {" "}
-                                            Topic
-                                          </div>
-                                        )}
-                                      <input
-                                        
-                                        className="mr-1  my-2 w-fit py-4 break-words  text-xs rounded-lg border border-gray-400 bg-gray-200 text-gray-700  transition duration-500 focus:border-gray-900 focus:outline-none"
-                                        type="textarea"
-                                        placeholder="Topic"
-                                        value={top.topic}
-                                        disabled={true}
-                                        name="topic"
-                                      />
-                                    </div>
-                                    <div className="col  mr-2 md:mx-1">
-                                      {index == 0 &&
-                                        valu == 0 &&
-                                        chapter_index == 0 &&
-                                        topic_index == 0 && (
-                                          <div className=" w-fit md:w-2/3 rounded bg-[#1A3765] text-center py-2.5 text-xs  uppercase  text-white shadow-md ">
-                                            Understanding
-                                          </div>
-                                        )}
-                                      <input
-                                        className="mr-1 my-2 w-fit py-4 break-words text-xs rounded-lg border border-gray-400 bg-gray-200 text-gray-700  transition duration-500 focus:border-gray-900 focus:outline-none "
-                                        type="text"
-                                        placeholder="Understanding"
-                                        disabled={true}
-                                        value={top.understanding}
-                                        name="understanding"
-                                      />
-                                    </div>
-                                  </div>
-                                );
-                              })}
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-
-            <div className=" w-fit my-10 border border-gray-200 rounded-lg shadow-md  md:px-3 md:py-2 ">
-              <div className="text-lg">On Result</div>
-
-              {tutee.assesments.map((asses, assesments_index) => {
-                return (
-                  <div className=" mt-10  flex flex-row px-3 py-2" key={assesments_index}>
-                    <div className="col basis-1/4 mr-2 md:mr-0">
-                      {assesments_index == 0 && (
-                        <div className=" inline-block w-fit md:w-2/3  rounded bg-[#1A3765] px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out">
-                          Subject
-                        </div>
-                      )}
-                      <input
-                        className="mr-1 my-2 w-fit py-4 break-words rounded-lg border text-xs border-gray-400 bg-gray-200 text-gray-700  transition duration-500 focus:border-gray-900 focus:outline-none "
-                        type="text"
-                        placeholder="Subject"
-                        disabled={true}
-                        name="assesment"
-                        value={asses.assesment}
-                      />
-                    </div>
-                    <div className="col flex basis-3/4 flex-col">
-                      {asses.units.map((uni, unit_index) => {
-                        return (
-                          <div className="row flex flex-row" key={unit_index}>
-                            <div className="col  mr-2 md:mr-0 ">
-                              {assesments_index == 0 && unit_index == 0 && (
-                                <div className=" w-fit md:w-2/3  rounded bg-[#1A3765] px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out">
-                                  {" "}
-                                  Chapter
-                                </div>
-                              )}
-                              <input
-                                className="mr-1 my-2 w-fit py-4 break-words text-xs rounded-lg border border-gray-400 bg-gray-200 text-gray-700  transition duration-500 focus:border-gray-900 focus:outline-none "
-                                type="text"
-                                name="unit"
-                                placeholder="Chapter"
-                                disabled={true}
-                                value={uni.unit}
-                              />
-                            </div>
-                            <div className="col flex basis-2/3 flex-col">
-                              {uni.types.map((typ, type_index) => {
-                                return (
-                                  <div className="row flex flex-row" key={type_index}>
-                                    <div className="col  mr-2 md:mr-0">
-                                      {assesments_index == 0 &&
-                                        unit_index == 0 &&
-                                        type_index == 0 && (
-                                          <div className=" mb-1  w-fit md:w-2/3  rounded bg-[#1A3765] px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out">
-                                            {" "}
-                                            Type
-                                          </div>
-                                        )}
-                                      <input
-                                    
-                                        className="mr-1 my-2 w-fit py-4 break-words text-xs rounded-lg border border-gray-400 bg-gray-200 text-gray-700  transition duration-500 focus:border-gray-900 focus:outline-none "
-                                        type="text"
-                                        placeholder="Type"
-                                        value={typ.type}
-                                        disabled={true}
-                                        name="type"
-                                      />
-                                    </div>
-                                    <div className="col mr-2 md:mr-0 ">
-                                      {assesments_index == 0 &&
-                                        unit_index == 0 &&
-                                        type_index == 0 && (
-                                          <div className=" mb-1  w-fit md:w-2/3  rounded bg-[#1A3765] px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out">
-                                            Result
-                                          </div>
-                                        )}
-                                      <input
-                                        className="mr-1 my-2 w-fit py-4 break-words text-xs rounded-lg border border-gray-400 bg-gray-200 text-gray-700  transition duration-500 focus:border-gray-900 focus:outline-none "
-                                        type="text"
-                                        placeholder="Result"
-                                        disabled={true}
-                                        value={typ.result}
-                                        name="result"
-                                      />
-                                    </div>
-                                  </div>
-                                );
-                              })}
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        );
-      })}
+                <Typography variant ="subtitle1">On Result</Typography>
+                 {renderAssessmentsTable(item.assesments)}
+                 </TableCell>
+                {/* <TableCell></TableCell> */}
+              </TableRow>
+              </Box>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </div>
 
       
       { report?.status == "PENDING" && ( 
@@ -394,6 +217,67 @@ useEffect(() => {
     </div>
   );
 };
+
+const renderAssessmentsTable =(assessments) => 
+  (
+    <TableContainer component={Paper}>
+      <Table>
+        <TableHead>
+          <TableRow>
+           
+            <TableCell>Course</TableCell>
+            <TableCell>Unit</TableCell>
+            <TableCell>Type</TableCell>
+            <TableCell>Result</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+        {assessments.map((assessment, index) => (
+          assessment.units.map((unit, index) => (
+            unit.types.map((type, index) => (
+              <TableRow key={index}>
+                <TableCell>{assessment.assesment}</TableCell>
+                <TableCell>{unit.unit}</TableCell>
+                <TableCell>{type.type}</TableCell>
+                <TableCell>{type.result}</TableCell>
+              </TableRow>
+            ))
+          ))
+        ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
+
+
+  const renderSubjectsTable = (subjects) => (
+    <TableContainer component={Paper}>
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableCell>Subject</TableCell>
+          <TableCell>Chapter</TableCell>
+          <TableCell>Topic</TableCell>
+          <TableCell>Understanding</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {subjects.map((subject, index) => (
+          subject.chapters.map((chapter, index) => (
+            chapter.topics.map((topic, index) => (
+              <TableRow key={index}>
+                <TableCell>{subject.subject}</TableCell>
+                <TableCell>{chapter.chapter}</TableCell>
+                <TableCell>{topic.topic}</TableCell>
+                <TableCell>{topic.understanding}</TableCell>
+              </TableRow>
+            ))
+          ))
+        ))}
+      </TableBody>
+    </Table>
+  </TableContainer>
+  );
 
 ReportDetail.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
