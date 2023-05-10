@@ -47,6 +47,21 @@ const updateStudent = async (token, id, tutorId, status) => {
   console.log(response)
   return response;
 };
+const updateStudentInGeneral = async (token, id, body) => {
+  const response = await fetch(`${API_URL}api/v1/student/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      ...body
+    }),
+  });
+  console.log(response)
+  return response;
+};
+
 
 const updateStudentTutor = async (token, id, tutorId, status) => {
   const response = await fetch(`${API_URL}api/v1/student/addTutor/${id}`, {
@@ -115,4 +130,4 @@ const response = await fetch (`${API_URL}api/v1/student/byGrade`,{
     return response
 }
 
-export { getStudents, createStudent, getAStudent, deleteStudent, updateStudent,getChildrenOfParent,getNumberOfStudentsByGrade, updateStudentTutor,removeStudentTutor };
+export { getStudents, createStudent, getAStudent, deleteStudent, updateStudent,getChildrenOfParent,getNumberOfStudentsByGrade, updateStudentTutor,removeStudentTutor,updateStudentInGeneral };

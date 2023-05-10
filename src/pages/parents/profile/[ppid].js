@@ -239,7 +239,16 @@ const ParentDetail = () => {
                     <Typography color="textSecondary" variant="body2">
                       Location: {parentData?.location}
                     </Typography>
-                    <Button
+                    <Grid container  sx={{
+              
+            alignItems: "center",
+            display: "flex",
+            flexDirection: "row",
+            ml:6
+          }}  spacing={3}>
+                      <Grid item lg={5} md={6} xs={12}>
+
+                      <Button
                       variant="contained"
                       onClick={() => {
                         router.push("/parents/" + parentData?.id);
@@ -247,6 +256,21 @@ const ParentDetail = () => {
                     >
                       Add Child
                     </Button>
+                      </Grid>
+                      <Grid item lg={5} md={6} xs={12}>
+
+                      <Button
+                      variant="contained"
+                      onClick={() => {
+                        router.push("/parents/edit/" + parentData?.id);
+                      }}
+                    >
+                      Edit Parent
+                    </Button>
+                      </Grid>
+                   
+                    </Grid>
+                    
                   </Box>
                 </CardContent>
               </Card>
