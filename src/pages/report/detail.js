@@ -21,6 +21,7 @@ import {
   CardHeader,
   CardContent,
   Chip,
+  InputLabel,
 } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -54,6 +55,7 @@ const ReportDetail = () => {
   const [reportList, setReportList] = useState([]);
   const [report, setReportDetail] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [commentD, setCommentD] =  useState({});
   if (tutorId == undefined || year == undefined || month == null || week == null) {
     router.push("/reports");
   }
@@ -64,6 +66,9 @@ const ReportDetail = () => {
   const handleRatingChange = (id, value) => {
     setRatings({ ...ratings, [id]: value }); // update the rating for the object with the given id
   };
+  const handleCommentChange = (id,value)=>{
+    setCommentD({...commentD,[id]:value})
+  }
   if (user) {
     var token = user.accessToken;
   }
@@ -91,10 +96,13 @@ const ReportDetail = () => {
   useEffect(() => {
     // initialize the ratings object with default values of -1 for each object
     const defaultRatings = {};
+    const defaultComment ={}
     reportList.forEach((object, index) => {
       defaultRatings[index] = -1;
+      defaultComment[index] ="";
     });
     setRatings(defaultRatings);
+    setCommentD(defaultComment);
   }, [reportList]);
   const monthNames = [
     "January",
@@ -124,7 +132,7 @@ const ReportDetail = () => {
         return (
           <>
             <Grid alignItems="center" m={2} p={2}>
-              <Typography  variant="subtitle1">Report  {index + 1}</Typography>
+              <Typography variant="subtitle1">Report {index + 1}</Typography>
               <Card>
                 <CardContent>
                   <Typography variant="h6" gutterBottom>
@@ -132,192 +140,205 @@ const ReportDetail = () => {
                   </Typography>
                   <Grid container spacing={3}>
                     <Grid item xs={12} sm={3}>
-                      <Typography>{monthNames[report.reportMonth-1]} {report.reportDate} , {report.reportYear}</Typography>
-                     
+                      <Typography>
+                        {monthNames[report.reportMonth - 1]} {report.reportDate} ,{" "}
+                        {report.reportYear}
+                      </Typography>
                     </Grid>
                     <Grid item xs={12} sm={3}>
-                    <Typography>Total Hours: {report.totalHours}</Typography>
-                     
+                      <Typography>Total Hours: {report.totalHours}</Typography>
                     </Grid>
                     <Grid item xs={12} sm={3}>
-                    <Typography>Total Days: {report.totalDays}</Typography>
+                      <Typography>Total Days: {report.totalDays}</Typography>
                     </Grid>
-                    
                   </Grid>
                 </CardContent>
               </Card>
               <div className="my-1">
-              <Card>
-                <CardContent>
-              <Typography variant="h6" gutterBottom>
-                    Report Summary
-                  </Typography>
-                <TableContainer component={Paper}>
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableRow>
-                          <TableCell>Name</TableCell>
-                          <TableCell rowSpan={2}>Report</TableCell>
-                        </TableRow>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {report?.reports?.inputFields?.map((item, index) => (
-                        <Box key={index} component="main" boxShadow={1}>
-                          <TableRow key={index}>
-                            <TableCell>{item.name}</TableCell>
-                            <TableCell>
-                              <Typography variant="subtitle1">On the Content</Typography>
-                              {renderSubjectsTable(item.subjects)}
-                              <br></br>
-                              <Typography variant="subtitle1">On Result</Typography>
-                              {renderAssessmentsTable(item.assesments)}
-                            </TableCell>
-                            {/* <TableCell></TableCell> */}
+                <Card>
+                  <CardContent>
+                    <Typography variant="h6" gutterBottom>
+                      Report Summary
+                    </Typography>
+                    <TableContainer component={Paper}>
+                      <Table>
+                        <TableHead>
+                          <TableRow>
+                            <TableRow>
+                              <TableCell>Name</TableCell>
+                              <TableCell rowSpan={2}>Report</TableCell>
+                            </TableRow>
                           </TableRow>
-                        </Box>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-                </CardContent>
+                        </TableHead>
+                        <TableBody>
+                          {report?.reports?.inputFields?.map((item, index) => (
+                            <Box key={index} component="main" boxShadow={1}>
+                              <TableRow key={index}>
+                                <TableCell>{item.name}</TableCell>
+                                <TableCell>
+                                  <Typography variant="subtitle1">On the Content</Typography>
+                                  {renderSubjectsTable(item.subjects)}
+                                  <br></br>
+                                  <Typography variant="subtitle1">On Result</Typography>
+                                  {renderAssessmentsTable(item.assesments)}
+                                </TableCell>
+                                {/* <TableCell></TableCell> */}
+                              </TableRow>
+                            </Box>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  </CardContent>
                 </Card>
               </div>
               <Card>
                 <CardContent>
-              <Typography variant="h6" gutterBottom>
-              On the Tutorial Delivery
+                  <Typography variant="h6" gutterBottom>
+                    On the Tutorial Delivery
                   </Typography>
-                    <Typography variant="h6"></Typography>
+                  <Typography variant="h6"></Typography>
                   <Grid container spacing={2}>
-                 
-                  <Grid item xs={12} sm={6}>
-                    <Typography>1.How do the tutorials go?</Typography>
-                    <Typography paddingLeft={2} >{report.feedback}</Typography>
+                    <Grid item xs={12} sm={6}>
+                      <Typography>1.How do the tutorials go?</Typography>
+                      <Typography paddingLeft={2}>{report.feedback}</Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <Typography>2.Was there any challenge?</Typography>
+                      <Typography paddingLeft={2}>{report.pastChallenge}</Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <Typography>3.What are you going to the challenge?</Typography>
+                      <Typography paddingLeft={2}>{report.futureChallenge}</Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <Typography>4.How can we help you with the challenge?</Typography>
+                      <Typography paddingLeft={2}>{report.helpChallenge}</Typography>
+                    </Grid>
                   </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <Typography >2.Was there any challenge?</Typography>
-                    <Typography paddingLeft={2} >{report.pastChallenge}</Typography>
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <Typography >
-                      3.What are you going to the challenge?
-                    </Typography>
-                    <Typography paddingLeft={2} >{report.futureChallenge}</Typography>
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <Typography>
-                      4.How can we help you with the challenge?
-                    </Typography>
-                    <Typography paddingLeft={2} >{report.helpChallenge}</Typography>
-                  </Grid>
-                  </Grid>
-                 
-               </CardContent>
-               </Card>
-             
-               <Card sx={{ my: 2 }} >
+                </CardContent>
+              </Card>
+
+              <Card sx={{ my: 2 }}>
                 <CardContent>
-              <Typography variant="h6" gutterBottom>
-              On Professionality (10%)
-                </Typography>
-   
-  
-  <Grid container alignItems="center" m={2} p={2}>
-  <Grid item xs={12} sm={6}>
-    <Typography variant="subtitle1">Dressing:</Typography>
-    <Chip label={`${report.dressing}/10`} variant="outlined" />
-  </Grid>
-  <Grid item xs={12} sm={6}>
-    <Typography variant="subtitle1">Grooming:</Typography>
-    <Chip label={`${report.grooming}/10`} variant="outlined" />
-  </Grid>
-  <Grid item xs={12} sm={6}>
-    <Typography variant="subtitle1">Hygiene:</Typography>
-    <Chip label={`${report.hygiene}/10`} variant="outlined" />
-  </Grid>
-  <Grid item xs={12} sm={6}>
-    <Typography variant="subtitle1">Punctuality:</Typography>
-    <Chip label={`${report.punctuality}/10`} variant="outlined" />
-  </Grid>
-  <Grid item xs={12} sm={6}>
-    <Typography variant="subtitle1">Manner:</Typography>
-    <Chip label={`${report.manner}/10`} variant="outlined" />
-  </Grid>
-  <Grid item xs={12} sm={6}>
-    <Typography variant="subtitle1">Eloquence:</Typography>
-    <Chip label={`${report.elequence}/10`} variant="outlined" />
-  </Grid>
-</Grid>
-</CardContent>
-</Card>
+                  <Typography variant="h6" gutterBottom>
+                    On Professionality (10%)
+                  </Typography>
 
-             
+                  <Grid container alignItems="center" m={2} p={2}>
+                    <Grid item xs={12} sm={6}>
+                      <Typography variant="subtitle1">Dressing:</Typography>
+                      <Chip label={`${report.dressing}/10`} variant="outlined" />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <Typography variant="subtitle1">Grooming:</Typography>
+                      <Chip label={`${report.grooming}/10`} variant="outlined" />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <Typography variant="subtitle1">Hygiene:</Typography>
+                      <Chip label={`${report.hygiene}/10`} variant="outlined" />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <Typography variant="subtitle1">Punctuality:</Typography>
+                      <Chip label={`${report.punctuality}/10`} variant="outlined" />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <Typography variant="subtitle1">Manner:</Typography>
+                      <Chip label={`${report.manner}/10`} variant="outlined" />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <Typography variant="subtitle1">Eloquence:</Typography>
+                      <Chip label={`${report.elequence}/10`} variant="outlined" />
+                    </Grid>
+                  </Grid>
+                </CardContent>
+              </Card>
 
-              {report?.status == "PENDING" && (
-                <Box marginTop={2}>
-                  <Typography component="legend">Rate the Report </Typography>
-                  <Rating
-                    name="simple-controlled"
-                    color="primary"
-                    value={ratings[index] || 0}
-                    onChange={(event, newValue) => handleRatingChange(index, newValue)}
-                  />
-                </Box>
-              )}
+              {!report?.comment && (
+  <>
+    <InputLabel id="demo-select-small">Comment</InputLabel>
+    <TextField
+     
+      required={true}
+      margin="normal"
+      multiline
+      rows={4}
+      value={commentD[index]}
+      onChange={(event) => handleCommentChange(index, event.target.value)}
+      error={commentD[index] === "" || commentD[index] === null }
+      helperText={commentD[index] === "" || commentD[index] === null && "Please fill out this field"}
+    />
+  </>
+)}
+{report?.status == "PENDING" && (
+  <Box marginTop={2}>
+    <Typography component="legend">Rate the Report </Typography>
+    <Rating
+      name="simple-controlled"
+      color="primary"
+      value={ratings[index] || 0}
+      onChange={(event, newValue) => handleRatingChange(index, newValue)}
+    />
+  </Box>
+)}
 
-              {report?.status == "PENDING" && (
-                <Stack direction="row" spacing={2}>
-                  <Button
-                    variant="contained"
-                    color="success"
-                    disabled={ratings[index] == -1}
-                    onClick={() => {
-                      report.status = "SUCCESS";
-                      UpdateAReport(token, report?.id, { status: "SUCCESS", rate: ratings[index] });
-                      router.push({
-                        pathname: "/report/detail",
-                        query: {
-                          tutorId: tutorId,
-                          year: year,
-                          month: month,
-                          week: week,
-                        },
-                      });
-                    }}
-                  >
-                    Accept
-                  </Button>
+{report?.status == "PENDING" && (
+  <Stack direction="row" spacing={2}>
+    <Button
+      variant="contained"
+      color="success"
+      disabled={commentD[index] === "" || commentD[index] ===null}
+      onClick={async () => {
+        if (commentD !== "") {
+          console.log(commentD[index])
+          report.status = "SUCCESS";
 
-                  <Button
-                    variant="contained"
-                    color="error"
-                    disabled={ratings[index] == -1}
-                    onClick={() => {
-                      report.status = "REJECTED";
+          await UpdateAReport(token, report?.id, { status: "SUCCESS",
+          rate: ratings[index],   comment: commentD[index] });
+          
+          router.reload()
+        
 
-                      UpdateAReport(token, report?.id, {
-                        status: "REJECTED",
-                        rate: ratings[index],
-                      });
-                      router.push({
-                        pathname: "/report/detail",
-                        query: {
-                          tutorId: tutorId,
-                          year: year,
-                          month: month,
-                          week: week,
-                        },
-                      });
-                    }}
-                  >
-                    Reject
-                  </Button>
-                </Stack>
-              )}
+        
+        } else {
+          setSubmitted(true);
+        }
+      }}
+    >
+      Accept
+    </Button>
+
+    <Button
+      variant="contained"
+      color="error"
+      disabled={ratings[index] == -1 || commentD === "" || commentD ===null}
+      onClick={() => {
+        report.status = "REJECTED";
+        UpdateAReport(token, report?.id, {
+          status: "REJECTED",
+          rate: ratings[index],
+          comment: commentD
+        });
+      router.reload()
+      }}
+    >
+      Reject
+    </Button>
+  </Stack>
+)}
+              {report?.comment && <><InputLabel id="demo-select-small">Comment</InputLabel>
+    <TextField
+      
+      disabled
+      margin="normal"
+      multiline
+      rows={4}
+      value={report?.comment}
+    
+    /> </>}
               {report?.status == "REJECTED" && <Alert severity="warning">Rejected</Alert>}
               {report?.status == "SUCCESS" && <Alert severity="success">Accepted</Alert>}
+             
             </Grid>
           </>
         );
