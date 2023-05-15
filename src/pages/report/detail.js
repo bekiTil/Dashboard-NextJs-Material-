@@ -171,11 +171,11 @@ const ReportDetail = () => {
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          {report?.reports?.inputFields?.map((item, index) => (
+                          { report?.reports?.inputFields?.map((item, index) => (
                             <Box key={index} component="main" boxShadow={1}>
                               <TableRow key={index}>
                                 <TableCell>{item.name}</TableCell>
-                                <TableCell>
+                                <TableCell style={{ width: '100%' }} >
                                   <Typography variant="subtitle1">On the Content</Typography>
                                   {renderSubjectsTable(item.subjects)}
                                   <br></br>
