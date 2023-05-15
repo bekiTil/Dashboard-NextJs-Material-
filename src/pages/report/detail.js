@@ -359,12 +359,12 @@ const renderAssessmentsTable = (assessments) => (
         </TableRow>
       </TableHead>
       <TableBody>
-        {assessments.map((assessment, index) =>
-          assessment.units.map((unit, index) =>
+        {assessments.map((assessment, index2) =>
+          assessment.units.map((unit, index1) =>
             unit.types.map((type, index) => (
               <TableRow key={index}>
-                <TableCell>{assessment.assesment}</TableCell>
-                <TableCell>{unit.unit}</TableCell>
+                <TableCell>{index1 == 0 && index ==0  &&assessment.assesment}</TableCell>
+                <TableCell>{index ==0 &&  unit.unit}</TableCell>
                 <TableCell>{type.type}</TableCell>
                 <TableCell>{type.result}</TableCell>
               </TableRow>
@@ -388,12 +388,12 @@ const renderSubjectsTable = (subjects) => (
         </TableRow>
       </TableHead>
       <TableBody>
-        {subjects.map((subject, index) =>
-          subject.chapters.map((chapter, index) =>
+        {subjects.map((subject, index2) =>
+          subject.chapters.map((chapter, index1) =>
             chapter.topics.map((topic, index) => (
               <TableRow key={index}>
-                <TableCell>{subject.subject}</TableCell>
-                <TableCell>{chapter.chapter}</TableCell>
+                <TableCell>{index1 == 0 && index ==0  && subject.subject}</TableCell>
+                <TableCell>{index ==0 && chapter.chapter}</TableCell>
                 <TableCell>{topic.topic}</TableCell>
                 <TableCell>{topic.understanding}</TableCell>
               </TableRow>
