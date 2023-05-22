@@ -78,6 +78,8 @@ const Reports = () => {
   const [Week3, setThirdWeek] = useState([]);
   const [Week4, setFourthWeek] = useState([]);
   const [Week5, setFiveWeek] = useState([]);
+  const [limit, setLimit] = useState(10);
+  const [page, setPage] = useState(0);
   const [WeeklyReport, setWeeklyReport] = useState([]);
   const [totalWeeks, setTotalWeeks] = useState([]);
   const [tempWeeks, setTempWeeks] = useState([]);
@@ -377,6 +379,13 @@ const Reports = () => {
   
     return count;
   };
+  const handleLimitChange = (event) => {
+    setLimit(event.target.value);
+  };
+
+  const handlePageChange = (event, newPage) => {
+    setPage(newPage);
+  };
 
   return (
     <>
@@ -478,6 +487,9 @@ const Reports = () => {
                     }
                     label={`${monthName[monthIndex]} ${week[0]} - ${week[1]}`}
                     onClick={() =>{ 
+
+                      setPage(0)
+                      setLimit(10)
                       setWeekIndex(index);
                       handleOpen(totalWeeks, totalWeeks[index])}
                     
@@ -514,7 +526,7 @@ const Reports = () => {
               <TableBody>
                 {tempWeeks.length > 0 &&
                   tempWeeks
-                    .slice(0, 10)
+                  
                     .filter((val) => {
                       if (searchTerm == "") {
                         return val;
@@ -522,6 +534,7 @@ const Reports = () => {
                         return val;
                       }
                     })
+                    .slice((limit*page), (limit)*(page+1))
                     .map((report, index) => {
                       return (
                         <>
@@ -593,6 +606,15 @@ const Reports = () => {
               </TableBody>
             </Table>
           </TableContainer>
+      <TablePagination
+        component="div"
+        count={tempWeeks.length}
+        onPageChange={handlePageChange}
+        onRowsPerPageChange={handleLimitChange}
+        page={page}
+        rowsPerPage={limit}
+        rowsPerPageOptions={[5, 10, 25]}
+      />
         </Container>
       </Box>
     </>
