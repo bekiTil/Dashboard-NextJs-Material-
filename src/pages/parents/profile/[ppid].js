@@ -34,15 +34,24 @@ import moment from "moment";
 import { getAParent, updateParent } from "backend-utils/parent-utils";
 import { DashboardLayout } from "src/components/dashboard-layout";
 import { selectUser } from "redux/userSlice";
-import { updateStudent } from "backend-utils/student-utils";
+import { deleteStudent, updateStudent } from "backend-utils/student-utils";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 
 import { DeleteOutlined, MoreHorizSharp } from "@mui/icons-material";
 import { updateStudentTutor } from "backend-utils/student-utils";
 import { removeStudentTutor } from "backend-utils/student-utils";
+import { makeStyles } from "@mui/styles";
+
+const useStyles = makeStyles((theme) => ({
+  rightAlign: {
+    marginLeft: 'auto',
+  },
+}));
+
 
 const ParentDetail = () => {
+  const classes = useStyles();
   const user = useSelector(selectUser);
   const router = useRouter();
   const { ppid } = router.query;
@@ -315,6 +324,17 @@ const ParentDetail = () => {
                           flexDirection: "column",
                         }}
                       >
+                         <IconButton
+         className={classes.rightAlign}
+      
+        onClick={()=>{deleteStudent(token,student.id)
+        
+        .finally(router.reload())}}
+        
+      >
+
+          <DeleteOutlined />
+      </IconButton>
                         <Typography color="textPrimary" gutterBottom variant="h5">
                           Student {index + 1}
                         </Typography>
