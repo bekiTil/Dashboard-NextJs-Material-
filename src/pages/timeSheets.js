@@ -104,6 +104,8 @@ const TimeSheets = () => {
   const [selectYear, setSelectedYear] = useState(currentYear);
   const [statusReport, setStatusReport] = useState(1);
   const [countofView,setCountOfView] = useState(0);
+  const [limit, setLimit] = useState(10);
+  const [page, setPage] = useState(0);
   
   const years = [];
   
@@ -135,6 +137,13 @@ const TimeSheets = () => {
     console.log(loadingOpen, "sealke");
   }, [tempWeeks]);
 
+  const handleLimitChange = (event) => {
+    setLimit(event.target.value);
+  };
+
+  const handlePageChange = (event, newPage) => {
+    setPage(newPage);
+  };
   useEffect(() => {
     handleOpen(totalWeeks, totalWeeks[selectedMonthIndex], selectedMonthIndex);
 
@@ -437,6 +446,8 @@ const TimeSheets = () => {
                     label={`${month} `}
                     onClick={() => {
                       if (selectedMonthIndex != index) {
+                        setPage(0)
+                      setLimit(10)
                         handleOpen(totalWeeks, totalWeeks[index], index);
                       }
                     }}
@@ -480,7 +491,7 @@ const TimeSheets = () => {
                 <TableBody>
                   {tempWeeks.length > 0 &&
                     tempWeeks
-                      .slice(0, 10)
+                
                       .filter((val) => {
                         if (searchTerm == "") {
                           return val;
@@ -490,7 +501,7 @@ const TimeSheets = () => {
                           return val;
                         }
                       })
-
+                      .slice((limit*page), (limit)*(page+1))
                       .map((timeSheets, index) => {
                         return (
                           <>
@@ -549,6 +560,15 @@ const TimeSheets = () => {
               )}
             </Table>
           </TableContainer>
+          <TablePagination
+        component="div"
+        count={tempWeeks.length}
+        onPageChange={handlePageChange}
+        onRowsPerPageChange={handleLimitChange}
+        page={page}
+        rowsPerPage={limit}
+        rowsPerPageOptions={[5, 10, 25]}
+      />
         </Container>
       </Box>
     </>
