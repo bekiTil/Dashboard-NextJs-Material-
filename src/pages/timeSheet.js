@@ -137,7 +137,9 @@ const TimeSheet = () => {
                           <TableCell align="center">Student Name</TableCell>
                           <TableCell align="center">Grade</TableCell>
                           <TableCell align="center">Work Hour</TableCell>
+                          <TableCell align="center">Work Minute</TableCell>
                           <TableCell align="center">Month</TableCell>
+                          <TableCell align="center">Date Submitted</TableCell>
                           <TableCell align="center">Status</TableCell>
                           <TableCell align="center">Image</TableCell>
                           <TableCell align="center">Action</TableCell>
@@ -184,7 +186,13 @@ const TimeSheet = () => {
                                 <TableCell align="center">{student.studentName.fullName}</TableCell>
                                 <TableCell align="center">{student.grade}</TableCell>
                                 <TableCell align="center">{student.workHour}</TableCell>
+                                <TableCell align="center">{student.workMin}</TableCell>
                                 <TableCell align="center">{months[val.month - 1]}</TableCell>
+                                <TableCell align="center"> {new Date(val.createdAt).toLocaleDateString('en-US', {
+            month: 'long',
+            day: 'numeric',
+            year: 'numeric',
+          })}</TableCell>
                                 <TableCell align="center">
                                   {val.statusOfAcceptance}
                                   {/* {val.statusOfAcceptance === "SUCCESS" && (

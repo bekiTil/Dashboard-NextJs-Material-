@@ -89,6 +89,8 @@ const TFinance = () => {
   const countNumberOfHOurs = ()=>{
     let hour = 0;
     listOfTimeSheet.map((val,index)=>{
+      console.log(val.timestamp)
+      console.log("Hidss")
       val.listStudent?.listStudent.map((student, index)=>{
         hour= Number(student?.workHour) + Number(hour)
       }
@@ -97,14 +99,25 @@ const TFinance = () => {
     return hour
   }
   const countNumberOfMoney = ()=>{
-    let hour = 0;
-    listOfTimeSheet.map((val,index)=>{
-      val.listStudent?.listStudent.map((student, index)=>{
-        hour= Number(student?.workHour) + Number(hour)
+    let temp = 0;
+    listOfTimeSheet.map((te,index)=>{
+      te.listStudent?.listStudent.map((val, index)=>{
+        if (val.grade == "11" || val.grade == "12")
+      {
+       
+       temp += Number(val.workHour) * 200 
+     
+       
+      }
+      else {
+        temp += Number(val.workHour) * 175
+        
+      }
+     
       }
       )
     })
-    return hour * 250;
+    return temp;
   }
 
   const handlePayment = ()=>{
