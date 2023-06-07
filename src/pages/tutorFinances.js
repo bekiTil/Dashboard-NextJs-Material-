@@ -103,6 +103,8 @@ const TutorFinance = () => {
   const [selectYear, setSelectedYear] = useState(currentYear);
   const [statusReport, setStatusReport] = useState(1);
   const [monthNotify, setMonthNotify] = useState([]);
+  const [limit, setLimit] = useState(10);
+  const [page, setPage] = useState(0);
   const years = [];
   for (let year = 2023; year <= 2050; year++) {
     years.push(year);
@@ -117,6 +119,13 @@ const TutorFinance = () => {
   //   setTempWeeks(weekRepo);
   //   setSelectedMonthIndex(index);
   // };
+  const handleLimitChange = (event) => {
+    setLimit(event.target.value);
+  };
+
+  const handlePageChange = (event, newPage) => {
+    setPage(newPage);
+  };
   const handleOpen = (truthValue, weekRepo = [], index) => {
     console.log("finsed");
     console.log(truthValue);
@@ -413,7 +422,10 @@ const TutorFinance = () => {
                     disabled={value == index}
                     icon={<Badge badgeContent={Number(monthNotify[index])} color="secondary" > <MailIcon  color="action" /></Badge>}
                     label={`${month}`}
-                    onClick={() => handleOpen(totalWeeks, totalWeeks[index], index)}
+                    onClick={() => {
+                      setPage(0);
+                      setLimit(10);
+                      handleOpen(totalWeeks, totalWeeks[index], index)}}
                   ></Tab>
 
                   //   {/* <Button
@@ -453,7 +465,7 @@ const TutorFinance = () => {
               <TableBody>
                 {tempWeeks.length > 0 &&
                   tempWeeks
-                    .slice(0, 10)
+                  
                     .filter((val) => {
                       if (searchTerm == "") {
                         return val;
@@ -463,6 +475,7 @@ const TutorFinance = () => {
                         return val;
                       }
                     })
+                    .slice((limit*page), (limit)*(page+1))
 
                     .map((timeSheets, index) => {
                       return (
@@ -522,6 +535,15 @@ const TutorFinance = () => {
               )}
             </Table>
           </TableContainer>
+          <TablePagination
+        component="div"
+        count={tempWeeks.length}
+        onPageChange={handlePageChange}
+        onRowsPerPageChange={handleLimitChange}
+        page={page}
+        rowsPerPage={limit}
+        rowsPerPageOptions={[5, 10, 25]}
+      />
         </Container>
       </Box>
     </>
