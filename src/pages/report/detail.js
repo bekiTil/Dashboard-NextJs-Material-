@@ -312,14 +312,21 @@ const ReportDetail = () => {
       variant="contained"
       color="error"
       disabled={ratings[index] == -1 || commentD === "" || commentD ===null}
-      onClick={() => {
-        report.status = "REJECTED";
-        UpdateAReport(token, report?.id, {
-          status: "REJECTED",
-          rate: ratings[index],
-          comment: commentD
-        });
-      router.reload()
+      onClick={async () => {
+        if (commentD !== "") {
+          console.log(commentD[index])
+          report.status = "REJECTED";
+
+          await UpdateAReport(token, report?.id, { status: "REJECTED",
+          rate: ratings[index],   comment: commentD[index] });
+          
+          router.reload()
+        
+
+        
+        } else {
+          setSubmitted(true);
+        }
       }}
     >
       Reject
